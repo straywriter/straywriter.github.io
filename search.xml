@@ -213,4 +213,23 @@
         <category>阿斯蒂芬</category>
       </categories>
   </entry>
+  <entry>
+    <title>test_my_site</title>
+    <url>/2021/03/18/test-my-site%20-%20%E5%89%AF%E6%9C%AC/</url>
+    <content><![CDATA[<h1 id="阿斯蒂芬">阿斯蒂芬</h1>
+]]></content>
+      <categories>
+        <category>阿斯蒂芬啊</category>
+        <category>阿斯蒂芬</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>cc</title>
+    <url>/2021/03/18/cc/</url>
+    <content><![CDATA[
+]]></content>
+      <categories>
+        <category>aaa</category>
+      </categories>
+  </entry>
 </search>
