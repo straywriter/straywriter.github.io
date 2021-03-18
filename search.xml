@@ -1,6 +1,174 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>HelloC+++ 是独立访客感觉</title>
+    <url>/2021/03/18/hello-world%20-%20%E5%89%AF%E6%9C%AC/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>. <span class="math display">\[
+\mathbf{V}_1 \times \mathbf{V}_2 =  \begin{vmatrix}
+\mathbf{i} &amp; \mathbf{j} &amp; \mathbf{k} \
+\frac{\partial X}{\partial u} &amp;  \frac{\partial Y}{\partial u} &amp; 0 \
+\frac{\partial X}{\partial v} &amp;  \frac{\partial Y}{\partial v} &amp; 0 \
+\end{vmatrix}
+\]</span></p>
+<p><span class="math display">\[
+\mathbf{V}_1 \times \mathbf{V}_2 =  \begin{vmatrix}
+\mathbf{i} &amp; \mathbf{j} &amp; \mathbf{k} \\
+\frac{\partial X}{\partial u} &amp;  \frac{\partial Y}{\partial u} &amp; 0 \\
+\frac{\partial X}{\partial v} &amp;  \frac{\partial Y}{\partial v} &amp; 0 \\
+\end{vmatrix}
+\]</span></p>
+<figure>
+<img src="/2021/03/18/hello-world%20-%20%E5%89%AF%E6%9C%AC/image-20210103102208582.png" alt="image-20210103102208582"><figcaption aria-hidden="true">image-20210103102208582</figcaption>
+</figure>
+<h2 id="quick-start">Quick Start</h2>
+<h3 id="create-a-new-post">Create a new post</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="run-server">Run server</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="generate-static-files">Generate static files</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="deploy-to-remote-sites">Deploy to remote sites</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+<p>搭建基于Hexo 和Next主题的博客</p>
+<h1 id="搭建环境">搭建环境</h1>
+<h2 id="安装node">安装node</h2>
+<p><a href="https://nodejs.org/en/">nodejs官网</a></p>
+<p><strong>scoop 安装</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">scoop install node</span><br></pre></td></tr></table></figure>
+<p><strong>检测node 版本</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">node -v</span><br><span class="line">npm -v</span><br></pre></td></tr></table></figure>
+<p><strong>npm 添加国内镜像</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm config set registry https:&#x2F;&#x2F;registry.npm.taobao.org</span><br></pre></td></tr></table></figure>
+<p><strong>安装hexo</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm install hexo-cli -g</span><br></pre></td></tr></table></figure>
+<p><strong>初始化博客</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo init blog</span><br></pre></td></tr></table></figure>
+<p>bolg 是搭建博客的路径，指在当前文件夹下的blog目录。</p>
+<h2 id="安装next主题">安装Next主题</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;theme-next&#x2F;hexo-theme-next.git themes&#x2F;next</span><br></pre></td></tr></table></figure>
+<p><strong>配置主题</strong>：blog根目录下的 _config.yml 文件中，修改 theme 为你的主题名字：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">theme: next</span><br></pre></td></tr></table></figure>
+<h2 id="hexo-常用命令">Hexo 常用命令</h2>
+<h2 id="配置git">配置git</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">deploy:</span><br><span class="line">	type: git</span><br><span class="line">    repo: https:&#x2F;&#x2F;github.com&#x2F;xxx&#x2F;xxxx.github.io.git</span><br></pre></td></tr></table></figure>
+<h2 id="网站基本配置">网站基本配置</h2>
+<table>
+<colgroup>
+<col style="width: 17%">
+<col style="width: 82%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">参数</th>
+<th style="text-align: left;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>title</code></td>
+<td style="text-align: left;">网站标题</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>subtitle</code></td>
+<td style="text-align: left;">网站副标题</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>description</code></td>
+<td style="text-align: left;">网站描述</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>keywords</code></td>
+<td style="text-align: left;">网站的关键词。支援多个关键词。</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>author</code></td>
+<td style="text-align: left;">您的名字</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>language</code></td>
+<td style="text-align: left;">网站使用的语言。对于简体中文用户来说，使用不同的主题可能需要设置成不同的值，请参考你的主题的文档自行设置，常见的有 <code>zh-Hans</code>和 <code>zh-CN</code>。</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>timezone</code></td>
+<td style="text-align: left;">网站时区。Hexo 默认使用您电脑的时区。请参考 <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones">时区列表</a> 进行设置，如 <code>America/New_York</code>, <code>Japan</code>, 和 <code>UTC</code> 。一般的，对于中国大陆地区可以使用 <code>Asia/Shanghai</code>。</td>
+</tr>
+</tbody>
+</table>
+<p>其中，<code>description</code>主要用于SEO，告诉搜索引擎一个关于您站点的简单描述，通常建议在其中包含您网站的关键词。<code>author</code>参数用于主题显示文章的作者。</p>
+<h2 id="文章头设置">文章头设置</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">title: &#123;&#123; title &#125;&#125;</span><br><span class="line">date: &#123;&#123; date &#125;&#125;</span><br><span class="line">top: false</span><br><span class="line">cover: false</span><br><span class="line">password:</span><br><span class="line">toc: true</span><br><span class="line">mathjax: true</span><br><span class="line">summary:</span><br><span class="line">tags:</span><br><span class="line">categories:</span><br></pre></td></tr></table></figure>
+<h2 id="section"></h2>
+<h2 id="hexo-基本配置及插件">Hexo 基本配置及插件</h2>
+<h3 id="hexo-更换渲染器">Hexo 更换渲染器</h3>
+<p>卸载</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm uninstall hexo-renderer-marked --save</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm install hexo-renderer-pandoc --save</span><br></pre></td></tr></table></figure>
+<p>解决数学公式及脚注问题</p>
+<h2 id="hexo-创建分类页">Hexo 创建分类页</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo new page categories</span><br></pre></td></tr></table></figure>
+<h2 id="hexo-about-页面">Hexo about 页面</h2>
+<h2 id="hexo-相对路径图片">Hexo 相对路径图片</h2>
+<p><code>_config.yml</code> 文件设置</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">post_asset_folder: true</span><br></pre></td></tr></table></figure>
+<p>安装<code>hexo-asset-image</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm install hexo-asset-image --save</span><br></pre></td></tr></table></figure>
+<p>将文件<code>node_modules/hexo-asset-image/index.js</code>替换为如下的内容：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#39;use strict&#39;;</span><br><span class="line">var cheerio &#x3D; require(&#39;cheerio&#39;);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; http:&#x2F;&#x2F;stackoverflow.com&#x2F;questions&#x2F;14480345&#x2F;how-to-get-the-nth-occurrence-in-a-string</span><br><span class="line">function getPosition(str, m, i) &#123;</span><br><span class="line">  return str.split(m, i).join(m).length;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var version &#x3D; String(hexo.version).split(&#39;.&#39;);</span><br><span class="line">hexo.extend.filter.register(&#39;after_post_render&#39;, function(data)&#123;</span><br><span class="line">  var config &#x3D; hexo.config;</span><br><span class="line">  if(config.post_asset_folder)&#123;</span><br><span class="line">    	var link &#x3D; data.permalink;</span><br><span class="line">	if(version.length &gt; 0 &amp;&amp; Number(version[0]) &#x3D;&#x3D; 3)</span><br><span class="line">	   var beginPos &#x3D; getPosition(link, &#39;&#x2F;&#39;, 1) + 1;</span><br><span class="line">	else</span><br><span class="line">	   var beginPos &#x3D; getPosition(link, &#39;&#x2F;&#39;, 3) + 1;</span><br><span class="line">	&#x2F;&#x2F; In hexo 3.1.1, the permalink of &quot;about&quot; page is like &quot;...&#x2F;about&#x2F;index.html&quot;.</span><br><span class="line">	var endPos &#x3D; link.lastIndexOf(&#39;&#x2F;&#39;) + 1;</span><br><span class="line">    link &#x3D; link.substring(beginPos, endPos);</span><br><span class="line"></span><br><span class="line">    var toprocess &#x3D; [&#39;excerpt&#39;, &#39;more&#39;, &#39;content&#39;];</span><br><span class="line">    for(var i &#x3D; 0; i &lt; toprocess.length; i++)&#123;</span><br><span class="line">      var key &#x3D; toprocess[i];</span><br><span class="line"> </span><br><span class="line">      var $ &#x3D; cheerio.load(data[key], &#123;</span><br><span class="line">        ignoreWhitespace: false,</span><br><span class="line">        xmlMode: false,</span><br><span class="line">        lowerCaseTags: false,</span><br><span class="line">        decodeEntities: false</span><br><span class="line">      &#125;);</span><br><span class="line"></span><br><span class="line">      $(&#39;img&#39;).each(function()&#123;</span><br><span class="line">		if ($(this).attr(&#39;src&#39;))&#123;</span><br><span class="line">			&#x2F;&#x2F; For windows style path, we replace &#39;\&#39; to &#39;&#x2F;&#39;.</span><br><span class="line">			var src &#x3D; $(this).attr(&#39;src&#39;).replace(&#39;\\&#39;, &#39;&#x2F;&#39;);</span><br><span class="line">			if(!&#x2F;http[s]*.*|\&#x2F;\&#x2F;.*&#x2F;.test(src) &amp;&amp;</span><br><span class="line">			   !&#x2F;^\s*\&#x2F;&#x2F;.test(src)) &#123;</span><br><span class="line">			  &#x2F;&#x2F; For &quot;about&quot; page, the first part of &quot;src&quot; can&#39;t be removed.</span><br><span class="line">			  &#x2F;&#x2F; In addition, to support multi-level local directory.</span><br><span class="line">			  var linkArray &#x3D; link.split(&#39;&#x2F;&#39;).filter(function(elem)&#123;</span><br><span class="line">				return elem !&#x3D; &#39;&#39;;</span><br><span class="line">			  &#125;);</span><br><span class="line">			  var srcArray &#x3D; src.split(&#39;&#x2F;&#39;).filter(function(elem)&#123;</span><br><span class="line">				return elem !&#x3D; &#39;&#39; &amp;&amp; elem !&#x3D; &#39;.&#39;;</span><br><span class="line">			  &#125;);</span><br><span class="line">			  if(srcArray.length &gt; 1)</span><br><span class="line">				srcArray.shift();</span><br><span class="line">			  src &#x3D; srcArray.join(&#39;&#x2F;&#39;);</span><br><span class="line">			  $(this).attr(&#39;src&#39;, config.root + link + src);</span><br><span class="line">			  console.info&amp;&amp;console.info(&quot;update link as:--&gt;&quot;+config.root + link + src);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;else&#123;</span><br><span class="line">			console.info&amp;&amp;console.info(&quot;no src attr, skipped...&quot;);</span><br><span class="line">			console.info&amp;&amp;console.info($(this));</span><br><span class="line">		&#125;</span><br><span class="line">      &#125;);</span><br><span class="line">      data[key] &#x3D; $.html();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h2 id="hexo-图片放大">Hexo 图片放大</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;theme-next&#x2F;theme-next-fancybox3 themes&#x2F;next&#x2F;source&#x2F;lib&#x2F;fancybox</span><br></pre></td></tr></table></figure>
+<p>主题配置文件<code>_config.yml</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">fancybox: true</span><br></pre></td></tr></table></figure>
+<h2 id="hexo-数学公式">Hexo 数学公式</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm install hexo-math --save</span><br></pre></td></tr></table></figure>
+<p>Next 主题配置文件</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mathjax:</span><br><span class="line">  enable: true</span><br></pre></td></tr></table></figure>
+<h2 id="hexo设置本地搜索">Hexo设置本地搜索</h2>
+<p><strong>安装插件</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm install hexo-generator-searchdb --save</span><br></pre></td></tr></table></figure>
+<p>配置<code>_config.yml</code> 文件，添加</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 本地搜索</span><br><span class="line">search:</span><br><span class="line">  path: search.xml</span><br><span class="line">  field: post</span><br><span class="line">  format: html</span><br><span class="line">  limit: 10000</span><br></pre></td></tr></table></figure>
+<p>修改主题配置文件<code>_config.yml</code>：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">local_search:</span><br><span class="line">  enable: true</span><br></pre></td></tr></table></figure>
+<h2 id="hexo-auto_excerpt">Hexo auto_excerpt</h2>
+<p><a href="https://github.com/chekun/hexo-excerpt">hexo-excerpt</a></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm install hexo-excerpt --save</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">excerpt:</span><br><span class="line">  depth: 10</span><br><span class="line">  excerpt_excludes: []</span><br><span class="line">  more_excludes: []</span><br><span class="line">  hideWholePostExcerpts: true</span><br></pre></td></tr></table></figure>
+<h2 id="hexo-显示当前浏览进度">Hexo 显示当前浏览进度</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">back2top:</span><br><span class="line">  enable: true</span><br><span class="line">  # Back to top in sidebar.</span><br><span class="line">  sidebar: true</span><br><span class="line">  # Scroll percent label in b2t button.</span><br><span class="line">  scrollpercent: true</span><br></pre></td></tr></table></figure>
+<p><strong>美化</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; 返回顶部 透明度设置</span><br><span class="line">.back-to-top</span><br><span class="line">&#123;</span><br><span class="line">  background :none;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="hexo-字数统计阅读时长">hexo 字数统计、阅读时长</h2>
+<p><a href="https://github.com/theme-next/hexo-symbols-count-time">hexo-symbols-count-time</a></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm install hexo-symbols-count-time --save</span><br></pre></td></tr></table></figure>
+<h2 id="hexo-取消行号">Hexo 取消行号</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;取消行号</span><br><span class="line">.highlight .gutter&#123;</span><br><span class="line">  display: none;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="hexo-主题配置及美化">Hexo 主题配置及美化</h1>
+<h2 id="archives-美化">Archives 美化</h2>
+<p>注释<code>.post-header</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">.post-meta &#123;</span><br><span class="line">  display: inline;</span><br><span class="line">  &#x2F;&#x2F;font-size: $font-size-smallest;</span><br><span class="line">  margin-right: 10px;</span><br><span class="line">   font-size: 19px;</span><br><span class="line">&#x2F;&#x2F;position: absolute;</span><br><span class="line">color: #fff;</span><br><span class="line">background-color: #49b1f5;</span><br><span class="line">border-radius: 5px;</span><br><span class="line">padding-left: 5px;</span><br><span class="line">padding-right: 5px;</span><br><span class="line">margin-left: 10px;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">  .post-title &#123;</span><br><span class="line">    display: inline;</span><br><span class="line"></span><br><span class="line">  margin-right: 10px;</span><br><span class="line">     font-size: 19px;</span><br><span class="line">  &#x2F;&#x2F;position: absolute;</span><br><span class="line">  color: #fff;</span><br><span class="line">  background-color: #eff2f3;</span><br><span class="line">  border-radius: 5px;</span><br><span class="line">  padding-left: 5px;</span><br><span class="line">  padding-right: 5px;</span><br><span class="line">  margin-left: 10px;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="分类美化">分类美化</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">.category-list-link</span><br><span class="line">&#123;</span><br><span class="line">  margin-right: 10px;</span><br><span class="line">     font-size: 19px;</span><br><span class="line">  &#x2F;&#x2F;position: absolute;</span><br><span class="line">  background-color: #eff2f3;</span><br><span class="line">  border-radius: 5px;</span><br><span class="line">  padding-left: 5px;</span><br><span class="line">  padding-right: 5px;</span><br><span class="line">  &#x2F;&#x2F; margin-left: 10px;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="主页文章标题美化">主页文章标题美化</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">.posts-expand .post-title-link</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line">  margin-right: 10px;</span><br><span class="line">    &#x2F;&#x2F;  font-size: 19px;</span><br><span class="line">  &#x2F;&#x2F;position: absolute;</span><br><span class="line">  &#x2F;&#x2F; color: #fff;</span><br><span class="line">  background-color: #f5f5f5;</span><br><span class="line">  border-radius: 5px;</span><br><span class="line">  padding-left: 8px;</span><br><span class="line">  padding-right: 8px;</span><br><span class="line">  margin-left: 10px;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="主页文章圆角透明">主页文章圆角透明</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">.post-block</span><br><span class="line">&#123;</span><br><span class="line">  background : #fff</span><br><span class="line">margin-top: 0px;</span><br><span class="line">   margin-bottom: 60px;</span><br><span class="line">   padding: 25px;</span><br><span class="line">   border-radius: 20px 20px 20px 20px;</span><br><span class="line">   -webkit-box-shadow: 0 0 5px rgba(202, 203, 203, .5);</span><br><span class="line">   -moz-box-shadow: 0 0 5px rgba(202, 203, 204, .5);</span><br><span class="line">opacity :0.9;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="主页美化">主页美化</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">.sidebar</span><br><span class="line">&#123;</span><br><span class="line">background :none;</span><br><span class="line">&#x2F;&#x2F; opacity :0.9;</span><br><span class="line">&#125;</span><br><span class="line">.sidebar-inner&#123;</span><br><span class="line">  margin-top :20px</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.content-wrap&#123;</span><br><span class="line">  background : inherit;</span><br><span class="line">   padding-top :0px</span><br><span class="line">&#x2F;&#x2F;  opacity : 1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="设置圆角">设置圆角</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$border-radius-inner              &#x3D; 20px 20px 20px 20px;</span><br><span class="line">$border-radius                    &#x3D; 20px;</span><br></pre></td></tr></table></figure>
+<h2 id="设置背景图片">设置背景图片</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">body &#123;</span><br><span class="line">  color :black</span><br><span class="line">  background: url(https:&#x2F;&#x2F;source.unsplash.com&#x2F;random);</span><br><span class="line">  background-size: cover;</span><br><span class="line">  background-repeat: no-repeat;</span><br><span class="line">  background-attachment: fixed;</span><br><span class="line">  background-position: 50% 50%;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="设置透明度">设置透明度</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">.main-inner&#123;</span><br><span class="line">	opacity: 0.8;</span><br><span class="line">&#125;</span><br><span class="line">.header-inner&#123;</span><br><span class="line">	opacity: 0.8;</span><br><span class="line">	z-index: 10;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+  </entry>
+  <entry>
     <title>Hello World</title>
     <url>/2021/01/03/hello-world/</url>
     <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>. <span class="math display">\[
@@ -34,5 +202,15 @@
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
 <p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
 ]]></content>
+  </entry>
+  <entry>
+    <title>test_my_site</title>
+    <url>/2021/03/18/test-my-site/</url>
+    <content><![CDATA[<h1 id="阿斯蒂芬">阿斯蒂芬</h1>
+]]></content>
+      <categories>
+        <category>阿斯蒂芬啊</category>
+        <category>阿斯蒂芬</category>
+      </categories>
   </entry>
 </search>
