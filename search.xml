@@ -3103,7 +3103,8 @@ I &amp;=I_{a}+I_{d}+I_{s} \\
   <entry>
     <title>设计模式基础</title>
     <url>/2021/04/17/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%9E%8B/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</url>
-    <content><![CDATA[<h2 id="简介">简介</h2>
+    <content><![CDATA[<hr>
+<h2 id="简介">简介</h2>
 <p>设计模式（Design Pattern）代表了最佳的实践，在面向对象的编程中被很多老鸟们反复使用。使用设计模式有很多好处：</p>
 <ul>
 <li>可重用代码</li>
