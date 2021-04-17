@@ -1192,7 +1192,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #ff9cf9;
+  background: #fff;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -1655,16 +1655,6 @@ pre .javascript .function {
   position: absolute;
   top: 1.25em;
   width: 4px;
-}
-.post-eof {
-  background: #ccc;
-  height: 1px;
-  margin: 80px auto 60px;
-  text-align: center;
-  width: 8%;
-}
-.post-block:last-of-type .post-eof {
-  display: none;
 }
 .content {
   padding-top: 40px;
@@ -2541,8 +2531,8 @@ mjx-container + br {
   margin-top: 16px;
 }
 body {
-  background-image: linear-gradient(to top, #fff1eb 0%, #ace0f9 100%);
   background-attachment: fixed;
+  background-image: linear-gradient(to top, #fff1eb 0, #ace0f9 100%);
   background-position: 50% 50%;
   background-repeat: no-repeat;
   background-size: cover;
@@ -2553,7 +2543,7 @@ span.exturl {
   border-bottom: none;
 }
 .main-inner {
-  opacity: 0.8;
+  opacity: 0.9;
 }
 .header-inner {
   margin-top: 20px;
@@ -2597,7 +2587,6 @@ span.exturl {
   border-radius: 20px 20px 20px 20px;
   margin-bottom: 60px;
   margin-top: 0;
-  opacity: 0.9;
   padding: 25px;
   -moz-box-shadow: 0 0 5px rgba(202,203,204,0.5);
   -webkit-box-shadow: 0 0 5px rgba(202,203,203,0.5);
@@ -2607,4 +2596,46 @@ span.exturl {
 }
 .back-to-top {
   background: none;
+}
+.post-body h1,
+.post-body h2 {
+  border-bottom: 2px solid #eee;
+}
+.post-body h3,
+.post-body h4 {
+  border-bottom: 2px solid #eee;
+}
+p {
+  margin-bottom: 10px;
+}
+.post-body p a {
+  border-bottom: none;
+  border-bottom: 1px solid #0593d3;
+  color: #0593d3;
+}
+.post-body p a:hover {
+  border-bottom: none;
+  border-bottom: 1px solid #fc6423;
+  color: #fc6423;
+}
+code {
+  color: #c7254e;
+}
+blockquote {
+  background-color: #f2f2f2;
+  border-left: 6px solid #ddd;
+  color: #000;
+}
+.post-button {
+  margin-top: 0;
+}
+.posts-expand .post-meta {
+  margin: 3px 0 25px;
+}
+.posts-collapse .collection-year {
+  margin: 5px 0;
+}
+.highlight,
+pre {
+  border-radius: 10px 10px 10px 10px;
 }
