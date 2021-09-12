@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"straywriter.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="CMake常用变量">
+<meta property="og:url" content="https://straywriter.github.io/2021/03/22/CMake/CMake%E5%B8%B8%E7%94%A8%E5%8F%98%E9%87%8F/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-03-22T13:59:11.000Z">
+<meta property="article:modified_time" content="2021-04-17T10:59:56.880Z">
+<meta property="article:author" content="straywriter">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://straywriter.github.io/2021/03/22/CMake/CMake%E5%B8%B8%E7%94%A8%E5%8F%98%E9%87%8F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>CMake常用变量 | Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://straywriter.github.io/2021/03/22/CMake/CMake%E5%B8%B8%E7%94%A8%E5%8F%98%E9%87%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="straywriter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CMake常用变量
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-03-22 21:59:11" itemprop="dateCreated datePublished" datetime="2021-03-22T21:59:11+08:00">2021-03-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-04-17 18:59:56" itemprop="dateModified" datetime="2021-04-17T18:59:56+08:00">2021-04-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CMake/" itemprop="url" rel="index"><span itemprop="name">CMake</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <hr>
+<h1 id="a">a</h1>
+<p>项目信息</p>
+<p>系统信息</p>
+<p>开关选项</p>
+<p>常用命令</p>
+<h3 id="项目信息">项目信息</h3>
+<table>
+<colgroup>
+<col style="width: 35%">
+<col style="width: 64%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>PROJECT_SOURCE_DIR</th>
+<th>工程的根目录</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>PROJECT_BINARY_DIR</td>
+<td>运行cmake命令的目录,通常是${PROJECT_SOURCE_DIR}/build</td>
+</tr>
+<tr class="even">
+<td>CMAKE_INCLUDE_PATH</td>
+<td>环境变量,非cmake变量</td>
+</tr>
+<tr class="odd">
+<td>CMAKE_LIBRARY_PATH</td>
+<td>环境变量</td>
+</tr>
+<tr class="even">
+<td>CMAKE_CURRENT_SOURCE_DIR</td>
+<td>当前处理的CMakeLists.txt所在的路径</td>
+</tr>
+<tr class="odd">
+<td>CMAKE_CURRENT_BINARY_DIR</td>
+<td>target编译目录 使用ADD_SURDIRECTORY(src bin)可以更改此变量的值 SET(EXECUTABLE_OUTPUT_PATH <新路径>)并不会对此变量有影响,只是改变了最终目标文件的存储路径</新路径></td>
+</tr>
+<tr class="even">
+<td>CMAKE_CURRENT_LIST_FILE</td>
+<td>输出调用这个变量的CMakeLists.txt的完整路径</td>
+</tr>
+<tr class="odd">
+<td>CMAKE_CURRENT_LIST_LINE</td>
+<td>输出这个变量所在的行</td>
+</tr>
+<tr class="even">
+<td>CMAKE_MODULE_PATH</td>
+<td>定义自己的cmake模块所在的路径 SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake),然后可以用INCLUDE命令来调用自己的模块</td>
+</tr>
+<tr class="odd">
+<td>EXECUTABLE_OUTPUT_PATH</td>
+<td>重新定义目标二进制可执行文件的存放位置</td>
+</tr>
+<tr class="even">
+<td>LIBRARY_OUTPUT_PATH</td>
+<td>重新定义目标链接库文件的存放位置</td>
+</tr>
+<tr class="odd">
+<td>PROJECT_NAME</td>
+<td>返回通过PROJECT指令定义的项目名称</td>
+</tr>
+<tr class="even">
+<td>CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS</td>
+<td>用来控制IF ELSE语句的书写方式</td>
+</tr>
+</tbody>
+</table>
+<h3 id="系统变量">系统变量</h3>
+<table>
+<thead>
+<tr class="header">
+<th>CMAKE_MAJOR_VERSION</th>
+<th>cmake主版本号,如3.8.5中的3</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>CMAKE_MINOR_VERSION</td>
+<td>cmake次版本号,如3.8.5中的8</td>
+</tr>
+<tr class="even">
+<td>CMAKE_PATCH_VERSION</td>
+<td>cmake补丁等级，如3.8.5中的5</td>
+</tr>
+<tr class="odd">
+<td>CMAKE_SYSTEM</td>
+<td>系统名称</td>
+</tr>
+<tr class="even">
+<td>CAMKE_SYSTEM_NAME</td>
+<td>不包含版本的系统名</td>
+</tr>
+<tr class="odd">
+<td>CMAKE_SYSTEM_VERSION</td>
+<td>系统版本</td>
+</tr>
+<tr class="even">
+<td>CMAKE_SYSTEM_PROCESSOR</td>
+<td>处理器名称</td>
+</tr>
+<tr class="odd">
+<td>UNIX</td>
+<td>在所有的类UNIX平台为TRUE,包括OS X和cygwin</td>
+</tr>
+<tr class="even">
+<td>WIN32</td>
+<td>在所有的win32平台为TRUE,包括cygwin</td>
+</tr>
+</tbody>
+</table>
+<h3 id="开关选项">开关选项</h3>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">编译控制开关名</th>
+<th style="text-align: left;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">BUILD_SHARED_LIBS</td>
+<td style="text-align: left;">使用 <code>ADD_LIBRARY</code> 时生成动态库</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">BUILD_STATIC_LIBS</td>
+<td style="text-align: left;">使用 <code>ADD_LIBRARY</code> 时生成静态库</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">CMAKE_C_FLAGS</td>
+<td style="text-align: left;">设置 C 编译选项,也可以通过指令 ADD_DEFINITIONS()添加。</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">CMAKE_CXX_FLAGS</td>
+<td style="text-align: left;">设置 C++编译选项,也可以通过指令 ADD_DEFINITIONS()添加。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="常用命令">常用命令</h3>
+<table>
+<colgroup>
+<col style="width: 15%">
+<col style="width: 42%">
+<col style="width: 42%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>PROJECT</th>
+<th>PROJECT(projectname [CXX] [C] [Java])</th>
+<th>指定工程名称,并可指定工程支持的语言。支持语言列表可忽略,默认支持所有语言</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>SET</td>
+<td>SET(VAR [VALUE] [CACHE TYPE DOCSTRING [FORCE]])</td>
+<td>定义变量(可以定义多个VALUE,如SET(SRC_LIST main.c util.c reactor.c))</td>
+</tr>
+<tr class="even">
+<td>MESSAGE</td>
+<td>MESSAGE([SEND_ERROR | STATUS | FATAL_ERROR] “message to display” …)</td>
+<td>向终端输出用户定义的信息或变量的值 SEND_ERROR, 产生错误,生成过程被跳过 STATUS, 输出前缀为—的信息 FATAL_ERROR, 立即终止所有cmake过程</td>
+</tr>
+<tr class="odd">
+<td>ADD_EXECUTABLE</td>
+<td>ADD_EXECUTABLE(bin_file_name <span class="math inline">\({SRC_LIST}) | 生成可执行文件 | | ADD_LIBRARY | ADD_LIBRARY(libname [SHARED \| STATIC \| MODULE] [EXCLUDE_FROM_ALL] SRC_LIST) | 生成动态库或静态库 SHARED 动态库 STATIC 静态库 MODULE 在使用dyld的系统有效,若不支持dyld,等同于SHARED EXCLUDE_FROM_ALL 表示该库不会被默认构建 | | SET_TARGET_PROPERTIES | | 设置输出的名称,设置动态库的版本和API版本 | | CMAKE_MINIMUM_REQUIRED | CMAKE_MINIMUM_REQUIRED(VERSION version_number [FATAL_ERROR]) | 声明CMake的版本要求 | | ADD_SUBDIRECTORY | ADD_SUBDIRECTORY(src_dir [binary_dir] [EXCLUDE_FROM_ALL]) | 向当前工程添加存放源文件的子目录,并可以指定中间二进制和目标二进制的存放位置 EXCLUDE_FROM_ALL含义：将这个目录从编译过程中排除 | | INCLUDE_DIRECTORIES | INCLUDE_DIRECTORIES([AFTER \| BEFORE] [SYSTEM] dir1 dir2 … ) | 向工程添加多个特定的头文件搜索路径,路径之间用空格分隔,如果路径包含空格,可以使用双引号将它括起来,默认的行为为追加到当前头文件搜索路径的后面。有如下两种方式可以控制搜索路径添加的位置：CMAKE_INCLUDE_DIRECTORIES_BEFORE,通过SET这个cmake变量为on,可以将添加的头文件搜索路径放在已有路径的前面通过AFTER或BEFORE参数,也可以控制是追加还是置前 | | LINK_DIRECTORIES | LINK_DIRECTORIES(dir1 dir2 …) | 添加非标准的共享库搜索路径 | | TARGET_LINK_LIBRARIES | TARGET_LINK_LIBRARIES(target lib1 lib2 …) | 为target添加需要链接的共享库 | | ADD_DEFINITIONS | ADD_DEFINITIONS(-DENABLE_DEBUG -DABC) | 向C/C++编译器添加-D定义，参数之间用空格分隔 | | ADD_DEPENDENCIES | ADD_DEPENDENCIES(target-name depend-target1 depend-target2 …) | 定义target依赖的其他target,确保target在构建之前,其依赖的target已经构建完毕 | | AUX_SOURCE_DIRECTORY | AUX_SOURCE_DIRECTORY(dir VAR) | 发现一个目录下所有的源代码文件并将列表存储在一个变量中 把当前目录下的所有源码文件名赋给变量DIR_HELLO_SRCS | | EXEC_PROGRAM | EXEC_PROGRAM(Executable [dir where to run] [ARGS &lt;args&gt;][OUTPUT_VARIABLE &lt;var&gt;] [RETURN_VALUE &lt;value&gt;]) | 用于在指定目录运行某个程序（默认为当前CMakeLists.txt所在目录）,通过ARGS添加参数,通过OUTPUT_VARIABLE和RETURN_VALUE获取输出和返回值 | | INCLUDE | INCLUDE(file [OPTIONAL]) 用来载入CMakeLists.txt文件 INCLUDE(module [OPTIONAL])用来载入预定义的cmake模块 | OPTIONAL参数的左右是文件不存在也不会产生错误 可以载入一个文件,也可以载入预定义模块（模块会在CMAKE_MODULE_PATH指定的路径进行搜索） 载入的内容将在处理到INCLUDE语句时直接执行 | | FIND_ | | FIND_FILE(&lt;VAR&gt; name path1 path2 …) VAR变量代表找到的文件全路径,包含文件名FIND_LIBRARY(&lt;VAR&gt; name path1 path2 …) VAR变量代表找到的库全路径,包含库文件FIND_PATH(&lt;VAR&gt; name path1 path2 …) VAR变量代表包含这个文件的路径FIND_PROGRAM(&lt;VAR&gt; name path1 path2 …) VAR变量代表包含这个程序的全路径FIND_PACKAGE(&lt;name&gt; [major.minor] [QUIET] [NO_MODULE] [[REQUIRED \| COMPONENTS] [componets …]]) *用来调用预定义在CMAKE_MODULE_PATH下的Find&lt;name&gt;.cmake模块,你也可以自己定义Find&lt;name&gt;模块,通过SET(CMAKE_MODULE_PATH \*dir)将其放入工程的某个目录供工程使用** | | IF | 数字比较表达式 IF (variable LESS number) IF (string LESS number) IF (variable GREATER number) IF (string GREATER number) IF (variable EQUAL number) IF (string EQUAL number)按照字母表顺序进行比较 IF (variable STRLESS string) IF (string STRLESS string) IF (variable STRGREATER string) IF (string STRGREATER string) IF (variable STREQUAL string) IF (string STREQUAL string) | IF (expression), expression不为：空,0,N,NO,OFF,FALSE,NOTFOUND或&lt;var&gt;_NOTFOUND,为真 IF (not exp), 与上面相反 IF (var1 AND var2) IF (var1 OR var2) IF (COMMAND cmd) 如果cmd确实是命令并可调用,为真 IF (EXISTS dir) IF (EXISTS file) 如果目录或文件存在,为真 IF (file1 IS_NEWER_THAN file2),当file1比file2新,或file1/file2中有一个不存在时为真,文件名需使用全路径 IF (IS_DIRECTORY dir) 当dir是目录时,为真 IF (DEFINED var) 如果变量被定义,为真 IF (var MATCHES regex) 此处var可以用var名,也可以用\)</span>{var} IF (string MATCHES regex)</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>WHILE</td>
+<td><code>WHILE(condition)    COMMAND1(ARGS ...)    COMMAND2(ARGS ...)    ... ENDWHILE(condition)</code></td>
+<td>其真假判断条件可以参考IF指令</td>
+</tr>
+<tr class="odd">
+<td>FOREACH</td>
+<td></td>
+<td>FOREACH指令的使用方法有三种形式：列表：<code>FOREACH(loop_var arg1 arg2 ...)     COMMAND1(ARGS ...)     COMMAND2(ARGS ...) ... ENDFOREACH(loop_var)</code>范围：<code>FOREACH(loop_var RANGE total)    COMMAND1(ARGS ...)    COMMAND2(ARGS ...)    ... ENDFOREACH(loop_var)</code>范围和步进：<code>FOREACH(loop_var RANGE start stop [step])    COMMAND1(ARGS ...)    COMMAND2(ARGS ...)    ... ENDFOREACH(loop_var)</code>从start开始到stop结束,以step为步进, 注意：直到遇到ENDFOREACH指令,整个语句块才会得到真正的执行。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cmake常用变量">CMake常用变量</h3>
+<table>
+<thead>
+<tr class="header">
+<th>变量名</th>
+<th style="text-align: center;">变量说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>PROJECT_NAME</td>
+<td style="text-align: center;">返回通过PROJECT指令定义的项目名称</td>
+</tr>
+<tr class="even">
+<td>PROJECT_SOURCE_DIR</td>
+<td style="text-align: center;">CMake源码地址，即cmake命令后指定的地址</td>
+</tr>
+<tr class="odd">
+<td>PROJECT_BINARY_DIR</td>
+<td style="text-align: center;">运行cmake命令的目录,通常是PROJECT_SOURCE_DIR下的build目录</td>
+</tr>
+<tr class="even">
+<td>CMAKE_MODULE_PATH</td>
+<td style="text-align: center;">定义自己的cmake模块所在的路径</td>
+</tr>
+<tr class="odd">
+<td>CMAKE_CURRENT_SOURCE_DIR</td>
+<td style="text-align: center;">当前处理的CMakeLists.txt所在的路径</td>
+</tr>
+<tr class="even">
+<td>CMAKE_CURRENT_LIST_DIR</td>
+<td style="text-align: center;">当前文件夹路径</td>
+</tr>
+<tr class="odd">
+<td>CMAKE_CURRENT_LIST_FILE</td>
+<td style="text-align: center;">输出调用这个变量的CMakeLists.txt的完整路径</td>
+</tr>
+<tr class="even">
+<td>CMAKE_CURRENT_LIST_LINE</td>
+<td style="text-align: center;">输出这个变量所在的行</td>
+</tr>
+<tr class="odd">
+<td>CMAKE_RUNTIME_OUTPUT_DIRECTORY</td>
+<td style="text-align: center;">生成可执行文件路径</td>
+</tr>
+<tr class="even">
+<td>CMAKE_LIBRARY_OUTPUT_DIRECTORY</td>
+<td style="text-align: center;">生成库的文件夹路径</td>
+</tr>
+<tr class="odd">
+<td>CMAKE_BUILD_TYPE</td>
+<td style="text-align: center;">指定基于make的产生器的构建类型（Release，Debug）</td>
+</tr>
+<tr class="even">
+<td>CMAKE_C_FLAGS</td>
+<td style="text-align: center;"><em>.C文件编译选项，如 </em>-std=c99 -O3 -march=native*</td>
+</tr>
+<tr class="odd">
+<td>CMAKE_CXX_FLAGS</td>
+<td style="text-align: center;"><em>.CPP文件编译选项，如 </em>-std=c++11 -O3 -march=native*</td>
+</tr>
+<tr class="even">
+<td>CMAKE_CURRENT_BINARY_DIR</td>
+<td style="text-align: center;">target编译目录</td>
+</tr>
+<tr class="odd">
+<td>CMAKE_INCLUDE_PATH</td>
+<td style="text-align: center;">环境变量,非cmake变量</td>
+</tr>
+<tr class="even">
+<td>CMAKE_LIBRARY_PATH</td>
+<td style="text-align: center;">环境变量</td>
+</tr>
+<tr class="odd">
+<td>CMAKE_STATIC_LIBRARY_PREFIX</td>
+<td style="text-align: center;">静态库前缀, Linux下默认为lib</td>
+</tr>
+<tr class="even">
+<td>CMAKE_STATIC_LIBRARY_SUFFIX</td>
+<td style="text-align: center;">静态库后缀，Linux下默认为.a</td>
+</tr>
+<tr class="odd">
+<td>CMAKE_SHARED_LIBRARY_PREFIX</td>
+<td style="text-align: center;">动态库前缀，Linux下默认为lib</td>
+</tr>
+<tr class="even">
+<td>CMAKE_SHARED_LIBRARY_SUFFIX</td>
+<td style="text-align: center;">动态库后缀，Linux下默认为.so</td>
+</tr>
+<tr class="odd">
+<td>BUILD_SHARED_LIBS</td>
+<td style="text-align: center;">如果为ON，则add_library默认创建共享库</td>
+</tr>
+<tr class="even">
+<td>CMAKE_INSTALL_PREFIX</td>
+<td style="text-align: center;">配置安装路径，默认为/usr/local</td>
+</tr>
+<tr class="odd">
+<td>CMAKE_ABSOLUTE_DESTINATION_FILES</td>
+<td style="text-align: center;">安装文件列表时使用ABSOLUTE DESTINATION 路径</td>
+</tr>
+<tr class="even">
+<td>CMAKE_AUTOMOC_RELAXED_MODE</td>
+<td style="text-align: center;">在严格和宽松的automoc模式间切换</td>
+</tr>
+<tr class="odd">
+<td>CMAKE_BACKWARDS_COMPATIBILITY</td>
+<td style="text-align: center;">构建工程所需要的CMake版本</td>
+</tr>
+<tr class="even">
+<td>CMAKE_COLOR_MAKEFILE</td>
+<td style="text-align: center;">开启时，使用Makefile产生器会产生彩色输出</td>
+</tr>
+<tr class="odd">
+<td>CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS</td>
+<td style="text-align: center;">用来控制IF ELSE语句的书写方式</td>
+</tr>
+</tbody>
+</table>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/03/22/CMake/CMake%E5%AE%89%E8%A3%85/" rel="prev" title="C++安装">
+      <i class="fa fa-chevron-left"></i> C++安装
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/03/22/CMake/CMake/" rel="next" title="CMake 基础">
+      CMake 基础 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#a"><span class="nav-number">1.</span> <span class="nav-text">a</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%E4%BF%A1%E6%81%AF"><span class="nav-number">1.0.1.</span> <span class="nav-text">项目信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E5%8F%98%E9%87%8F"><span class="nav-number">1.0.2.</span> <span class="nav-text">系统变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%80%E5%85%B3%E9%80%89%E9%A1%B9"><span class="nav-number">1.0.3.</span> <span class="nav-text">开关选项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="nav-number">1.0.4.</span> <span class="nav-text">常用命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cmake%E5%B8%B8%E7%94%A8%E5%8F%98%E9%87%8F"><span class="nav-number">1.0.5.</span> <span class="nav-text">CMake常用变量</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">straywriter</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">124</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/straywriter" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;straywriter" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">straywriter</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

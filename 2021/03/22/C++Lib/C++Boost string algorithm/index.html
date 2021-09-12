@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"straywriter.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="C++ Boost string algorithm 使用">
+<meta property="og:url" content="https://straywriter.github.io/2021/03/22/C++Lib/C++Boost%20string%20algorithm/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-03-22T13:59:11.315Z">
+<meta property="article:modified_time" content="2021-05-31T07:49:04.590Z">
+<meta property="article:author" content="straywriter">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://straywriter.github.io/2021/03/22/C++Lib/C++Boost%20string%20algorithm/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>C++ Boost string algorithm 使用 | Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://straywriter.github.io/2021/03/22/C++Lib/C++Boost%20string%20algorithm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="straywriter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C++ Boost string algorithm 使用
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-03-22 21:59:11" itemprop="dateCreated datePublished" datetime="2021-03-22T21:59:11+08:00">2021-03-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-05-31 15:49:04" itemprop="dateModified" datetime="2021-05-31T15:49:04+08:00">2021-05-31</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <hr>
+<h2 id="case-conversion">Case Conversion</h2>
+<table>
+<thead>
+<tr class="header">
+<th><strong>Algorithm name</strong></th>
+<th><strong>Description</strong></th>
+<th><strong>Functions</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>to_upper</td>
+<td>Convert a string to upper case</td>
+<td><code>to_upper_copy()</code> <code>to_upper()</code></td>
+</tr>
+<tr class="even">
+<td>to_lower</td>
+<td>Convert a string to lower case</td>
+<td><code>to_lower_copy()</code> <code>to_lower()</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="trimming">Trimming</h2>
+<table>
+<colgroup>
+<col style="width: 14%">
+<col style="width: 37%">
+<col style="width: 47%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Algorithm name</strong></th>
+<th><strong>Description</strong></th>
+<th><strong>Functions</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>trim_left</td>
+<td>Remove leading spaces from a string</td>
+<td><code>trim_left_copy_if()</code> <code>trim_left_if()</code> <code>trim_left_copy()</code> <code>trim_left()</code></td>
+</tr>
+<tr class="even">
+<td>trim_right</td>
+<td>Remove trailing spaces from a string</td>
+<td><code>trim_right_copy_if()</code> <code>trim_right_if()</code> <code>trim_right_copy()</code> <code>trim_right()</code></td>
+</tr>
+<tr class="odd">
+<td>trim</td>
+<td>Remove leading and trailing spaces from a string</td>
+<td><code>trim_copy_if()</code> <code>trim_if()</code> <code>trikm_copy()</code> <code>trim()</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="predicates">Predicates</h2>
+<table>
+<colgroup>
+<col style="width: 16%">
+<col style="width: 43%">
+<col style="width: 40%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Algorithm name</strong></th>
+<th><strong>Description</strong></th>
+<th><strong>Functions</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>starts_with</td>
+<td>Check if a string is a prefix of the other one</td>
+<td><code>starts_with()</code> <code>istarts_with()</code></td>
+</tr>
+<tr class="even">
+<td>ends_with</td>
+<td>Check if a string is a suffix of the other one</td>
+<td><code>ends_with()</code> <code>iends_with()</code></td>
+</tr>
+<tr class="odd">
+<td>contains</td>
+<td>Check if a string is contained of the other one</td>
+<td><code>contains()</code> <code>icontains()</code></td>
+</tr>
+<tr class="even">
+<td>equals</td>
+<td>Check if two strings are equal</td>
+<td><code>equals()</code> <code>iequals()</code></td>
+</tr>
+<tr class="odd">
+<td>lexicographical_compare</td>
+<td>Check if a string is lexicographically less then another one</td>
+<td><code>lexicographical_compare()</code> <code>ilexicographical_compare()</code></td>
+</tr>
+<tr class="even">
+<td>all</td>
+<td>Check if all elements of a string satisfy the given predicate</td>
+<td><code>all()</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="find-algorithms">Find algorithms</h2>
+<table>
+<colgroup>
+<col style="width: 17%">
+<col style="width: 55%">
+<col style="width: 27%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Algorithm name</strong></th>
+<th><strong>Description</strong></th>
+<th><strong>Functions</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>find_first</td>
+<td>Find the first occurrence of a string in the input</td>
+<td><code>find_first()</code> <code>ifind_first()</code></td>
+</tr>
+<tr class="even">
+<td>find_last</td>
+<td>Find the last occurrence of a string in the input</td>
+<td><code>find_last()</code> <code>ifind_last()</code></td>
+</tr>
+<tr class="odd">
+<td>find_nth</td>
+<td>Find the nth (zero-indexed) occurrence of a string in the input</td>
+<td><code>find_nth()</code> <code>ifind_nth()</code></td>
+</tr>
+<tr class="even">
+<td>find_head</td>
+<td>Retrieve the head of a string</td>
+<td><code>find_head()</code></td>
+</tr>
+<tr class="odd">
+<td>find_tail</td>
+<td>Retrieve the tail of a string</td>
+<td><code>find_tail()</code></td>
+</tr>
+<tr class="even">
+<td>find_token</td>
+<td>Find first matching token in the string</td>
+<td><code>find_token()</code></td>
+</tr>
+<tr class="odd">
+<td>find_regex</td>
+<td>Use the regular expression to search the string</td>
+<td><code>find_regex()</code></td>
+</tr>
+<tr class="even">
+<td>find</td>
+<td>Generic find algorithm</td>
+<td><code>find()</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="erasereplace">Erase/Replace</h2>
+<table>
+<colgroup>
+<col style="width: 13%">
+<col style="width: 43%">
+<col style="width: 43%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Algorithm name</strong></th>
+<th><strong>Description</strong></th>
+<th><strong>Functions</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>replace/erase_first</td>
+<td>Replace/Erase the first occurrence of a string in the input</td>
+<td><code>replace_first()</code> <code>replace_first_copy()</code> <code>ireplace_first()</code> <code>ireplace_first_copy()</code> <code>erase_first()</code> <code>erase_first_copy()</code> <code>ierase_first()</code> <code>ierase_first_copy()</code></td>
+</tr>
+<tr class="even">
+<td>replace/erase_last</td>
+<td>Replace/Erase the last occurrence of a string in the input</td>
+<td><code>replace_last()</code> <code>replace_last_copy()</code> <code>ireplace_last()</code> <code>ireplace_last_copy()</code> <code>erase_last()</code> <code>erase_last_copy()</code> <code>ierase_last()</code> <code>ierase_last_copy()</code></td>
+</tr>
+<tr class="odd">
+<td>replace/erase_nth</td>
+<td>Replace/Erase the nth (zero-indexed) oc- currence of a string in the input</td>
+<td><code>replace_nth()</code> <code>replace_nth_copy()</code> <code>ireplace_nth()</code> <code>ireplace_nth_copy()</code> <code>erase_nth()</code> <code>erase_nth_copy()</code> <code>ierase_nth()</code> <code>ierase_nth_copy()</code></td>
+</tr>
+<tr class="even">
+<td>replace/erase_all</td>
+<td>Replace/Erase the all occurrences of a string in the input</td>
+<td><code>replace_all()</code> <code>replace_all_copy()</code> <code>ireplace_all()</code> <code>ireplace_all_copy()</code> <code>erase_all()</code> <code>erase_all_copy()</code> <code>ierase_all()</code> <code>ierase_all_copy()</code></td>
+</tr>
+<tr class="odd">
+<td>replace/erase_head</td>
+<td>Replace/Erase the head of the input</td>
+<td>replace_head() replace_head_copy() erase_head() erase_head_copy()</td>
+</tr>
+<tr class="even">
+<td>replace/erase_tail</td>
+<td>Replace/Erase the tail of the input</td>
+<td><code>replace_tail() replace_tail_copy() erase_tail()</code> <code>erase_tail_copy()</code></td>
+</tr>
+<tr class="odd">
+<td>replace/erase_regex</td>
+<td>Replace/Erase a substring matching the given regular expression</td>
+<td><code>replace_regex()</code> <code>replace_regex_copy()</code> <code>erase_regex()</code> <code>erase_regex_copy()</code></td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 16%">
+<col style="width: 41%">
+<col style="width: 41%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Algorithm name</strong></th>
+<th><strong>Description</strong></th>
+<th><strong>Functions</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>replace/erase_regex_all</td>
+<td>Replace/Erase all substrings matching the given regular expression</td>
+<td><code>replace_all_regex()</code> <code>replace_all_regex_copy()</code> <code>erase_all_regex()</code> <code>erase_all_regex_copy()</code></td>
+</tr>
+<tr class="even">
+<td>find_format</td>
+<td>Generic replace algorithm</td>
+<td><code>find_format()</code> <code>find_format_copy()</code> <code>find_format_all()</code> <code>find_format_all_copy()</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="split">Split</h2>
+<table>
+<colgroup>
+<col style="width: 16%">
+<col style="width: 50%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Algorithm name</strong></th>
+<th><strong>Description</strong></th>
+<th><strong>Functions</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>find_all</td>
+<td>Find/Extract all matching substrings in the input</td>
+<td>find_all() ifind_all() find_all_regex()</td>
+</tr>
+<tr class="even">
+<td>split</td>
+<td>Split input into parts</td>
+<td>split() split_regex()</td>
+</tr>
+<tr class="odd">
+<td>iter_find</td>
+<td>Iteratively apply the finder to the input to find all matching substrings</td>
+<td>iter_find()</td>
+</tr>
+<tr class="even">
+<td>iter_split</td>
+<td>Use the finder to find matching substrings in the input and use them as separators to split the input into parts</td>
+<td>iter_split()</td>
+</tr>
+</tbody>
+</table>
+<h2 id="join">Join</h2>
+<table>
+<colgroup>
+<col style="width: 20%">
+<col style="width: 65%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Algorithm name</strong></th>
+<th><strong>Description</strong></th>
+<th><strong>Functions</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>join</td>
+<td>Join all elements in a container into a single string</td>
+<td>join</td>
+</tr>
+<tr class="even">
+<td>join_if</td>
+<td>Join all elements in a container that satis- fies the condition into a single string</td>
+<td>join_if()</td>
+</tr>
+</tbody>
+</table>
+<h2 id="finders-and-formatters">Finders and Formatters</h2>
+<p><strong>Finders</strong></p>
+<table>
+<colgroup>
+<col style="width: 13%">
+<col style="width: 68%">
+<col style="width: 18%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Finder</strong></th>
+<th><strong>Description</strong></th>
+<th><strong>Generators</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>first_finder</td>
+<td>Search for the first match of the string in an input</td>
+<td><code>first_finder()</code></td>
+</tr>
+<tr class="even">
+<td>last_finder</td>
+<td>Search for the last match of the string in an input</td>
+<td><code>last_finder()</code></td>
+</tr>
+<tr class="odd">
+<td>nth_finder</td>
+<td>Search for the nth (zero-indexed) match of the string in an input</td>
+<td><code>nth_finder()</code></td>
+</tr>
+<tr class="even">
+<td>head_finder</td>
+<td>Retrieve the head of an input</td>
+<td><code>head_finder()</code></td>
+</tr>
+<tr class="odd">
+<td>tail_finder</td>
+<td>Retrieve the tail of an input</td>
+<td><code>tail_finder()</code></td>
+</tr>
+<tr class="even">
+<td>token_finder</td>
+<td>Search for a matching token in an input</td>
+<td><code>token_finder()</code></td>
+</tr>
+<tr class="odd">
+<td>range_finder</td>
+<td>Do no search, always returns the given range</td>
+<td><code>range_finder()</code></td>
+</tr>
+<tr class="even">
+<td>regex_finder</td>
+<td>Search for a substring matching the given regex</td>
+<td><code>regex_finder()</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Formatters</strong></p>
+<table>
+<colgroup>
+<col style="width: 18%">
+<col style="width: 60%">
+<col style="width: 22%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Formatter</strong></th>
+<th><strong>Description</strong></th>
+<th><strong>Generators</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>const_formatter</td>
+<td>Constant formatter. Always return the specified string</td>
+<td><code>const_formatter()</code></td>
+</tr>
+<tr class="even">
+<td>identity_formatter</td>
+<td>Identity formatter. Return unmodified in- put input</td>
+<td><code>identity_formatter()</code></td>
+</tr>
+<tr class="odd">
+<td>empty_formatter</td>
+<td>Null formatter. Always return an empty string</td>
+<td><code>empty_formatter()</code></td>
+</tr>
+<tr class="even">
+<td>regex_formatter</td>
+<td>Regex formatter. Format regex match us- ing the specification in the format string</td>
+<td><code>regex_formatter()</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="iterators">Iterators</h2>
+<p><strong>Find Iterators</strong></p>
+<table>
+<colgroup>
+<col style="width: 16%">
+<col style="width: 55%">
+<col style="width: 28%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Iterator name</strong></th>
+<th><strong>Description</strong></th>
+<th><strong>Iterator class</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>find_iterator</td>
+<td>Iterates through matching substrings in the input</td>
+<td><a href="#_bookmark128">find_iterator</a></td>
+</tr>
+<tr class="even">
+<td>split_iterator</td>
+<td>Iterates through gaps between matching substrings in the input</td>
+<td><a href="#_bookmark138">split_iterator</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="classification">Classification</h2>
+<p><strong>Predicates</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th><strong>Predicate name</strong></th>
+<th><strong>Description</strong></th>
+<th><strong>Generator</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>is_classified</td>
+<td>Generic ctype mask based classification</td>
+<td>is_classified()</td>
+</tr>
+<tr class="even">
+<td>is_space</td>
+<td>Recognize spaces</td>
+<td>is_space()</td>
+</tr>
+<tr class="odd">
+<td>is_alnum</td>
+<td>Recognize alphanumeric characters</td>
+<td>is_alnum()</td>
+</tr>
+<tr class="even">
+<td>is_alpha</td>
+<td>Recognize letters</td>
+<td>is_alpha()</td>
+</tr>
+<tr class="odd">
+<td>is_cntrl</td>
+<td>Recognize control characters</td>
+<td>is_cntrl()</td>
+</tr>
+<tr class="even">
+<td>is_digit</td>
+<td>Recognize decimal digits</td>
+<td>is_digit()</td>
+</tr>
+<tr class="odd">
+<td>is_graph</td>
+<td>Recognize graphical characters</td>
+<td>is_graph()</td>
+</tr>
+<tr class="even">
+<td>is_lower</td>
+<td>Recognize lower case characters</td>
+<td>is_lower()</td>
+</tr>
+<tr class="odd">
+<td>is_print</td>
+<td>Recognize printable characters</td>
+<td>is_print()</td>
+</tr>
+<tr class="even">
+<td>is_punct</td>
+<td>Recognize punctuation characters</td>
+<td>is_punct()</td>
+</tr>
+<tr class="odd">
+<td>is_upper</td>
+<td>Recognize uppercase characters</td>
+<td>is_upper()</td>
+</tr>
+<tr class="even">
+<td>is_xdigit</td>
+<td>Recognize hexadecimal digits</td>
+<td>is_xdigit()</td>
+</tr>
+<tr class="odd">
+<td>is_any_of</td>
+<td>Recognize any of a sequence of characters</td>
+<td>is_any_of()</td>
+</tr>
+<tr class="even">
+<td>is_from_range</td>
+<td>Recognize characters inside a min..max range</td>
+<td>is_from_range()</td>
+</tr>
+</tbody>
+</table>
+<h2 id="示例">示例</h2>
+<h2 id="相关参考">相关参考</h2>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/dodo_check/article/details/8219456">boost 处理字符串_dodo_check的博客-CSDN博客</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/TianFang/archive/2013/02/04/2891538.html">boost的字符串处理函数——string algorithm - 天方 - 博客园 (cnblogs.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://theboostcpplibraries.com/boost.stringalgorithms">Chapter 5. Boost.StringAlgorithms (theboostcpplibraries.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.boost.org/doc/libs/1_46_1/doc/html/string_algo.html">Chapter 21. Boost String Algorithms Library - 1.46.1</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.geeksforgeeks.org/c-boost-string-algorithms-library/">C++ Boost String Algorithms Library - GeeksforGeeks</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.boost.org/doc/libs/1_61_0/doc/html/string_algo.html">Chapter 32. Boost String Algorithms Library - 1.61.0</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/boostorg/algorithm">boostorg/algorithm: Boost.org algorithm module (github.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://scicomp.ethz.ch/public/manual/Boost/1.55.0/string_algo.pdf">Boost String Algorithms Library (ethz.ch)</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/03/22/C++Lib/C++GoogleTest%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" rel="prev" title="C++ GoogleTest基本使用">
+      <i class="fa fa-chevron-left"></i> C++ GoogleTest基本使用
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/03/22/C++/C++%E4%BB%A3%E7%A0%81%E9%A3%8E%E6%A0%BC%E6%8C%87%E5%8D%97/" rel="next" title="C++代码风格指南">
+      C++代码风格指南 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#case-conversion"><span class="nav-number">1.</span> <span class="nav-text">Case Conversion</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#trimming"><span class="nav-number">2.</span> <span class="nav-text">Trimming</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#predicates"><span class="nav-number">3.</span> <span class="nav-text">Predicates</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#find-algorithms"><span class="nav-number">4.</span> <span class="nav-text">Find algorithms</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#erasereplace"><span class="nav-number">5.</span> <span class="nav-text">Erase&#x2F;Replace</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#split"><span class="nav-number">6.</span> <span class="nav-text">Split</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#join"><span class="nav-number">7.</span> <span class="nav-text">Join</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#finders-and-formatters"><span class="nav-number">8.</span> <span class="nav-text">Finders and Formatters</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#iterators"><span class="nav-number">9.</span> <span class="nav-text">Iterators</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#classification"><span class="nav-number">10.</span> <span class="nav-text">Classification</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B"><span class="nav-number">11.</span> <span class="nav-text">示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E5%8F%82%E8%80%83"><span class="nav-number">12.</span> <span class="nav-text">相关参考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">straywriter</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">124</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/straywriter" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;straywriter" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">straywriter</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

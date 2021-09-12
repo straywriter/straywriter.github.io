@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"straywriter.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="C++ 多态">
+<meta property="og:url" content="https://straywriter.github.io/2021/03/19/C++/C++%E5%A4%9A%E6%80%81/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://straywriter.github.io/2021/03/19/C++/C++%E5%A4%9A%E6%80%81/image-20210319190708543.png">
+<meta property="og:image" content="https://straywriter.github.io/2021/03/19/C++/C++%E5%A4%9A%E6%80%81/image-20210319153019136.png">
+<meta property="og:image" content="https://straywriter.github.io/2021/03/19/C++/C++%E5%A4%9A%E6%80%81/20161026215545962">
+<meta property="article:published_time" content="2021-03-19T05:45:33.000Z">
+<meta property="article:modified_time" content="2021-03-19T11:10:19.215Z">
+<meta property="article:author" content="straywriter">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://straywriter.github.io/2021/03/19/C++/C++%E5%A4%9A%E6%80%81/image-20210319190708543.png">
+
+<link rel="canonical" href="https://straywriter.github.io/2021/03/19/C++/C++%E5%A4%9A%E6%80%81/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>C++ 多态 | Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://straywriter.github.io/2021/03/19/C++/C++%E5%A4%9A%E6%80%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="straywriter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C++ 多态
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-03-19 13:45:33 / Modified: 19:10:19" itemprop="dateCreated datePublished" datetime="2021-03-19T13:45:33+08:00">2021-03-19</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="/2021/03/19/C++/C++%E5%A4%9A%E6%80%81/image-20210319190708543.png"></p>
+<h2 id="基本概念">基本概念</h2>
+<p><strong>多态性指相同对象收到不同消息或不同对象收到相同消息时产生不同的实现动作。多态性(polymorphism)可以简单地概括为“一个接口，多种方法”，它是面向对象编程领域的核心概念。</strong></p>
+<p><img src="/2021/03/19/C++/C++%E5%A4%9A%E6%80%81/image-20210319153019136.png"></p>
+<p><strong>C++支持两种多态性：</strong></p>
+<ul>
+<li><p>编译时多态性（静态多态）：通过重载函数和泛型编程实现：先期联编 early binding</p></li>
+<li><p>运行时多态性（动态多态）：通过虚函数实现 ：滞后联编 late binding</p></li>
+</ul>
+<p>C++运行时多态性是通过虚函数来实现的，虚函数允许子类重新定义成员函数，而子类重新定义父类的做法称为覆盖(Override)，或者称为重写。</p>
+<hr>
+<p><strong>静态联编和动态联编：</strong></p>
+<ul>
+<li><p><strong>静态联编：</strong>在编译时所进行的这种联编又称静态束定，在编译时就解决了程序中的操作调用与执行该操作代码间的关系。</p></li>
+<li><p><strong>动态联编：</strong>编译程序在编译阶段并不能确切知道将要调用的函数，只有在程序运行时才能确定将要调用的函数，为此要确切知道该调用的函数，要求联编工作要在程序运行时进行，这种在程序运行时进行联编工作被称为动态联编。</p></li>
+</ul>
+<hr>
+<p><strong>动态多态的条件：</strong></p>
+<ul>
+<li><p>基类中必须包含虚函数，并且派生类中一定要对基类中的虚函数进行<strong>重写</strong>。</p></li>
+<li><p>通过基类对象的指针或者引用调用虚函数。</p></li>
+</ul>
+<hr>
+<p><strong>多态的表现形式：</strong></p>
+<ul>
+<li><strong>派生类的指针</strong>可以赋给<strong>基类指针</strong>；</li>
+<li>通过基类指针调用基类和派生类中的同名「虚函数」时:
+<ol type="1">
+<li>若该指针指向一个基类的对象，那么被调用是 基类的虚函数；</li>
+<li>若该指针指向一个派生类的对象，那么被调用 的是派生类的虚函数。</li>
+</ol></li>
+<li><strong>派生类的对象</strong>可以赋给<strong>基类</strong>引用</li>
+<li>通过基类引用调用基类和派生类中的同名「虚函数」时:
+<ol type="1">
+<li>若该引用引用的是一个基类的对象，那么被调 用是基类的虚函数；</li>
+<li>若该引用引用的是一个派生类的对象，那么被 调用的是派生类的虚函数。</li>
+</ol></li>
+</ul>
+<hr>
+<p>，</p>
+<p><strong>派生类虚表：</strong> 1.先将基类的虚表中的内容拷贝一份 2.如果派生类对基类中的虚函数进行重写，使用派生类的虚函数替换相同偏移量位置的基类虚函数 3.如果派生类中新增加自己的虚函数，按照其在派生类中的声明次序，放在上述虚函数之后</p>
+<p>多态缺陷</p>
+<p>●降低了程序运行效率（多态需要去找虚表的地址） ●空间浪费</p>
+<p><strong>注意：</strong></p>
+<ul>
+<li>构造函数不能为虚函数</li>
+<li>析构函数可为虚函数，且推荐设置基类析构函数为虚函数</li>
+<li>虚函数不能是static</li>
+</ul>
+<hr>
+<h2 id="c-对象模型">C++ 对象模型</h2>
+<hr>
+<h3 id="c-内存分区">C++ 内存分区</h3>
+<p>C++的内存分区大概分成五个部分：</p>
+<ol type="1">
+<li>栈（stack）：是由编译器在需要时自动分配，不需要时自动清除的变量存储区，通常存放局部变量、函数参数等。</li>
+<li>堆（heap）：是由<code>malloc</code>等分配的内存块，和堆十分相似，用<code>free</code>来释放</li>
+<li>自由存储区：是由<code>new</code>分配的内存块，由程序员释放（编译器不管），一般一个<code>new</code>与一个<code>delete</code>对应，一个<code>new[]</code>与一个<code>delete[]</code>对应，如果程序员没有释放掉，资源将由操作系统在程序结束后自动回收</li>
+<li>全局/静态存储区：<strong>全局变量</strong>和<strong>静态变量</strong>被分配到同一块内存中</li>
+<li>常量存储区：这是一块特殊存储区，里边存放常量，不允许修改</li>
+</ol>
+<h2 id="虚函数">虚函数</h2>
+<p>一个虚函数是一个可继承和重写的函数，使动态调度变得更加容易.C++通过继承和虚函数来实现多态性，<strong>虚函数</strong>是通过一张<strong>虚函数表</strong>实现的，虚函数表解决了继承、覆盖、添加虚函数的问题，保证其真实反应实际的函数</p>
+<p>虚函数继承是解决多态性的，当用基类指针指向派生类对象的时候，基类指针调用虚函数的时候会自动调用派生类的虚函数，这就是多态性，也叫动态编联。重要概念是 <strong>虚函数指针(vfptr)</strong> 和 <strong>虚函数表(vftable)</strong></p>
+<p><strong>需要注意：</strong></p>
+<ol type="1">
+<li><p>只有类的成员函数才能声明为虚函数，虚函数仅适用于有继承关系的类对象。普通函数不能声明为虚函数。</p></li>
+<li><p>静态成员函数不能是虚函数，因为静态成员函数不受限于某个对象。</p></li>
+<li><p>内联函数（inline）不能是虚函数，因为内联函数不能在运行中动态确定位置。</p></li>
+<li><p>构造函数不能是虚函数。</p></li>
+<li><p>析构函数可以是虚函数，而且建议声明为虚函数。</p></li>
+<li><p>如果含有虚函数的类中没有定义构造函数，编译器会自动合成一个构造函数</p></li>
+<li><p>在面向对象的编程中，当派生类从基类继承时，可以通过基类类型的指针或引用而不是派生类类型来引用派生类的对象。如果存在派生类重写的基类方法，则可以根据指针或引用的声明类型或“后期”将此类引用或指针实际调用的方法“较早”（由编译器）绑定。 （即，由该语言的运行时系统），根据所引用对象的实际类型而定。</p></li>
+</ol>
+<h3 id="纯虚函数和抽象类">纯虚函数和抽象类</h3>
+<p>纯虚函数相当于基类只提供接口而不定义具体实现，在函数声明后加=0，如： virtual void Eat() = 0。重要概念是 <strong>抽象类</strong>。</p>
+<p>在基类中不能对虚函数给出<strong>有意义</strong>的实现，凡是含有纯虚函数的类叫做抽象类。这种类不能声明对象，只是作为基类为派生类服务。除非在派生类中完全实现基类中所有的的纯虚函数，否则，派生类也变成了抽象类，不能实例化对象。</p>
+<p>一般而言纯虚函数的函数体是缺省的，但是也可以给出纯虚函数的函数体（此时纯虚函数变为虚函数），这一点经常被人们忽视，调用纯虚函数的方法为baseclass::virtual function。</p>
+<p><strong>抽象类的继承类不实现纯虚函数会怎样？</strong></p>
+<p>那么继承类本身也是抽象类，不能直接用来实例化对象。</p>
+<hr>
+<h3 id="虚函数类继承">虚函数类继承</h3>
+<ul>
+<li>一般继承时，子类的虚函数表中先将父类虚函数放在前，再放自己的虚函数指针。</li>
+<li>如果子类覆盖了父类的虚函数，将被放到了虚表中<strong>原来父类虚函数</strong>的位置。</li>
+<li>在多继承的情况下，<strong>每个父类都有自己的虚表，子类的成员函数被放到了第一个父类的表中。</strong>，也就是说当类在多重继承中时，其实例对象的内存结构并不只记录一个虚函数表指针。基类中有几个存在虚函数，则子类就会保存几个虚函数表指针</li>
+</ul>
+<p><strong>简单的总结一下：</strong></p>
+<blockquote>
+<p><strong>1. 每一个基类都会有自己的虚函数表，派生类的虚函数表的数量根据继承的基类的数量来定。</strong></p>
+<p><strong>2. 派生类的虚函数表的顺序，和继承时的顺序相同。</strong></p>
+<p><strong>3. 派生类自己的虚函数放在第一个虚函数表的后面，顺序也是和定义时顺序相同。</strong></p>
+<p><strong>4. 对于派生类如果要覆盖父类中的虚函数，那么会在虚函数表中代替其位置。</strong></p>
+</blockquote>
+<h3 id="虚继承">虚继承</h3>
+<p>虚继承主要用于菱形形式的继承形式，是为了在多继承的时候避免引发歧义，避免重复拷贝。重要概念是 <strong>虚基类指针(vbptr)</strong> 和 <strong>虚基类表(vftable)</strong>。</p>
+<h2 id="虚函数用法">虚函数用法</h2>
+<p><strong>虚析构函数</strong></p>
+<p>虽然析构函数是不继承的，但若基类声明其析构函数为 <code>virtual</code>，则派生的析构函数始终覆盖它。这使得可以通过指向基类的指针 delete 动态分配的多态类型对象</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Base</span> &#123;</span></span><br><span class="line"> <span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">virtual</span> ~Base() &#123; <span class="comment">/* 释放 Base 的资源 */</span> &#125;</span><br><span class="line">&#125;;</span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Derived</span> :</span> <span class="keyword">public</span> Base &#123;</span><br><span class="line">    ~Derived() &#123; <span class="comment">/* 释放 Derived 的资源 */</span> &#125;</span><br><span class="line">&#125;;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Base* b = <span class="keyword">new</span> Derived;</span><br><span class="line">    <span class="keyword">delete</span> b; <span class="comment">// 进行对 Base::~Base() 的虚函数调用</span></span><br><span class="line">              <span class="comment">// 由于它是虚函数，故它调用的是 Derived::~Derived()，</span></span><br><span class="line">              <span class="comment">// 这就能释放派生类的资源，然后遵循通常的析构顺序</span></span><br><span class="line">              <span class="comment">// 调用 Base::~Base()</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>此外，若类是<em>多态的</em>（声明或继承了至少一个虚函数），且其析构函数非虚，则删除它是<em>未定义行为</em>，无论不调用派生的析构函数时是否会导致资源泄漏。</p>
+<p>一条有用的方针是，任何基类的析构函数必须为<a target="_blank" rel="noopener" href="https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#discussion-make-base-class-destructors-public-and-virtual-or-protected-and-nonvirtual">公开且虚，或受保护且非虚</a></p>
+<p><strong>在构造和析构期间</strong></p>
+<p>当从构造函数或从析构函数中直接或间接调用虚函数（包括在类的非静态数据成员的构造或析构期间，例如在成员<a target="_blank" rel="noopener" href="https://zh.cppreference.com/w/cpp/language/initializer_list">初始化器列表</a>中），且对其实施调用的对象是正在构造或析构中的对象时，所调用的函数是构造函数或析构函数的类中的最终覆盖函数，而非进一步的派生类中的覆盖函数。 换言之，在构造和析构期间，进一步的派生类并不存在。</p>
+<p>当构建具有多个分支的复杂类时，在属于一个分支的构造函数内，多态被限制到该类及其基类：若它获得了指向这个子层级之外的某个基类子对象的指针或引用，且试图进行虚函数调用（例如通过显式成员访问），则行为未定义：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">V</span> &#123;</span></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">f</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">g</span><span class="params">()</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">A</span> :</span> <span class="keyword">virtual</span> V &#123;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">f</span><span class="params">()</span></span>; <span class="comment">// A::f 是 V::f 在 A 中的最终覆盖函数</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">B</span> :</span> <span class="keyword">virtual</span> V &#123;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">g</span><span class="params">()</span></span>; <span class="comment">// B::g 是 V::g 在 B 中的最终覆盖函数</span></span><br><span class="line">    B(V*, A*);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">D</span> :</span> A, B &#123;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">f</span><span class="params">()</span></span>; <span class="comment">// D::f 是 V::f 在 D 中的最终覆盖函数</span></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">g</span><span class="params">()</span></span>; <span class="comment">// D::g 是 V::g 在 D 中的最终覆盖函数</span></span><br><span class="line"> </span><br><span class="line">    <span class="comment">// 注意：A 在 B 之前初始化</span></span><br><span class="line">    D() : B((A*)<span class="keyword">this</span>, <span class="keyword">this</span>) </span><br><span class="line">    &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"> </span><br><span class="line"><span class="comment">// B 的构造函数，从 D 的构造函数调用 </span></span><br><span class="line">B::B(V* v, A* a)</span><br><span class="line">&#123;</span><br><span class="line">    f(); <span class="comment">// 对 V::f 的虚调用（尽管 D 拥有最终覆盖函数，D 也不存在）</span></span><br><span class="line">    g(); <span class="comment">// 对 B::g 的虚调用，在 B 中是最终覆盖函数</span></span><br><span class="line"> </span><br><span class="line">    v-&gt;g(); <span class="comment">// v 的类型 V 是 B 的基类，虚调用如前调用 B::g</span></span><br><span class="line"> </span><br><span class="line">    a-&gt;f(); <span class="comment">// a 的类型 A 不是 B 的基类，它属于层级中的不同分支。</span></span><br><span class="line">            <span class="comment">// 尝试通过这个分支进行虚调用导致未定义行为，</span></span><br><span class="line">            <span class="comment">// 即使此情况下 A 已完成构造</span></span><br><span class="line">            <span class="comment">// （它在 B 之前构造，因为它在 D 的基类列表中先于 B 出现）</span></span><br><span class="line">            <span class="comment">// 实践中，对 A::f 的虚调用会试图使用 B 的虚成员函数表，</span></span><br><span class="line">            <span class="comment">// 因为它在 B 的构造期间是活跃的</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="虚函数的应用注意事项">虚函数的应用注意事项</h3>
+<ul>
+<li>内联函数 (inline) 虚函数用于实现运行时的多态，或者称为晚绑定或动态绑定。而内联函数用于提高效率。内联函数的原理是，在编译期间，对调用内联函数的地方的代码替换成函数代码。内联函数对于程序中需要频繁使用和调用的小函数非常有用。默认地，类中定义的所有函数，除了虚函数之外，会隐式地或自动地当成内联函数(注意：内联只是对于编译器的一个建议，编译器可以自己决定是否进行内联). 无论何时，<strong>使用基类指针或引用来调用虚函数，它都不能为内联函数(因为调用发生在运行时)</strong>。但是，无论何时，使用类的对象(不是指针或引用)来调用时，可以当做是内联，因为编译器在编译时确切知道对象是哪个类的。</li>
+<li>静态成员函数 (static) static成员不属于任何类对象或类实例，所以即使给此函数加上virutal也是没有任何意义的。此外静态与非静态成员函数之间有一个主要的区别，那就是<strong>静态成员函数没有this指针</strong>，从而导致两者调用方式不同。虚函数依靠vptr和vtable来处理。vptr是一个指针，在类的构造函数中创建生成，并且只能用this指针来访问它，因为它是类的一个成员，并且vptr指向保存虚函数地址的vtable。<strong>虚函数的调用关系：this -&gt; vptr -&gt; vtable -&gt;virtual function</strong>，对于静态成员函数，它没有this指针，所以无法访问vptr. 这就是为何<strong>static函数不能为virtual</strong>。</li>
+<li>构造函数 (constructor) 虚函数基于虚表vtable（内存空间），构造函数 (constructor) 如果是virtual的，调用时也需要根据vtable寻找，但是constructor是virtual的情况下是找不到的，因为constructor自己本身都不存在了，创建不到class的实例，没有实例class的成员（除了public static/protected static for friend class/functions，其余无论是否virtual）都不能被访问了。此外构造函数不仅不能是虚函数。而且在构造函数中调用虚函数，实际执行的是父类的对应函数，因为自己还没有构造好,多态是被disable的。</li>
+<li>析构函数 (deconstructor) <strong>对于可能作为基类的类的析构函数要求就是virtual的</strong>。因为如果不是virtual的，派生类析构的时候调用的是基类的析构函数，而基类的析构函数只要对基类部分进行析构，从而可能导致派生类部分出现内存泄漏问题。</li>
+<li>纯虚函数 析构函数可以是纯虚的，但<strong>纯虚析构函数必须有定义体</strong>，因为析构函数的调用是在子类中隐含的。</li>
+</ul>
+<hr>
+<h2 id="虚函数的实现原理">虚函数的实现原理</h2>
+<p><strong>虚函数（Virtual Function）是通过一张虚函数表来实现的</strong>。简称为V-Table。在这个表中，主要是一个类的虚函数的地址表，<strong>这张表解决了继承、覆盖的问题，保证其真实反应实际的函数</strong>。这样，在有虚函数的类的实例中分配了指向这个表的指针的内存，所以，当用父类的指针来操作一个子类的时候，这张虚函数表就显得尤为重要了，它就像一个地图一样，指明了实际所应该调用的函数。</p>
+<p>虚函数继承是解决多态性的，当用基类指针指向派生类对象的时候，基类指针调用虚函数的时候会自动调用派生类的虚函数，这就是多态性，也叫动态编联。重要概念是 <strong>虚函数指针(vfptr)</strong> 和 <strong>虚函数表(vftable)</strong></p>
+<h3 id="虚函数的调用过程">虚函数的调用过程</h3>
+<p>当调用一个虚函数时，首先通过对象内存中的vptr找到虚函数表vtbl，接着通过vtbl找到对应虚函数的实现区域并进行调用。</p>
+<p>其中<strong>被执行的代码必须和调用函数的对象的动态类型相一致</strong>。编译器需要做的就是如何高效的实现提供这种特性。不同编译器实现细节也不相同。大多数编译器通过虚表vtbl（virtual table）和虚表指针vptr（virtual table pointer）来实现的。 当一个类声明了虚函数或者继承了虚函数，这个类就会有自己的vtbl。vtbl核心就是一个函数指针数组，有的编译器用的是链表，不过方法都是差不多。vtbl数组中的每一个元素对应一个函数指针指向该类的一个虚函数，同时该类的每一个对象都会包含一个vptr，vptr指向该vtbl的地址。 在有继承关系时(子类相对于其直接父类)</p>
+<h3 id="虚函数表-virtual-method-table">虚函数表 Virtual method table</h3>
+<p>C++的编译器会保证<strong>虚函数表的指针存在于对象实例中最前面的位置</strong>（为了保证取虚函数表有最高的性能，在有多层继承或是多重继承的情况下），这意味着我们通过对象实例的地址得到这张虚函数表的地址，然后就可以遍历其中函数指针，并调用相应的函数</p>
+<p>对于一个类来说，<strong>如果类中存在虚函数，那么该类的大小就会多4个字节，然而这4个字节就是一个指针的大小，这个指针指向虚函数表</strong>。所以，如果对象存在虚函数，那么编译器就会生成一个指向虚函数表的指针，所有的虚函数都存在于这个表中，<strong>虚函数表就可以理解为一个数组，每个单元用来存放虚函数的地址</strong>。</p>
+<hr>
+<h3 id="虚表指针">虚表指针</h3>
+<p>在一个类实例中指向虚函数表的指针。</p>
+<h3 id="虚函数性能分析">虚函数性能分析</h3>
+<p><strong>调用性能</strong></p>
+<p>从前面虚函数的调用过程可知。当调用虚函数时过程如下（引自More Effective C++）:</p>
+<ul>
+<li>通过对象的 vptr 找到类的 vtbl。 这是一个简单的操作,因为编译器知道在对象内 哪里能找到 vptr(毕竟是由编译器放置的它们)。因此这个代价只是一个偏移调整(以得到 vptr)和一个指针的间接寻址(以得到 vtbl)。</li>
+<li>找到对应 vtbl 内的指向被调用函数的指针。 这也是很简单的, 因为编译器为每个虚函数在 vtbl 内分配了一个唯一的索引。这步的代价只是在 vtbl 数组内的一个偏移。</li>
+<li>调用第二步找到的的指针所指向的函数。
+<ul>
+<li>在单继承的情况下 调用虚函数所需的代价基本上和非虚函数效率一样，在大多数计算机上它多执行了很少的一些指令，<strong>所以有很多人一概而论说虚函数性能不行是不太科学的。</strong></li>
+<li>在多继承的情况 由于会根据多个父类生成多个vptr，在对象里为寻找 vptr 而进行的偏移量计算会变得复杂一些，但这些并不是虚函数的性能瓶颈。<strong>虚函数运行时所需的代价主要是虚函数不能是内联函数。</strong>这也是非常好理解的，是因为内联函数是指在编译期间用被调用的函数体本身来代替函数调用的指令，但是虚函数的“虚”是指“直到运行时才能知道要调用的是哪一个函数。”但虚函数的运行时多态特性就是要在运行时才知道具体调用哪个虚函数，所以没法在编译时进行内联函数展开。当然如果通过对象直接调用虚函数它是可以被内联，但是大多数虚函数是通过对象的指针或引用被调用的，这种调用不能被内联。 因为这种调用是标准的调用方式，所以虚函数实际上不能被内联。</li>
+</ul></li>
+</ul>
+<p><strong>空间占用</strong></p>
+<p>在上面的虚函数实现原理部分，可以看到为了实现运行时多态机制，<strong>编译器会给每一个包含虚函数或继承了虚函数的类自动建立一个虚函数表</strong>，所以虚函数的一个代价就是会增加类的体积。</p>
+<p>在虚函数接口较少的类中这个代价并不明显，虚函数表vtbl的体积相当于几个函数指针的体积，如果你有大量的类或者在每个类中有大量的虚函数,你会发现 vtbl 会占用大量的地址空间。但这并不是最主要的代价，主要的代价是发生在类的继承过程中，在上面的分析中，可以看到，当子类继承父类的虚函数时，子类会有自己的vtbl，如果子类只覆盖父类的一两个虚函数接口，子类vtbl的其余部分内容会与父类重复。<strong>如果存在大量的子类继承，且重写父类的虚函数接口只占总数的一小部分的情况下，会造成大量地址空间浪费。</strong></p>
+<p>在一些GUI库上这种大量子类继承自同一父类且只覆盖其中一两个虚函数的情况是经常有的，这样就导致UI库的占用内存明显变大。 由于虚函数指针vptr的存在，虚函数也会增加该类的每个对象的体积。在单继承或没有继承的情况下，类的每个对象会多一个vptr指针的体积，也就是4个字节；在多继承的情况下，类的每个对象会多N个（N＝包含虚函数的父类个数）vptr的体积，也就是4N个字节。当一个类的对象体积较大时，这个代价不是很明显，但当一个类的对象很轻量的时候，如成员变量只有4个字节，那么再加上4（或4N）个字节的vptr，对象的体积相当于翻了1（或N）倍，这个代价是非常大的。</p>
+<h2 id="重写重载隐藏">重写/重载/隐藏</h2>
+<p><img src="/2021/03/19/C++/C++%E5%A4%9A%E6%80%81/20161026215545962"></p>
+<p>重写可以有两种，直接重写成员函数和重写虚函数，只有重写了虚函数的才能算作是体现了C++多态性。而重载则是允许有多个同名的函数，而这些函数的参数列表不同，允许参数个数不同，参数类型不同，或者两者都不同。编译器会根据这些函数的不同列表，将同名的函数的名称做修饰，从而生成一些不同名称的预处理函数，来实现同名函数调用时的重载问题。但这并没有体现多态性。</p>
+<p>隐藏是指派生类的函数屏蔽了与其同名的基类函数。隐藏规则如下：</p>
+<ol type="1">
+<li>如果派生类的函数与基类的函数同名，但是参数不同。此时，不论有无virtual 关键字，基类的函数将被隐藏（注意别与重载混淆，重载是在同一个类中发生）。</li>
+<li>如果派生类的函数与基类的函数同名，并且参数也相同，但是基类函数没有virtual 关键字。此时，基类的函数被隐藏（注意别与覆盖混淆，覆盖有virtual关键字）。</li>
+</ol>
+<h2 id="协变">协变</h2>
+<p><strong>协变：</strong>基类（或者派生类）的虚函数返回基类（派生类）的指针（引用）</p>
+<p><strong>重写</strong> ： （a）基类中将被重写的函数必须为虚函数（上面的检测用例已经证实过了） （b）基类和派生类中虚函数的原型必须保持一致（返回值类型，函数名称以及参数列表），<strong>协变和析构函数（基类和派生类的析构函数是不一样的）除外</strong> （c）访问限定符可以不同</p>
+<p><strong>协变返回类型：</strong></p>
+<p>若函数 <code>Derived::f</code> 覆盖 <code>Base::f</code>，则其返回类型必须要么相同要么为<em>协变（covariant）</em>。当满足所有下列要求时，两个类型为协变：</p>
+<ul>
+<li>两个类型均为到类的指针或引用（左值或右值）。不允许多级指针或引用。</li>
+<li><code>Base::f()</code> 的返回类型中被引用/指向的类，必须是 <code>Derived::f()</code> 的返回类型中被引用/指向的类的无歧义且可访问的直接或间接基类。</li>
+<li><code>Derived::f()</code> 的返回类型必须有相对于 <code>Base::f()</code> 的返回类型的相等或较少的 <a target="_blank" rel="noopener" href="https://zh.cppreference.com/w/cpp/language/cv">cv 限定</a>。</li>
+</ul>
+<p><code>Derived::f</code> 的返回类型中的类必须要么是 <code>Derived</code> 自身，要么必须是于 <code>Derived::f</code> 声明点的某个<a target="_blank" rel="noopener" href="https://zh.cppreference.com/w/cpp/language/incomplete_type">完整类型</a>。</p>
+<p>进行虚函数调用时，最终覆盖函数的返回类型被<a target="_blank" rel="noopener" href="https://zh.cppreference.com/w/cpp/language/implicit_conversion">隐式转换</a>成所调用的被覆盖函数的返回类型：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">class B &#123;&#125;;</span><br><span class="line"> </span><br><span class="line">struct Base &#123;</span><br><span class="line">    virtual void vf1();</span><br><span class="line">    virtual void vf2();</span><br><span class="line">    virtual void vf3();</span><br><span class="line">    virtual B* vf4();</span><br><span class="line">    virtual B* vf5();</span><br><span class="line">&#125;;</span><br><span class="line"> </span><br><span class="line">class D : private B &#123;</span><br><span class="line">    friend struct Derived; &#x2F;&#x2F; Derived 中，B 是 D 的可访问基类</span><br><span class="line">&#125;;</span><br><span class="line"> </span><br><span class="line">class A; &#x2F;&#x2F; 前置声明的类是不完整类型</span><br><span class="line"> </span><br><span class="line">struct Derived : public Base &#123;</span><br><span class="line">    void vf1();    &#x2F;&#x2F; 虚函数，覆盖 Base::vf1()</span><br><span class="line">    void vf2(int); &#x2F;&#x2F; 非虚函数，隐藏 Base::vf2()</span><br><span class="line">&#x2F;&#x2F;  char vf3();    &#x2F;&#x2F; 错误：覆盖 Base::vf3，但具有不同且非协变的返回类型</span><br><span class="line">    D* vf4();      &#x2F;&#x2F; 覆盖 Base::vf4() 并具有协变的返回类型</span><br><span class="line">&#x2F;&#x2F;  A* vf5();      &#x2F;&#x2F; 错误：A 是不完整类型</span><br><span class="line">&#125;;</span><br><span class="line"> </span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    Derived d;</span><br><span class="line">    Base&amp; br &#x3D; d;</span><br><span class="line">    Derived&amp; dr &#x3D; d;</span><br><span class="line"> </span><br><span class="line">    br.vf1(); &#x2F;&#x2F; 调用 Derived::vf1()</span><br><span class="line">    br.vf2(); &#x2F;&#x2F; 调用 Base::vf2()</span><br><span class="line">&#x2F;&#x2F;  dr.vf2(); &#x2F;&#x2F; 错误：vf2(int) 隐藏 vf2()</span><br><span class="line"> </span><br><span class="line">    B* p &#x3D; br.vf4(); &#x2F;&#x2F; 调用 Derived::vf4() 并将结果转换为 B*</span><br><span class="line">    D* q &#x3D; dr.vf4(); &#x2F;&#x2F; 调用 Derived::vf4() 而不将结果转换为 B*</span><br><span class="line"> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="面试题">面试题</h2>
+<p><strong>哪些函数不能定义为虚函数</strong>？</p>
+<p>1）友元函数，它不是类的成员函数</p>
+<p>2）全局函数  静态成员函数，它没有this指针</p>
+<p>3）构造函数，拷贝构造函数，以及赋值运算符重载（可以但是一般不建议作为虚函数）</p>
+<hr>
+<h2 id="相关参考">相关参考</h2>
+<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Virtual_method_table">Virtual method table wiki</a></p>
+<p><a target="_blank" rel="noopener" href="https://zh.cppreference.com/w/cpp/language/virtual">cppreference</a></p>
+<p><strong>相关文章</strong></p>
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1599283">C++虚函数表深入探索(详细全面)</a></p>
+<p><a target="_blank" rel="noopener" href="https://coolshell.cn/articles/12165.html">C++ 虚函数表解析</a></p>
+<p><a target="_blank" rel="noopener" href="https://coolshell.cn/articles/12176.html">C++ 对象的内存布局</a></p>
+<p>英文资料</p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2003.05039.pdf">逆向C++中的虚继承</a></p>
+<p><a target="_blank" rel="noopener" href="http://refspecs.linux-foundation.org/LSB_5.0.0/LSB-Core-generic/LSB-Core-generic/cxxclasses.html">C++ Class Representations</a></p>
+<p>相关文章</p>
+<p><a target="_blank" rel="noopener" href="https://jacktang816.github.io/post/virtualfunction/">C++虚函数的实现基本原理</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/37340242">C++ 多态</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/03/18/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/%E5%85%A8%E5%B1%80%E7%85%A7%E6%98%8EBRDF%E9%87%87%E6%A0%B7%E6%96%B9%E6%B3%95/" rel="prev" title="An Importance Sampling Method for arbitrary BRDFs used in Global Illumination Applications 读书总结">
+      <i class="fa fa-chevron-left"></i> An Importance Sampling Method for arbitrary BRDFs used in Global Illumination Applications 读书总结
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/03/22/C++/C++STL%E7%AE%97%E6%B3%95/" rel="next" title="C++ STL 算法">
+      C++ STL 算法 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.</span> <span class="nav-text">C++ 对象模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#c-%E5%86%85%E5%AD%98%E5%88%86%E5%8C%BA"><span class="nav-number">2.1.</span> <span class="nav-text">C++ 内存分区</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%99%9A%E5%87%BD%E6%95%B0"><span class="nav-number">3.</span> <span class="nav-text">虚函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%AF%E8%99%9A%E5%87%BD%E6%95%B0%E5%92%8C%E6%8A%BD%E8%B1%A1%E7%B1%BB"><span class="nav-number">3.1.</span> <span class="nav-text">纯虚函数和抽象类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%99%9A%E5%87%BD%E6%95%B0%E7%B1%BB%E7%BB%A7%E6%89%BF"><span class="nav-number">3.2.</span> <span class="nav-text">虚函数类继承</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%99%9A%E7%BB%A7%E6%89%BF"><span class="nav-number">3.3.</span> <span class="nav-text">虚继承</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%99%9A%E5%87%BD%E6%95%B0%E7%94%A8%E6%B3%95"><span class="nav-number">4.</span> <span class="nav-text">虚函数用法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%99%9A%E5%87%BD%E6%95%B0%E7%9A%84%E5%BA%94%E7%94%A8%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">4.1.</span> <span class="nav-text">虚函数的应用注意事项</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%99%9A%E5%87%BD%E6%95%B0%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="nav-number">5.</span> <span class="nav-text">虚函数的实现原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%99%9A%E5%87%BD%E6%95%B0%E7%9A%84%E8%B0%83%E7%94%A8%E8%BF%87%E7%A8%8B"><span class="nav-number">5.1.</span> <span class="nav-text">虚函数的调用过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%99%9A%E5%87%BD%E6%95%B0%E8%A1%A8-virtual-method-table"><span class="nav-number">5.2.</span> <span class="nav-text">虚函数表 Virtual method table</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%99%9A%E8%A1%A8%E6%8C%87%E9%92%88"><span class="nav-number">5.3.</span> <span class="nav-text">虚表指针</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%99%9A%E5%87%BD%E6%95%B0%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90"><span class="nav-number">5.4.</span> <span class="nav-text">虚函数性能分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8D%E5%86%99%E9%87%8D%E8%BD%BD%E9%9A%90%E8%97%8F"><span class="nav-number">6.</span> <span class="nav-text">重写&#x2F;重载&#x2F;隐藏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%8F%E5%8F%98"><span class="nav-number">7.</span> <span class="nav-text">协变</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%A2%E8%AF%95%E9%A2%98"><span class="nav-number">8.</span> <span class="nav-text">面试题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E5%8F%82%E8%80%83"><span class="nav-number">9.</span> <span class="nav-text">相关参考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">straywriter</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">124</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/straywriter" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;straywriter" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">straywriter</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

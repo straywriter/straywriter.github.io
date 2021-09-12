@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"straywriter.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="Latex基础学习">
+<meta property="og:url" content="https://straywriter.github.io/2021/03/22/Latex/Latex%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-03-22T13:59:11.315Z">
+<meta property="article:modified_time" content="2021-04-17T12:32:58.425Z">
+<meta property="article:author" content="straywriter">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://straywriter.github.io/2021/03/22/Latex/Latex%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Latex基础学习 | Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://straywriter.github.io/2021/03/22/Latex/Latex%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="straywriter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Latex基础学习
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-03-22 21:59:11" itemprop="dateCreated datePublished" datetime="2021-03-22T21:59:11+08:00">2021-03-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-04-17 20:32:58" itemprop="dateModified" datetime="2021-04-17T20:32:58+08:00">2021-04-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Latex/" itemprop="url" rel="index"><span itemprop="name">Latex</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <hr>
+<h1 id="latex-公式">Latex 公式</h1>
+<p>求和 积分</p>
+<ul>
+<li>行内公式与行间公式</li>
+<li>数学结构的输入</li>
+<li>数学符号的输入</li>
+<li>多行公式排版</li>
+</ul>
+<h3 id="显示方法">1.显示方法</h3>
+<ul>
+<li>嵌入文字显示：<code>$...$</code> eg: <code>$\sum^n_&#123;i=1&#125;x^i=1$</code> ==&gt; ∑i=1nxi=1</li>
+<li>单行显示： <code>$$...$$</code> eg: <code>$ $\sum^n_&#123;i=1&#125;x^i=1$ $</code> ==&gt;∑i=1nxi=1</li>
+<li>带序号显示：<code>\begin&#123;equation&#125;...\end&#123;equation&#125;</code> eg: <code>\begin&#123;equation&#125;\sum^n_&#123;i=1&#125;x^i=1\end&#123;equation&#125;</code> ==&gt;(1)∑i=1nxi=1<code>\begin&#123;equation&#125;\x+y=z\end&#123;equation&#125;</code> ==&gt;(2)x+y=z</li>
+</ul>
+<h3 id="通用显示规则">2.通用显示规则</h3>
+<ul>
+<li><code>^</code> =&gt; 上标</li>
+<li><code>_</code> =&gt; 下标</li>
+<li><code>&#123;&#125;</code> =&gt; 包括</li>
+<li><code>~</code> =&gt; 空格</li>
+<li><code>\</code> =&gt; 转移符号</li>
+</ul>
+<h3 id="增强型显示规则">3.增强型显示规则</h3>
+<ul>
+<li>求根 eg: <code>$\sqrt&#123;x+y&#125;$</code>==&gt; x+y eg: <code>$\sqrt[3]&#123;x+y&#125;$</code>==&gt; x+y3</li>
+<li>分数形式 eg: <code>$\frac&#123;a+1&#125;&#123;b+2&#125;$</code> ==&gt; a+1b+2 eg: <code>$&#123;a+1&#125;\over&#123;b+2&#125;$</code> ==&gt; a+1b+2</li>
+<li>求和 eg: <code>$\sum$</code>==&gt; ∑</li>
+<li>求积 eg: <code>$\prod^n_&#123;i=1&#125;i+1=1$</code> ==&gt; ∏i=1ni+1=1</li>
+<li>求积分 eg: <code>$\int x+1$</code> ==&gt; ∫x+1</li>
+<li>求积分 eg: <code>$\iint x+1$</code> ==&gt; ∬x+1</li>
+<li>并集 eg: <code>$A\bigcup B$</code> ==&gt; A⋃B</li>
+<li>并集 eg: <code>$A\cup B$</code> ==&gt; A∪B</li>
+<li>交集 eg: <code>$A\cap B$</code> ==&gt; A∩B</li>
+<li>交集 eg: <code>$A\bigcap B$</code> ==&gt; A⋂B</li>
+<li>箭头 eg: <code>$A\to B$</code> ==&gt; A→B</li>
+<li>eg: <code>$\lim_&#123;0\to 100&#125;$</code> ==&gt; lim0→100</li>
+<li>eg: <code>$\ln_&#123;0\to 100&#125;$</code> ==&gt; ln0→100</li>
+<li>eg: <code>$\sin x$</code> ==&gt; sin⁡x</li>
+<li>eg: <code>$\cos x$</code> ==&gt; cos⁡x</li>
+<li>8m空格</li>
+<li>4m空格</li>
+<li>乘号 eg: <code>$a \times b$</code>=a×b</li>
+<li>除号 eg: <code>$a\div b$</code>=a÷b</li>
+<li>{} 花括号显示 eg: <code>$\\&#123; hello \\&#125;$</code> ==&gt; {hello} <em>注意：在这里我测试的Sublime Text3编写输出的结果， 如果在其他MarkDown编辑器可能要使用单反斜杠</em></li>
+<li>小括号增强 eg: <code>$\left( hello\right)$</code> ==&gt; (hello)</li>
+<li>中括号增强 eg: <code>$\left[hello\right]$</code> ==&gt; [hello]</li>
+<li>绝对值增强 eg: <code>$\left|hello\right|$</code> ==&gt; |hello|</li>
+<li>尖括号 eg: <code>$\langle hello\rangle$</code> ==&gt; ⟨hello⟩</li>
+<li>向上取整 eg: <code>$\lceil hello\rceil$</code> ==&gt; ⌈hello⌉</li>
+<li>向下取整 eg: <code>$\lfloor hllo\rfloor$</code> ==&gt; ⌊hllo⌋</li>
+</ul>
+<h3 id="数学符号表一">4.数学符号表一</h3>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">符号</th>
+<th style="text-align: left;">显示方法</th>
+<th style="text-align: left;">符号</th>
+<th style="text-align: left;">显示方法</th>
+<th style="text-align: left;">符号</th>
+<th style="text-align: left;">显示方法</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">±</td>
+<td style="text-align: left;"><code>\pm</code></td>
+<td style="text-align: left;">∓</td>
+<td style="text-align: left;"><code>\mp</code></td>
+<td style="text-align: left;">×</td>
+<td style="text-align: left;"><code>\times</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">÷</td>
+<td style="text-align: left;"><code>\div</code></td>
+<td style="text-align: left;">∗</td>
+<td style="text-align: left;"><code>\ast</code></td>
+<td style="text-align: left;">⋆</td>
+<td style="text-align: left;"><code>\star</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">∘</td>
+<td style="text-align: left;"><code>\circ</code></td>
+<td style="text-align: left;">∙</td>
+<td style="text-align: left;"><code>\bullet</code></td>
+<td style="text-align: left;">⋅</td>
+<td style="text-align: left;"><code>\cdot</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">⊕</td>
+<td style="text-align: left;"><code>\oplus</code></td>
+<td style="text-align: left;">⊘</td>
+<td style="text-align: left;"><code>\oslash</code></td>
+<td style="text-align: left;">†</td>
+<td style="text-align: left;"><code>\dagger</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">+</td>
+<td style="text-align: left;"><code>+</code></td>
+<td style="text-align: left;">−</td>
+<td style="text-align: left;"><code>-</code></td>
+<td style="text-align: left;">∩</td>
+<td style="text-align: left;"><code>\cap</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">∪</td>
+<td style="text-align: left;"><code>\cup</code></td>
+<td style="text-align: left;">‡</td>
+<td style="text-align: left;"><code>\ddagger</code></td>
+<td style="text-align: left;">⋄</td>
+<td style="text-align: left;"><code>\diamond</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">⊎</td>
+<td style="text-align: left;"><code>\uplus</code></td>
+<td style="text-align: left;">⊓</td>
+<td style="text-align: left;"><code>\sqcap</code></td>
+<td style="text-align: left;">⊔</td>
+<td style="text-align: left;"><code>\sqcup</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">∨</td>
+<td style="text-align: left;"><code>\vee</code></td>
+<td style="text-align: left;">∧</td>
+<td style="text-align: left;"><code>\wedge</code></td>
+<td style="text-align: left;">∖</td>
+<td style="text-align: left;"><code>\setminus</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">≀</td>
+<td style="text-align: left;"><code>\wr</code></td>
+<td style="text-align: left;">⊖</td>
+<td style="text-align: left;"><code>\ominus</code></td>
+<td style="text-align: left;">⊙</td>
+<td style="text-align: left;"><code>\odot</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">△</td>
+<td style="text-align: left;"><code>\bigtriangleup</code></td>
+<td style="text-align: left;">▽</td>
+<td style="text-align: left;"><code>\bigtriangledown</code></td>
+<td style="text-align: left;">◃</td>
+<td style="text-align: left;"><code>\triangleleft</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">▹</td>
+<td style="text-align: left;"><code>\triangleright</code></td>
+<td style="text-align: left;">⊲</td>
+<td style="text-align: left;"><code>\lhd</code></td>
+<td style="text-align: left;">⊳</td>
+<td style="text-align: left;"><code>\rhd</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">⊴</td>
+<td style="text-align: left;"><code>\unlhd</code></td>
+<td style="text-align: left;">⊵</td>
+<td style="text-align: left;"><code>\unrhd</code></td>
+<td style="text-align: left;">⊗</td>
+<td style="text-align: left;"><code>\otimes</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">◯</td>
+<td style="text-align: left;"><code>\bigcirc</code></td>
+<td style="text-align: left;">⨿</td>
+<td style="text-align: left;"><code>\amalg</code></td>
+<td style="text-align: left;">∑</td>
+<td style="text-align: left;"><code>\sum</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">∏</td>
+<td style="text-align: left;"><code>\prod</code></td>
+<td style="text-align: left;">∐</td>
+<td style="text-align: left;"><code>\coprod</code></td>
+<td style="text-align: left;">∫</td>
+<td style="text-align: left;"><code>\int</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">∮</td>
+<td style="text-align: left;"><code>\oint</code></td>
+<td style="text-align: left;">⋂</td>
+<td style="text-align: left;"><code>\bigcap</code></td>
+<td style="text-align: left;">⋃</td>
+<td style="text-align: left;"><code>\bigcup</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">⨆</td>
+<td style="text-align: left;"><code>\bigsqcup</code></td>
+<td style="text-align: left;">⋁</td>
+<td style="text-align: left;"><code>\bigvee</code></td>
+<td style="text-align: left;">⋀</td>
+<td style="text-align: left;"><code>\bigwedge</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">⨀</td>
+<td style="text-align: left;"><code>\bigodot</code></td>
+<td style="text-align: left;">⨂</td>
+<td style="text-align: left;"><code>\bigotimes</code></td>
+<td style="text-align: left;">⨁</td>
+<td style="text-align: left;"><code>\bigoplus</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">⨄</td>
+<td style="text-align: left;"><code>\biguplus</code></td>
+<td style="text-align: left;">≤</td>
+<td style="text-align: left;"><code>\leq</code></td>
+<td style="text-align: left;">≥</td>
+<td style="text-align: left;"><code>\geq</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">≡</td>
+<td style="text-align: left;"><code>\equiv</code></td>
+<td style="text-align: left;">≺</td>
+<td style="text-align: left;"><code>\prec</code></td>
+<td style="text-align: left;">≻</td>
+<td style="text-align: left;"><code>\cucc</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">∼</td>
+<td style="text-align: left;"><code>\sim</code></td>
+<td style="text-align: left;">⪯</td>
+<td style="text-align: left;"><code>\preceq</code></td>
+<td style="text-align: left;">⪰</td>
+<td style="text-align: left;"><code>\succeq</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">≃</td>
+<td style="text-align: left;"><code>\simeq</code></td>
+<td style="text-align: left;">≪</td>
+<td style="text-align: left;"><code>\ll</code></td>
+<td style="text-align: left;">≫</td>
+<td style="text-align: left;"><code>\gg</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">≍</td>
+<td style="text-align: left;"><code>\asymp</code></td>
+<td style="text-align: left;">⊂</td>
+<td style="text-align: left;"><code>\subset</code></td>
+<td style="text-align: left;">⊃</td>
+<td style="text-align: left;"><code>\supset</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">≈</td>
+<td style="text-align: left;"><code>\approx</code></td>
+<td style="text-align: left;">⊆</td>
+<td style="text-align: left;"><code>\subseteq</code></td>
+<td style="text-align: left;">⊇</td>
+<td style="text-align: left;"><code>\subseteq</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">≅</td>
+<td style="text-align: left;"><code>\cong</code></td>
+<td style="text-align: left;">⊏</td>
+<td style="text-align: left;"><code>\sqsubset</code></td>
+<td style="text-align: left;">⊐</td>
+<td style="text-align: left;"><code>\sqsupset</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">≠</td>
+<td style="text-align: left;"><code>\neq</code></td>
+<td style="text-align: left;">⊑</td>
+<td style="text-align: left;"><code>\sqsubseteq</code></td>
+<td style="text-align: left;">⊒</td>
+<td style="text-align: left;"><code>\sqsupseteq</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">≐</td>
+<td style="text-align: left;"><code>\doteq</code></td>
+<td style="text-align: left;">∈</td>
+<td style="text-align: left;"><code>\in</code></td>
+<td style="text-align: left;">∋</td>
+<td style="text-align: left;"><code>\ni</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">∉</td>
+<td style="text-align: left;"><code>\notin</code></td>
+<td style="text-align: left;">⊢</td>
+<td style="text-align: left;"><code>\vdash</code></td>
+<td style="text-align: left;">⊣</td>
+<td style="text-align: left;"><code>\dashv</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">:</td>
+<td style="text-align: left;"><code>:</code></td>
+<td style="text-align: left;">⊨</td>
+<td style="text-align: left;"><code>\models</code></td>
+<td style="text-align: left;">⊥</td>
+<td style="text-align: left;"><code>\perp</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">∣</td>
+<td style="text-align: left;"><code>\mid</code></td>
+<td style="text-align: left;">∥</td>
+<td style="text-align: left;"><code>\parallel</code></td>
+<td style="text-align: left;">⋈</td>
+<td style="text-align: left;"><code>\bowtie</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">⋈</td>
+<td style="text-align: left;"><code>\Join</code></td>
+<td style="text-align: left;">⌣</td>
+<td style="text-align: left;"><code>\smile</code></td>
+<td style="text-align: left;">⌢</td>
+<td style="text-align: left;"><code>\frown</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">∝</td>
+<td style="text-align: left;"><code>\propto</code></td>
+<td style="text-align: left;">&lt;</td>
+<td style="text-align: left;"><code>&lt;</code></td>
+<td style="text-align: left;">&gt;</td>
+<td style="text-align: left;"><code>&gt;</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="数学符号表二">5.数学符号表二</h3>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">符号</th>
+<th style="text-align: left;">显示方法</th>
+<th style="text-align: left;">符号</th>
+<th style="text-align: left;">显示方法</th>
+<th style="text-align: left;">符号</th>
+<th style="text-align: left;">显示方法</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">arccos</td>
+<td style="text-align: left;"><code>\arccos</code></td>
+<td style="text-align: left;">arcsin</td>
+<td style="text-align: left;"><code>\arcsin</code></td>
+<td style="text-align: left;">arctan</td>
+<td style="text-align: left;"><code>\arctan</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">arg</td>
+<td style="text-align: left;"><code>\arg</code></td>
+<td style="text-align: left;">cos</td>
+<td style="text-align: left;"><code>\cos</code></td>
+<td style="text-align: left;">cosh</td>
+<td style="text-align: left;"><code>\cosh</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">cot</td>
+<td style="text-align: left;"><code>\cot</code></td>
+<td style="text-align: left;">coth</td>
+<td style="text-align: left;"><code>\coth</code></td>
+<td style="text-align: left;">csc</td>
+<td style="text-align: left;"><code>\csc</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">deg</td>
+<td style="text-align: left;"><code>\deg</code></td>
+<td style="text-align: left;">det</td>
+<td style="text-align: left;"><code>\det</code></td>
+<td style="text-align: left;">dim</td>
+<td style="text-align: left;"><code>\dim</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">exp</td>
+<td style="text-align: left;"><code>\exp</code></td>
+<td style="text-align: left;">gcd</td>
+<td style="text-align: left;"><code>\gcd</code></td>
+<td style="text-align: left;">hom</td>
+<td style="text-align: left;"><code>\hom</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">inf</td>
+<td style="text-align: left;"><code>\inf</code></td>
+<td style="text-align: left;">ker</td>
+<td style="text-align: left;"><code>\ker</code></td>
+<td style="text-align: left;">lg</td>
+<td style="text-align: left;"><code>\lg</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">lim</td>
+<td style="text-align: left;"><code>\lim</code></td>
+<td style="text-align: left;">lim inf</td>
+<td style="text-align: left;"><code>\liminf</code></td>
+<td style="text-align: left;">lim sup</td>
+<td style="text-align: left;"><code>\limsup</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ln</td>
+<td style="text-align: left;"><code>\ln</code></td>
+<td style="text-align: left;">log</td>
+<td style="text-align: left;"><code>\log</code></td>
+<td style="text-align: left;">max</td>
+<td style="text-align: left;"><code>\max</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">min</td>
+<td style="text-align: left;"><code>\min</code></td>
+<td style="text-align: left;">Pr</td>
+<td style="text-align: left;"><code>\pr</code></td>
+<td style="text-align: left;">sec</td>
+<td style="text-align: left;"><code>\sec</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">sin</td>
+<td style="text-align: left;"><code>\sin</code></td>
+<td style="text-align: left;">sinh</td>
+<td style="text-align: left;"><code>\sinh</code></td>
+<td style="text-align: left;">sup</td>
+<td style="text-align: left;"><code>\sup</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">tan</td>
+<td style="text-align: left;"><code>\tan</code></td>
+<td style="text-align: left;">tanh</td>
+<td style="text-align: left;"><code>\tanh</code></td>
+<td style="text-align: left;">——</td>
+<td style="text-align: left;">——</td>
+</tr>
+</tbody>
+</table>
+<h3 id="箭头符号表">5.箭头符号表</h3>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">符号</th>
+<th style="text-align: left;">显示方法</th>
+<th style="text-align: left;">符号</th>
+<th style="text-align: left;">显示方法</th>
+<th style="text-align: left;">符号</th>
+<th style="text-align: left;">显示方法</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">←</td>
+<td style="text-align: left;"><code>\leftarrow</code></td>
+<td style="text-align: left;">⟵</td>
+<td style="text-align: left;"><code>\longleftarrow</code></td>
+<td style="text-align: left;">⇐</td>
+<td style="text-align: left;"><code>\Leftarrow</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">⟸</td>
+<td style="text-align: left;"><code>\Longleftarrow</code></td>
+<td style="text-align: left;">→</td>
+<td style="text-align: left;"><code>\rightarrow</code></td>
+<td style="text-align: left;">⟶</td>
+<td style="text-align: left;"><code>\longrightarrow</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">⇒</td>
+<td style="text-align: left;"><code>\Rightarrow</code></td>
+<td style="text-align: left;">⟹</td>
+<td style="text-align: left;"><code>\Longrightarrow</code></td>
+<td style="text-align: left;">↔︎</td>
+<td style="text-align: left;"><code>\leftrightarrow</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">⟷</td>
+<td style="text-align: left;"><code>\longleftrightarrow</code></td>
+<td style="text-align: left;">⇔</td>
+<td style="text-align: left;"><code>\Leftrightarrow</code></td>
+<td style="text-align: left;">⟺</td>
+<td style="text-align: left;"><code>\Longleftrightarrow</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">↦</td>
+<td style="text-align: left;"><code>\mapsto</code></td>
+<td style="text-align: left;">⟼</td>
+<td style="text-align: left;"><code>\longmapsto</code></td>
+<td style="text-align: left;">↩︎</td>
+<td style="text-align: left;"><code>\hookleftarrow</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">↪</td>
+<td style="text-align: left;"><code>\hookrightarrow</code></td>
+<td style="text-align: left;">↼</td>
+<td style="text-align: left;"><code>\leftharpoonup</code></td>
+<td style="text-align: left;">⇀</td>
+<td style="text-align: left;"><code>\rightharpoonup</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">↽</td>
+<td style="text-align: left;"><code>\leftharpoondown</code></td>
+<td style="text-align: left;">⇁</td>
+<td style="text-align: left;"><code>\rightharpoondown</code></td>
+<td style="text-align: left;">⇌</td>
+<td style="text-align: left;"><code>\rightleftharpoons</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">⇝</td>
+<td style="text-align: left;"><code>\leadsto</code></td>
+<td style="text-align: left;">↑</td>
+<td style="text-align: left;"><code>\uparrow</code></td>
+<td style="text-align: left;">↓</td>
+<td style="text-align: left;"><code>\downarrow</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">⇑</td>
+<td style="text-align: left;"><code>\Uparrow</code></td>
+<td style="text-align: left;">⇓</td>
+<td style="text-align: left;"><code>\Downarrow</code></td>
+<td style="text-align: left;">↕</td>
+<td style="text-align: left;"><code>\updownarrow</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">⇕</td>
+<td style="text-align: left;"><code>\Updownarrow</code></td>
+<td style="text-align: left;">↖</td>
+<td style="text-align: left;"><code>\nwarrow</code></td>
+<td style="text-align: left;">↗</td>
+<td style="text-align: left;"><code>\nearrow</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">↙</td>
+<td style="text-align: left;"><code>\swarrow</code></td>
+<td style="text-align: left;">↘</td>
+<td style="text-align: left;"><code>\searrow</code></td>
+<td style="text-align: left;">——</td>
+<td style="text-align: left;">——</td>
+</tr>
+</tbody>
+</table>
+<h3 id="特殊符号表">6.特殊符号表</h3>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">符号</th>
+<th style="text-align: left;">显示方法</th>
+<th style="text-align: left;">符号</th>
+<th style="text-align: left;">显示方法</th>
+<th style="text-align: left;">符号</th>
+<th style="text-align: left;">显示方法</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">§§</td>
+<td style="text-align: left;"><code>\S</code></td>
+<td style="text-align: left;">ℵ</td>
+<td style="text-align: left;"><code>\aleph</code></td>
+<td style="text-align: left;">LATEX</td>
+<td style="text-align: left;"><code>\LaTeX</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">…</td>
+<td style="text-align: left;"><code>\ldots</code></td>
+<td style="text-align: left;">⋱</td>
+<td style="text-align: left;"><code>\ddots</code></td>
+<td style="text-align: left;">⋯</td>
+<td style="text-align: left;"><code>\cdots</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">⋮</td>
+<td style="text-align: left;"><code>\vdots</code></td>
+<td style="text-align: left;">ı</td>
+<td style="text-align: left;"><code>\imath</code></td>
+<td style="text-align: left;">ȷ</td>
+<td style="text-align: left;"><code>\jmath</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ℓ</td>
+<td style="text-align: left;"><code>\ell</code></td>
+<td style="text-align: left;">℘</td>
+<td style="text-align: left;"><code>\wp</code></td>
+<td style="text-align: left;">ℜ</td>
+<td style="text-align: left;"><code>\Re</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ℑ</td>
+<td style="text-align: left;"><code>\Im</code></td>
+<td style="text-align: left;">◊</td>
+<td style="text-align: left;"><code>\Diamond</code></td>
+<td style="text-align: left;">♢</td>
+<td style="text-align: left;"><code>\diamondsuit</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">′</td>
+<td style="text-align: left;"><code>\prime</code></td>
+<td style="text-align: left;">∅</td>
+<td style="text-align: left;"><code>\emptyset</code></td>
+<td style="text-align: left;">∇</td>
+<td style="text-align: left;"><code>\nabla</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">√</td>
+<td style="text-align: left;"><code>\surd</code></td>
+<td style="text-align: left;">⊤</td>
+<td style="text-align: left;"><code>\top</code></td>
+<td style="text-align: left;">⊥</td>
+<td style="text-align: left;"><code>\bot</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">∖</td>
+<td style="text-align: left;"><code>\backslash</code></td>
+<td style="text-align: left;">∂</td>
+<td style="text-align: left;"><code>\partial</code></td>
+<td style="text-align: left;">∞</td>
+<td style="text-align: left;"><code>\infty</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">△</td>
+<td style="text-align: left;"><code>\triangle</code></td>
+<td style="text-align: left;">♡</td>
+<td style="text-align: left;"><code>\heartsuit</code></td>
+<td style="text-align: left;">Ⓢ</td>
+<td style="text-align: left;"><code>\circledS</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ℏ</td>
+<td style="text-align: left;"><code>\hbar</code></td>
+<td style="text-align: left;">∀</td>
+<td style="text-align: left;"><code>\forall</code></td>
+<td style="text-align: left;">∃</td>
+<td style="text-align: left;"><code>\exists</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">¬</td>
+<td style="text-align: left;"><code>\neg</code></td>
+<td style="text-align: left;">♭</td>
+<td style="text-align: left;"><code>\flat</code></td>
+<td style="text-align: left;">♮</td>
+<td style="text-align: left;"><code>\natural</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">♯</td>
+<td style="text-align: left;"><code>\sharp</code></td>
+<td style="text-align: left;">∠</td>
+<td style="text-align: left;"><code>\angle</code></td>
+<td style="text-align: left;">℧</td>
+<td style="text-align: left;"><code>\mho</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">◻</td>
+<td style="text-align: left;"><code>\Box</code></td>
+<td style="text-align: left;">♣</td>
+<td style="text-align: left;"><code>\clubsuits</code></td>
+<td style="text-align: left;">♠</td>
+<td style="text-align: left;"><code>\spadesuit</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="希腊字母greek-letters显示表">7.希腊字母(Greek Letters)显示表</h3>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">拉丁字母</th>
+<th style="text-align: left;">小写显示方法</th>
+<th style="text-align: left;">大写显示方法</th>
+<th style="text-align: left;">大写字母</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">α</td>
+<td style="text-align: left;"><code>\alpha</code></td>
+<td style="text-align: left;">——</td>
+<td style="text-align: left;">——</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">β</td>
+<td style="text-align: left;"><code>\beta</code></td>
+<td style="text-align: left;">——</td>
+<td style="text-align: left;">——</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">γ</td>
+<td style="text-align: left;"><code>\gamma</code></td>
+<td style="text-align: left;"><code>\Gamma</code></td>
+<td style="text-align: left;">Γ</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">δ</td>
+<td style="text-align: left;"><code>\delta</code></td>
+<td style="text-align: left;"><code>\Delta</code></td>
+<td style="text-align: left;">Δ</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ϵ</td>
+<td style="text-align: left;"><code>\epsilon</code></td>
+<td style="text-align: left;">——</td>
+<td style="text-align: left;">——</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ζ</td>
+<td style="text-align: left;"><code>\zeta</code></td>
+<td style="text-align: left;">——</td>
+<td style="text-align: left;">——</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">η</td>
+<td style="text-align: left;"><code>\eta</code></td>
+<td style="text-align: left;">——</td>
+<td style="text-align: left;">——</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">θ</td>
+<td style="text-align: left;"><code>\theta</code></td>
+<td style="text-align: left;"><code>\Theta</code></td>
+<td style="text-align: left;">Θ</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ι</td>
+<td style="text-align: left;"><code>\iota</code></td>
+<td style="text-align: left;">——</td>
+<td style="text-align: left;">——</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">κ</td>
+<td style="text-align: left;"><code>\kappa</code></td>
+<td style="text-align: left;">——</td>
+<td style="text-align: left;">——</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">λ</td>
+<td style="text-align: left;"><code>\lambda</code></td>
+<td style="text-align: left;"><code>\lambda</code></td>
+<td style="text-align: left;">λ</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">μ</td>
+<td style="text-align: left;"><code>\mu</code></td>
+<td style="text-align: left;">——</td>
+<td style="text-align: left;">——</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ν</td>
+<td style="text-align: left;"><code>\nu</code></td>
+<td style="text-align: left;">——</td>
+<td style="text-align: left;">——</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ξ</td>
+<td style="text-align: left;"><code>\xi</code></td>
+<td style="text-align: left;"><code>\Xi</code></td>
+<td style="text-align: left;">Ξ</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ο</td>
+<td style="text-align: left;"><code>\omicron</code></td>
+<td style="text-align: left;">——</td>
+<td style="text-align: left;">——</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">π</td>
+<td style="text-align: left;"><code>\pi</code></td>
+<td style="text-align: left;"><code>\Pi</code></td>
+<td style="text-align: left;">Π</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ρ</td>
+<td style="text-align: left;"><code>\rho</code></td>
+<td style="text-align: left;">——</td>
+<td style="text-align: left;">——</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">σ</td>
+<td style="text-align: left;"><code>\sigma</code></td>
+<td style="text-align: left;"><code>\Sigma</code></td>
+<td style="text-align: left;">Σ</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">τ</td>
+<td style="text-align: left;"><code>\tau</code></td>
+<td style="text-align: left;">——</td>
+<td style="text-align: left;">——</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">υ</td>
+<td style="text-align: left;"><code>\upsilon</code></td>
+<td style="text-align: left;"><code>\Upsilon</code></td>
+<td style="text-align: left;">Υ</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ϕ</td>
+<td style="text-align: left;"><code>\phi</code></td>
+<td style="text-align: left;"><code>\Phi</code></td>
+<td style="text-align: left;">Φ</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">χ</td>
+<td style="text-align: left;"><code>\chi</code></td>
+<td style="text-align: left;">——</td>
+<td style="text-align: left;">——</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ψ</td>
+<td style="text-align: left;"><code>\psi</code></td>
+<td style="text-align: left;"><code>\Psi</code></td>
+<td style="text-align: left;">Ψ</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ω</td>
+<td style="text-align: left;"><code>\omega</code></td>
+<td style="text-align: left;"><code>\Omega</code></td>
+<td style="text-align: left;">Ω</td>
+</tr>
+</tbody>
+</table>
+<p><em>注意：将小写字母的首字母大写表示为大写拉丁字母</em></p>
+<h1 id="相关链接">相关链接</h1>
+<p><a target="_blank" rel="noopener" href="https://lixingcong.github.io/2016/04/04/LaTex-intro/">https://lixingcong.github.io/2016/04/04/LaTex-intro/</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/24502400">LaTeX 第五课：数学公式排版</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/0d442af1541e">LaTex 公式语法示例</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/u011826404/article/details/70215074">Latex数学公式表</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.im/post/5a6721bd518825733201c4a2#heading-17">MarkDown 插入数学公式实验大集合</a></p>
+<p><a target="_blank" rel="noopener" href="https://lixingcong.github.io/2016/04/04/LaTex-intro/">https://lixingcong.github.io/2016/04/04/LaTex-intro/</a></p>
+<p><a target="_blank" rel="noopener" href="https://xjay.net/201902/latex-syntax-for-math-equation/">https://xjay.net/201902/latex-syntax-for-math-equation/</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.mohu.org/info/lshort-cn.pdf">http://www.mohu.org/info/lshort-cn.pdf</a></p>
+<p><a target="_blank" rel="noopener" href="http://mohu.org/info/symbols/symbols.htm">http://mohu.org/info/symbols/symbols.htm</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/blog/IowaBattleship/latex-gong-shi-tai-quan">https://www.luogu.com.cn/blog/IowaBattleship/latex-gong-shi-tai-quan</a> | LaTeX数学公式大全 - Iowa_BattleShip 的博客 - 洛谷博客</p>
+<p><a target="_blank" rel="noopener" href="http://mohu.org/info/symbols/symbols.htm">http://mohu.org/info/symbols/symbols.htm</a> | mohu.org/info/symbols/symbols.htm</p>
+<p><a target="_blank" rel="noopener" href="http://www.mohu.org/info/lshort-cn.pdf">http://www.mohu.org/info/lshort-cn.pdf</a> | lshort-cn.pdf</p>
+<p><a target="_blank" rel="noopener" href="https://xjay.net/201902/latex-syntax-for-math-equation/">https://xjay.net/201902/latex-syntax-for-math-equation/</a> | LaTeX 数学公式语法 | Vault 101</p>
+<p><a target="_blank" rel="noopener" href="https://lixingcong.github.io/2016/04/04/LaTex-intro/">https://lixingcong.github.io/2016/04/04/LaTex-intro/</a> | LaTex数学公式语法 | Lixingcong</p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/0d442af1541e">https://www.jianshu.com/p/0d442af1541e</a> | LaTex 公式语法示例 - 简书</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/u011826404/article/details/70215074">https://blog.csdn.net/u011826404/article/details/70215074</a> | Latex数学公式表_网络_VAY-长跑-CSDN博客</p>
+<p><a target="_blank" rel="noopener" href="https://juejin.im/post/5a6721bd518825733201c4a2#heading-17">https://juejin.im/post/5a6721bd518825733201c4a2#heading-17</a> | MarkDown 插入数学公式实验大集合 - 掘金</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/houkai/p/3399646.html">https://www.cnblogs.com/houkai/p/3399646.html</a> | LATEX数学公式基本语法 - 侯凯 - 博客园</p>
+<p><a target="_blank" rel="noopener" href="https://pandoc.herokuapp.com/">https://pandoc.herokuapp.com/</a> | Markx</p>
+<p><a target="_blank" rel="noopener" href="https://hands133.github.io/2018/06/11/hexo-%E4%B8%AD%E6%B8%B2%E6%9F%93-LaTeX-%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F/">https://hands133.github.io/2018/06/11/hexo-%E4%B8%AD%E6%B8%B2%E6%9F%93-LaTeX-%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F/</a> | hexo 中渲染 LaTeX 数学公式 | 十兽鉴 (Mason)</p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/d7c4cf8dc62d">https://www.jianshu.com/p/d7c4cf8dc62d</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/9bf16599e220">https://www.jianshu.com/p/9bf16599e220</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/97ec8a3739f6">https://www.jianshu.com/p/97ec8a3739f6</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/03/22/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/%E7%BC%96%E8%AF%91/" rel="prev" title="C++">
+      <i class="fa fa-chevron-left"></i> C++
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/03/22/Eigen/EigenMatrix%E7%B1%BB/" rel="next" title="Eigen Matrix类">
+      Eigen Matrix类 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#latex-%E5%85%AC%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">Latex 公式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%98%BE%E7%A4%BA%E6%96%B9%E6%B3%95"><span class="nav-number">1.0.1.</span> <span class="nav-text">1.显示方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E7%94%A8%E6%98%BE%E7%A4%BA%E8%A7%84%E5%88%99"><span class="nav-number">1.0.2.</span> <span class="nav-text">2.通用显示规则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A2%9E%E5%BC%BA%E5%9E%8B%E6%98%BE%E7%A4%BA%E8%A7%84%E5%88%99"><span class="nav-number">1.0.3.</span> <span class="nav-text">3.增强型显示规则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E5%AD%A6%E7%AC%A6%E5%8F%B7%E8%A1%A8%E4%B8%80"><span class="nav-number">1.0.4.</span> <span class="nav-text">4.数学符号表一</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E5%AD%A6%E7%AC%A6%E5%8F%B7%E8%A1%A8%E4%BA%8C"><span class="nav-number">1.0.5.</span> <span class="nav-text">5.数学符号表二</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%AD%E5%A4%B4%E7%AC%A6%E5%8F%B7%E8%A1%A8"><span class="nav-number">1.0.6.</span> <span class="nav-text">5.箭头符号表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E6%AE%8A%E7%AC%A6%E5%8F%B7%E8%A1%A8"><span class="nav-number">1.0.7.</span> <span class="nav-text">6.特殊符号表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%8C%E8%85%8A%E5%AD%97%E6%AF%8Dgreek-letters%E6%98%BE%E7%A4%BA%E8%A1%A8"><span class="nav-number">1.0.8.</span> <span class="nav-text">7.希腊字母(Greek Letters)显示表</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E9%93%BE%E6%8E%A5"><span class="nav-number">2.</span> <span class="nav-text">相关链接</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">straywriter</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">124</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/straywriter" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;straywriter" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">straywriter</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

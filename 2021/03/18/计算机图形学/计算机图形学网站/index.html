@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"straywriter.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="计算机图形学网站及资源">
+<meta property="og:url" content="https://straywriter.github.io/2021/03/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E7%BD%91%E7%AB%99/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-03-18T05:45:33.000Z">
+<meta property="article:modified_time" content="2021-04-18T04:52:50.294Z">
+<meta property="article:author" content="straywriter">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://straywriter.github.io/2021/03/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E7%BD%91%E7%AB%99/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>计算机图形学网站及资源 | Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://straywriter.github.io/2021/03/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E7%BD%91%E7%AB%99/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="straywriter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          计算机图形学网站及资源
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-03-18 13:45:33" itemprop="dateCreated datePublished" datetime="2021-03-18T13:45:33+08:00">2021-03-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-04-18 12:52:50" itemprop="dateModified" datetime="2021-04-18T12:52:50+08:00">2021-04-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">计算机图形学</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <hr>
+<h1 id="置顶">置顶</h1>
+<h2 id="graphics-and-game-gems-database">Graphics and Game Gems Database</h2>
+<ul>
+<li>图形和游戏数据库</li>
+<li><a target="_blank" rel="noopener" href="http://gameenginegems.com/gemsdb/index.php">http://gameenginegems.com/gemsdb/index.php</a></li>
+</ul>
+<blockquote>
+<ul>
+<li>Game Engine Gems</li>
+<li>GPU Pro</li>
+<li>Insights</li>
+<li>Game Programming Gems</li>
+<li>GPU Gems</li>
+<li>Graphics Gems</li>
+<li>......</li>
+</ul>
+</blockquote>
+<h2 id="siggraph-论文">SIGGRAPH 论文</h2>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://kesen.realtimerendering.com/">http://kesen.realtimerendering.com/</a></li>
+</ul>
+<h1 id="time">Time</h1>
+<h2 id="beyond3d-论坛">1 beyond3d 论坛</h2>
+<ul>
+<li><p>图形学论坛 <a target="_blank" rel="noopener" href="https://forum.beyond3d.com/">https://forum.beyond3d.com/</a></p></li>
+<li><p><a target="_blank" rel="noopener" href="https://forum.beyond3d.com/threads/game-development-presentations-a-useful-reference.46956/">游戏开发演示文稿</a> 非常有用的学习资料</p></li>
+</ul>
+<h2 id="beyond3d官网">2 beyond3d官网</h2>
+<p><a target="_blank" rel="noopener" href="https://www.beyond3d.com/">https://www.beyond3d.com/</a></p>
+<h2 id="remedy-游戏公司">3 remedy 游戏公司</h2>
+<p>https://www.remedygames.com/</p>
+<h2 id="blender-艺术社区">4 blender 艺术社区</h2>
+<p>https://blenderartists.org/</p>
+<h2 id="英伟达开发者blog">5 英伟达开发者Blog</h2>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://developer.nvidia.com/blog/">https://developer.nvidia.com/blog/</a></li>
+<li><a target="_blank" rel="noopener" href="https://developer.nvidia.com/blog/introduction-nvidia-rtx-directx-ray-tracing/">NVIDIA RTX和DirectX光线跟踪简介</a></li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/269149582/answer/346376116">如何评价微软的 DXR（DirectX Raytracing）</a></p>
+<h2 id="animation-and-cgi-motion-课程">6 Animation and CGI Motion 课程</h2>
+<ul>
+<li>Animation and CGI Motion</li>
+<li>https://learning.edx.org/course/course-v1:ColumbiaX+CSMM.104x+1T2018/home</li>
+<li>https://www.edx.org/course/animation-and-cgi-motion-2</li>
+</ul>
+<h2 id="cs448a-real-time-graphics-architectures">7 CS448A: Real-Time Graphics Architectures</h2>
+<ul>
+<li>http://www.graphics.stanford.edu/courses/cs448a-01-fall/</li>
+</ul>
+<h2 id="site-从头开始学习计算机图形学">8 Site 从头开始学习计算机图形学</h2>
+<ul>
+<li>https://www.scratchapixel.com</li>
+</ul>
+<h2 id="site-实时渲染论文-ke-sen-huangs-home-page">9 Site 实时渲染论文 Ke-Sen Huang's Home Page</h2>
+<ul>
+<li>http://kesen.realtimerendering.com/</li>
+</ul>
+<h2 id="site-实时全局照明技术收藏">10 Site 实时全局照明技术收藏</h2>
+<ul>
+<li>https://extremeistan.wordpress.com/2014/05/11/realtime-global-illumination-techniques-collection/</li>
+</ul>
+<h2 id="实时渲染官网">11 实时渲染官网</h2>
+<ul>
+<li>http://www.realtimerendering.com/</li>
+</ul>
+<h2 id="cs6630-真实感图形渲染">12 CS6630 真实感图形渲染</h2>
+<ul>
+<li>Realistic Image Synthesis</li>
+<li><a target="_blank" rel="noopener" href="http://www.cs.cornell.edu/courses/cs6630/2015fa/index.shtml#">site</a></li>
+</ul>
+<h2 id="course-计算机图形学">13 Course 计算机图形学</h2>
+<ul>
+<li>CMU 15-462/662 COMPUTER GRAPHICS</li>
+<li><a target="_blank" rel="noopener" href="http://15462.courses.cs.cmu.edu/fall2015/">site</a></li>
+</ul>
+<h2 id="course-虚拟现实">14 Course 虚拟现实</h2>
+<ul>
+<li>http://lavalle.pl/vr/</li>
+<li>虚拟现实免费学习资料</li>
+</ul>
+<h2 id="mit-course-computer-graphics">15 MIT Course Computer Graphics</h2>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-837-computer-graphics-fall-2012/">site</a></li>
+</ul>
+<h2 id="course-计算机图形学-1">16 Course 计算机图形学</h2>
+<ul>
+<li>Introduction to Computer Graphics</li>
+<li><a target="_blank" rel="noopener" href="http://math.hws.edu/graphicsbook/index.html">site</a></li>
+</ul>
+<h2 id="site-glassner">17 Site glassner</h2>
+<ul>
+<li></li>
+<li><a target="_blank" rel="noopener" href="https://www.glassner.com/computer-graphics/graphics-research/">https://www.glassner.com/computer-graphics/graphics-research/</a></li>
+<li><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Andrew_Glassner">https://en.wikipedia.org/wiki/Andrew_Glassner</a></li>
+</ul>
+<blockquote>
+<p>Andrew S. Glassner（生于1960年）是美国计算机图形专家，在计算机图形界广为人知，是《图形宝石》系列《雷追踪导论》和《数字图像合成原理》的发起人和编辑。他后来的兴趣包括互动小说，写作和导演和咨询在电脑游戏和在线娱乐行业。 他在纽约理工学院计算机图形实验室工作。</p>
+<p>他于1978年开始从事3D计算机图形工作。他获得了计算机工程学士（1984年）的凯斯西储大学，克利夫兰，俄亥俄州，计算机科学硕士（1987年）和博士学位（1988年，顾问弗雷德里克布鲁克斯）从北卡罗来纳大学教堂山，教堂山，北卡罗来纳州。</p>
+<p>他是施乐帕洛阿尔托研究中心（1988-1994年）和微软研究（1994-2000年）的计算机图形研究员。</p>
+</blockquote>
+<h2 id="book-pbrt">18 Book Pbrt</h2>
+<ul>
+<li><p><strong>Physically Based Rendering</strong></p>
+<p><a target="_blank" rel="noopener" href="https://pbrt.org/">site</a> <a target="_blank" rel="noopener" href="https://www.amazon.com/gp/product/0128006455/ref=as_li_tl?ie=UTF8&amp;tag=pharr-20&amp;camp=1789&amp;creative=9325&amp;linkCode=as2&amp;creativeASIN=0128006455&amp;linkId=8d99f0006f611ac309e1c72906f78e17">amazon</a></p></li>
+<li><p>基于物理的渲染</p></li>
+</ul>
+<h2 id="site-gpu-pro-blog">19 Site GPU pro Blog</h2>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://gpupro.blogspot.com/">http://gpupro.blogspot.com/</a></li>
+</ul>
+<h2 id="github-book">20 Github Book</h2>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/K0-0K/book">https://github.com/K0-0K/book</a></li>
+</ul>
+<h2 id="book-site-game-enginegems">21 Book Site game enginegems</h2>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://www.gameenginegems.com/">http://www.gameenginegems.com/</a></li>
+</ul>
+<h2 id="book-opengl-蓝宝石">22 Book OpenGL 蓝宝石</h2>
+<ul>
+<li>OpenGL Superbible: Comprehensive Tutorial and Reference</li>
+<li><a target="_blank" rel="noopener" href="https://www.amazon.com/OpenGL-Superbible-Comprehensive-Tutorial-Reference/dp/0672337479">amazon</a></li>
+</ul>
+<h2 id="book-曲线-曲面">23 Book 曲线 曲面</h2>
+<ul>
+<li>Curves and Surfaces for CAGD: A Practical Guide (The Morgan Kaufmann Series in Computer Graphics)</li>
+<li><a target="_blank" rel="noopener" href="https://www.amazon.com/Curves-Surfaces-CAGD-Practical-Kaufmann/dp/1558607374">amazon</a></li>
+</ul>
+<h2 id="book-曲线">24 Book 曲线</h2>
+<ul>
+<li>The NURBS Book (Monographs in Visual Communication)</li>
+<li><a target="_blank" rel="noopener" href="https://www.amazon.com/NURBS-Book-Monographs-Visual-Communication/dp/3540615458">amazon</a></li>
+</ul>
+<h2 id="book-曲线与曲面的数学">25 Book 曲线与曲面的数学</h2>
+<ul>
+<li>曲线与曲面的数学</li>
+<li><a target="_blank" rel="noopener" href="https://book.douban.com/subject/1099506/">豆瓣</a></li>
+</ul>
+<h2 id="book-隐式曲面">26 Book 隐式曲面</h2>
+<ul>
+<li>Introduction to Implicit Surfaces (The Morgan Kaufmann Series in Computer Graphics)</li>
+<li><a target="_blank" rel="noopener" href="https://www.amazon.com/Introduction-Implicit-Surfaces-Kaufmann-Computer/dp/155860233X">amazon</a></li>
+</ul>
+<h2 id="book-隐式曲面-1">27 Book 隐式曲面</h2>
+<ul>
+<li>Implicit Objects Computer Graphics</li>
+<li><a target="_blank" rel="noopener" href="https://www.amazon.com/Implicit-Objects-Computer-Graphics-Velho/dp/1475777388">amazon</a></li>
+</ul>
+<h2 id="book-细分曲面">28 Book 细分曲面</h2>
+<ul>
+<li>Subdivision Methods for Geometric Design: A Constructive Approach</li>
+<li><a target="_blank" rel="noopener" href="https://www.amazon.com/Subdivision-Methods-Geometric-Design-Constructive/dp/1558604464">amazon</a></li>
+</ul>
+<h2 id="book-lod">29 Book LOD</h2>
+<ul>
+<li>Level of Detail for 3D Graphics</li>
+<li><a target="_blank" rel="noopener" href="https://www.amazon.com/Level-Detail-Graphics-David-Luebke/dp/0123991811">amazon</a></li>
+</ul>
+<h2 id="book-光线追踪">29 Book 光线追踪</h2>
+<ul>
+<li>An Introduction to Ray tracing</li>
+<li><a target="_blank" rel="noopener" href="https://www.amazon.com/Introduction-Tracing-Kaufmann-Computer-Graphics/dp/0122861604">amazon</a></li>
+</ul>
+<h2 id="book-光线追踪-1">30 Book 光线追踪</h2>
+<ul>
+<li>Realistic Ray Tracing</li>
+<li><a target="_blank" rel="noopener" href="https://www.amazon.com/Realistic-Tracing-Second-Peter-Shirley/dp/1568814615">光线追踪</a></li>
+</ul>
+<h2 id="book-辐射度">31 Book 辐射度</h2>
+<ul>
+<li>Radiosity and Realistic Image Synthesis</li>
+<li><a target="_blank" rel="noopener" href="https://www.amazon.com/Radiosity-Realistic-Image-Synthesis-Michael/dp/0124121500">amazon</a></li>
+</ul>
+<blockquote>
+<p>Cohen获得SIGGRAPH 1998计算机图形学成就奖，他把Radiosity变成实际可用。</p>
+</blockquote>
+<h2 id="book-辐射度-1">32 Book 辐射度</h2>
+<ul>
+<li>Radiosity and Global Illumination (The Morgan Kaufmann Series in Computer Graphics)</li>
+<li><a target="_blank" rel="noopener" href="https://www.amazon.com/Radiosity-Illumination-Kaufmann-Computer-Graphics/dp/1558602771">amazon</a></li>
+</ul>
+<h2 id="book-advanced-global-illumination">33 Book Advanced Global Illumination</h2>
+<ul>
+<li>Advanced Global Illumination</li>
+<li><a target="_blank" rel="noopener" href="https://www.amazon.com/Advanced-Global-Illumination-Philip-Dutre/dp/1568813074">Amazon</a></li>
+</ul>
+<h2 id="book-辐射度radiosity">34 Book 辐射度Radiosity</h2>
+<ul>
+<li>Radiosity: A Programmer's Perspective</li>
+<li><a target="_blank" rel="noopener" href="https://www.amazon.com/Radiosity-Programmers-Perspective-Professional-Computing/dp/0471304441">amazon</a></li>
+</ul>
+<blockquote>
+<p>有源代码</p>
+</blockquote>
+<h2 id="book-光子映射-photonmapping">35 Book 光子映射 PhotonMapping</h2>
+<ul>
+<li>Realistic Image Synthesis Using Photon Mapping</li>
+<li><a target="_blank" rel="noopener" href="https://www.amazon.com/Realistic-Image-Synthesis-Photon-Mapping/dp/1568811470">Amazon</a></li>
+</ul>
+<blockquote>
+<p><em>Henrik Wann Jensen</em>的《Realistic Image Synthesis Using Photon Mapping》。Henrik Wann Jensen是Photon mapping技术的发明者。</p>
+</blockquote>
+<h2 id="book-non-photorealistic-graphics">36 Book Non-Photorealistic Graphics</h2>
+<ul>
+<li>Non-Photorealistic Rendering</li>
+<li><a target="_blank" rel="noopener" href="https://www.amazon.com/Non-Photorealistic-Rendering-Bruce-Gooch/dp/0367447231">amazon</a></li>
+</ul>
+<h2 id="book-体图形学volume-graphics">37 Book 体图形学(Volume Graphics)</h2>
+<ul>
+<li>Volume Graphics</li>
+<li></li>
+</ul>
+<h2 id="book">38 Book</h2>
+<ul>
+<li>Texturing &amp; Modeling: A Procedural Approach, Third Edition</li>
+<li><a target="_blank" rel="noopener" href="https://www.amazon.com/Texturing-Modeling-Third-Procedural-Approach/dp/1558608486">amazon</a></li>
+</ul>
+<blockquote>
+<p><em>David Ebert</em>等人的《Texturing &amp; Modeling: A Procedural Approach, Third Edition》。讲述如何通过程序实现纹理、山、地形等图形学要素。</p>
+</blockquote>
+<h2 id="book-常用的图形格式">39 Book 常用的图形格式</h2>
+<ul>
+<li>Evan Pipho Focus On 3D Models</li>
+<li></li>
+</ul>
+<h2 id="book-地形">40 Book 地形</h2>
+<ul>
+<li>Focus On 3D Terrain Programming</li>
+</ul>
+<h2 id="book-布料">41 Book 布料</h2>
+<ul>
+<li>Cloth Modeling and Animation</li>
+</ul>
+<h2 id="book-角色动画">42 Book 角色动画</h2>
+<ul>
+<li>Real-time 3D Character Animation with Visual C++</li>
+</ul>
+<h2 id="book-动画">43 Book 动画</h2>
+<ul>
+<li>Computer Animation: Algorithms and Techniques</li>
+</ul>
+<h2 id="book-图形引擎">44 Book 图形引擎</h2>
+<ul>
+<li>3D Game Engine Design : A Practical Approach to Real-Time Computer Graphics</li>
+</ul>
+<h2 id="book-1">45 Book</h2>
+<ul>
+<li>Computer Graphics: Principles and Practice in C (2nd Edition)</li>
+<li></li>
+</ul>
+<h2 id="course">46 Course</h2>
+<ul>
+<li></li>
+<li><p><a target="_blank" rel="noopener" href="http://cs248.stanford.edu/winter19/">site</a></p></li>
+<li><p>http://cs248.stanford.edu/winter19/</p>
+<p>http://15462.courses.cs.cmu.edu/fall2018/</p>
+<p>https://cs184.eecs.berkeley.edu/sp17/</p></li>
+</ul>
+<h2 id="行实现光线追踪">47 99行实现光线追踪</h2>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://www.kevinbeason.com/smallpt/">http://www.kevinbeason.com/smallpt/</a></li>
+</ul>
+<h2 id="site-geometrictools">48 site geometrictools</h2>
+<ul>
+<li>https://www.geometrictools.com/</li>
+</ul>
+<h2 id="book-腾讯游戏开发精粹">49 Book 腾讯游戏开发精粹</h2>
+<ul>
+<li></li>
+<li><a target="_blank" rel="noopener" href="https://e.jd.com/30513143.html">京东</a></li>
+</ul>
+<h2 id="blog-虚幻引擎如何渲染一帧">50 Blog 虚幻引擎如何渲染一帧</h2>
+<ul>
+<li></li>
+<li><a target="_blank" rel="noopener" href="https://interplayoflight.wordpress.com/2017/10/25/how-unreal-renders-a-frame/">https://interplayoflight.wordpress.com/2017/10/25/how-unreal-renders-a-frame/</a></li>
+</ul>
+<h2 id="site-opengl-文档">51 Site Opengl 文档</h2>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://docs.gl/">https://docs.gl/</a></li>
+</ul>
+<h2 id="course-games101-现代计算机图形学入门">52 Course GAMES101: 现代计算机图形学入门</h2>
+<ul>
+<li></li>
+<li><a target="_blank" rel="noopener" href="https://sites.cs.ucsb.edu/~lingqi/teaching/games101.html">site</a></li>
+</ul>
+<h2 id="lab-图形学几何实验室">53 Lab 图形学几何实验室</h2>
+<ul>
+<li></li>
+<li><a target="_blank" rel="noopener" href="https://igl.ethz.ch/">https://igl.ethz.ch/</a></li>
+<li>专注于交互式形状建模、几何处理、数字制造以及图像和视频处理。</li>
+</ul>
+<h2 id="中科大刘利刚教授">54 中科大刘利刚教授</h2>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://staff.ustc.edu.cn/~lgliu/">http://staff.ustc.edu.cn/~lgliu/</a></li>
+<li></li>
+</ul>
+<h2 id="hololens">55 HoloLens</h2>
+<ul>
+<li>https://www.microsoft.com/en-ca/hololens/</li>
+</ul>
+<h2 id="site-learn-opengl">56 Site Learn OpenGL</h2>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://learnopengl.com/">https://learnopengl.com/</a></li>
+<li><a target="_blank" rel="noopener" href="http://ogldev.atspace.co.uk/index.html">http://ogldev.atspace.co.uk/index.html</a></li>
+</ul>
+<h2 id="doc-清华-aminer-团队计算机图形学研究报告">57 Doc 清华 AMiner 团队《计算机图形学研究报告》</h2>
+<ul>
+<li>PPT 版本报告：<a href="https://link.zhihu.com/?target=https%3A//static.aminer.cn/misc/article/cg-p.pdf">https://static.aminer.cn/misc/article/cg-p.pdf</a></li>
+<li>word 版本报告：<a href="https://link.zhihu.com/?target=https%3A//static.aminer.cn/misc/article/cg.pdf">https://static.aminer.cn/misc/article/cg.pdf</a></li>
+<li>AMiner 官网：<a href="https://link.zhihu.com/?target=http%3A//www.aminer.cn">http://www.aminer.cn</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/42480063">【清华计算机图形学报告】全球首个华人AI学术指数倒计时30天</a></li>
+</ul>
+<h2 id="handmade-hero教学视频">58 Handmade Hero教学视频</h2>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.youtube.com/channel/UCaTznQhurW5AaiYPbhEA-KA/videos">YouTube</a></li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/28508025">把整个Handmade Hero教学视频进行中文翻译，添加上字幕。这件事情意义大么，国内的字幕团队会做这种事情么？</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/column/gameengine">自制游戏引擎</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/66022851">计算机图形学，下一步如何提高？</a></p>
+<h2 id="ieee-754">59 IEEE 754</h2>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/zh-hans/IEEE_754">IEEE 754 wiki</a></li>
+</ul>
+<h2 id="book-高动态范围图像">60 Book 高动态范围图像</h2>
+<ul>
+<li>High Dynamic Range Imaging: Acquisition, Display, and Image-Based Lighting</li>
+</ul>
+<h2 id="book-表观建模">61 Book 表观建模</h2>
+<ul>
+<li><strong>Digital Modeling of Material Appearance</strong></li>
+</ul>
+<h2 id="book-polygon-mesh-processing">62 Book Polygon Mesh Processing</h2>
+<ul>
+<li>Polygon Mesh Processing</li>
+</ul>
+<h2 id="site">63 Site</h2>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/42904254/answer/120090285?group_id=754829698940272640">计算机图形学与机器学习（深度学习）怎么结合起来？</a></p>
+<h2 id="site-娱乐艺术家社区">64 Site 娱乐艺术家社区</h2>
+<ul>
+<li>http://www.cgchannel.com/</li>
+</ul>
+<h2 id="site-1">65 Site</h2>
+<ul>
+<li>https://www.javatpoint.com/computer-graphics-bresenhams-line-algorithm</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/03/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E9%98%85%E8%AF%BB%E4%B9%A6%E7%B1%8D/" rel="prev" title="计算机图形学阅读书籍">
+      <i class="fa fa-chevron-left"></i> 计算机图形学阅读书籍
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/03/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/%E8%AE%A1%E7%AE%97%E5%9B%BE%E5%BD%A2%E5%AD%A6%E4%BA%BA%E7%89%A9/" rel="next" title="计算机图形学人物">
+      计算机图形学人物 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BD%AE%E9%A1%B6"><span class="nav-number">1.</span> <span class="nav-text">置顶</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#graphics-and-game-gems-database"><span class="nav-number">1.1.</span> <span class="nav-text">Graphics and Game Gems Database</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#siggraph-%E8%AE%BA%E6%96%87"><span class="nav-number">1.2.</span> <span class="nav-text">SIGGRAPH 论文</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#time"><span class="nav-number">2.</span> <span class="nav-text">Time</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#beyond3d-%E8%AE%BA%E5%9D%9B"><span class="nav-number">2.1.</span> <span class="nav-text">1 beyond3d 论坛</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#beyond3d%E5%AE%98%E7%BD%91"><span class="nav-number">2.2.</span> <span class="nav-text">2 beyond3d官网</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#remedy-%E6%B8%B8%E6%88%8F%E5%85%AC%E5%8F%B8"><span class="nav-number">2.3.</span> <span class="nav-text">3 remedy 游戏公司</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#blender-%E8%89%BA%E6%9C%AF%E7%A4%BE%E5%8C%BA"><span class="nav-number">2.4.</span> <span class="nav-text">4 blender 艺术社区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8B%B1%E4%BC%9F%E8%BE%BE%E5%BC%80%E5%8F%91%E8%80%85blog"><span class="nav-number">2.5.</span> <span class="nav-text">5 英伟达开发者Blog</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#animation-and-cgi-motion-%E8%AF%BE%E7%A8%8B"><span class="nav-number">2.6.</span> <span class="nav-text">6 Animation and CGI Motion 课程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cs448a-real-time-graphics-architectures"><span class="nav-number">2.7.</span> <span class="nav-text">7 CS448A: Real-Time Graphics Architectures</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#site-%E4%BB%8E%E5%A4%B4%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6"><span class="nav-number">2.8.</span> <span class="nav-text">8 Site 从头开始学习计算机图形学</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#site-%E5%AE%9E%E6%97%B6%E6%B8%B2%E6%9F%93%E8%AE%BA%E6%96%87-ke-sen-huangs-home-page"><span class="nav-number">2.9.</span> <span class="nav-text">9 Site 实时渲染论文 Ke-Sen Huang&#39;s Home Page</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#site-%E5%AE%9E%E6%97%B6%E5%85%A8%E5%B1%80%E7%85%A7%E6%98%8E%E6%8A%80%E6%9C%AF%E6%94%B6%E8%97%8F"><span class="nav-number">2.10.</span> <span class="nav-text">10 Site 实时全局照明技术收藏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E6%97%B6%E6%B8%B2%E6%9F%93%E5%AE%98%E7%BD%91"><span class="nav-number">2.11.</span> <span class="nav-text">11 实时渲染官网</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cs6630-%E7%9C%9F%E5%AE%9E%E6%84%9F%E5%9B%BE%E5%BD%A2%E6%B8%B2%E6%9F%93"><span class="nav-number">2.12.</span> <span class="nav-text">12 CS6630 真实感图形渲染</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#course-%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6"><span class="nav-number">2.13.</span> <span class="nav-text">13 Course 计算机图形学</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#course-%E8%99%9A%E6%8B%9F%E7%8E%B0%E5%AE%9E"><span class="nav-number">2.14.</span> <span class="nav-text">14 Course 虚拟现实</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mit-course-computer-graphics"><span class="nav-number">2.15.</span> <span class="nav-text">15 MIT Course Computer Graphics</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#course-%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6-1"><span class="nav-number">2.16.</span> <span class="nav-text">16 Course 计算机图形学</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#site-glassner"><span class="nav-number">2.17.</span> <span class="nav-text">17 Site glassner</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#book-pbrt"><span class="nav-number">2.18.</span> <span class="nav-text">18 Book Pbrt</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#site-gpu-pro-blog"><span class="nav-number">2.19.</span> <span class="nav-text">19 Site GPU pro Blog</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#github-book"><span class="nav-number">2.20.</span> <span class="nav-text">20 Github Book</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#book-site-game-enginegems"><span class="nav-number">2.21.</span> <span class="nav-text">21 Book Site game enginegems</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#book-opengl-%E8%93%9D%E5%AE%9D%E7%9F%B3"><span class="nav-number">2.22.</span> <span class="nav-text">22 Book OpenGL 蓝宝石</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#book-%E6%9B%B2%E7%BA%BF-%E6%9B%B2%E9%9D%A2"><span class="nav-number">2.23.</span> <span class="nav-text">23 Book 曲线 曲面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#book-%E6%9B%B2%E7%BA%BF"><span class="nav-number">2.24.</span> <span class="nav-text">24 Book 曲线</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#book-%E6%9B%B2%E7%BA%BF%E4%B8%8E%E6%9B%B2%E9%9D%A2%E7%9A%84%E6%95%B0%E5%AD%A6"><span class="nav-number">2.25.</span> <span class="nav-text">25 Book 曲线与曲面的数学</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#book-%E9%9A%90%E5%BC%8F%E6%9B%B2%E9%9D%A2"><span class="nav-number">2.26.</span> <span class="nav-text">26 Book 隐式曲面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#book-%E9%9A%90%E5%BC%8F%E6%9B%B2%E9%9D%A2-1"><span class="nav-number">2.27.</span> <span class="nav-text">27 Book 隐式曲面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#book-%E7%BB%86%E5%88%86%E6%9B%B2%E9%9D%A2"><span class="nav-number">2.28.</span> <span class="nav-text">28 Book 细分曲面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#book-lod"><span class="nav-number">2.29.</span> <span class="nav-text">29 Book LOD</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#book-%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA"><span class="nav-number">2.30.</span> <span class="nav-text">29 Book 光线追踪</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#book-%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-1"><span class="nav-number">2.31.</span> <span class="nav-text">30 Book 光线追踪</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#book-%E8%BE%90%E5%B0%84%E5%BA%A6"><span class="nav-number">2.32.</span> <span class="nav-text">31 Book 辐射度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#book-%E8%BE%90%E5%B0%84%E5%BA%A6-1"><span class="nav-number">2.33.</span> <span class="nav-text">32 Book 辐射度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#book-advanced-global-illumination"><span class="nav-number">2.34.</span> <span class="nav-text">33 Book Advanced Global Illumination</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#book-%E8%BE%90%E5%B0%84%E5%BA%A6radiosity"><span class="nav-number">2.35.</span> <span class="nav-text">34 Book 辐射度Radiosity</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#book-%E5%85%89%E5%AD%90%E6%98%A0%E5%B0%84-photonmapping"><span class="nav-number">2.36.</span> <span class="nav-text">35 Book 光子映射 PhotonMapping</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#book-non-photorealistic-graphics"><span class="nav-number">2.37.</span> <span class="nav-text">36 Book Non-Photorealistic Graphics</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#book-%E4%BD%93%E5%9B%BE%E5%BD%A2%E5%AD%A6volume-graphics"><span class="nav-number">2.38.</span> <span class="nav-text">37 Book 体图形学(Volume Graphics)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#book"><span class="nav-number">2.39.</span> <span class="nav-text">38 Book</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#book-%E5%B8%B8%E7%94%A8%E7%9A%84%E5%9B%BE%E5%BD%A2%E6%A0%BC%E5%BC%8F"><span class="nav-number">2.40.</span> <span class="nav-text">39 Book 常用的图形格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#book-%E5%9C%B0%E5%BD%A2"><span class="nav-number">2.41.</span> <span class="nav-text">40 Book 地形</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#book-%E5%B8%83%E6%96%99"><span class="nav-number">2.42.</span> <span class="nav-text">41 Book 布料</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#book-%E8%A7%92%E8%89%B2%E5%8A%A8%E7%94%BB"><span class="nav-number">2.43.</span> <span class="nav-text">42 Book 角色动画</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#book-%E5%8A%A8%E7%94%BB"><span class="nav-number">2.44.</span> <span class="nav-text">43 Book 动画</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#book-%E5%9B%BE%E5%BD%A2%E5%BC%95%E6%93%8E"><span class="nav-number">2.45.</span> <span class="nav-text">44 Book 图形引擎</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#book-1"><span class="nav-number">2.46.</span> <span class="nav-text">45 Book</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#course"><span class="nav-number">2.47.</span> <span class="nav-text">46 Course</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%8C%E5%AE%9E%E7%8E%B0%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA"><span class="nav-number">2.48.</span> <span class="nav-text">47 99行实现光线追踪</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#site-geometrictools"><span class="nav-number">2.49.</span> <span class="nav-text">48 site geometrictools</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#book-%E8%85%BE%E8%AE%AF%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91%E7%B2%BE%E7%B2%B9"><span class="nav-number">2.50.</span> <span class="nav-text">49 Book 腾讯游戏开发精粹</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#blog-%E8%99%9A%E5%B9%BB%E5%BC%95%E6%93%8E%E5%A6%82%E4%BD%95%E6%B8%B2%E6%9F%93%E4%B8%80%E5%B8%A7"><span class="nav-number">2.51.</span> <span class="nav-text">50 Blog 虚幻引擎如何渲染一帧</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#site-opengl-%E6%96%87%E6%A1%A3"><span class="nav-number">2.52.</span> <span class="nav-text">51 Site Opengl 文档</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#course-games101-%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8"><span class="nav-number">2.53.</span> <span class="nav-text">52 Course GAMES101: 现代计算机图形学入门</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lab-%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%87%A0%E4%BD%95%E5%AE%9E%E9%AA%8C%E5%AE%A4"><span class="nav-number">2.54.</span> <span class="nav-text">53 Lab 图形学几何实验室</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AD%E7%A7%91%E5%A4%A7%E5%88%98%E5%88%A9%E5%88%9A%E6%95%99%E6%8E%88"><span class="nav-number">2.55.</span> <span class="nav-text">54 中科大刘利刚教授</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hololens"><span class="nav-number">2.56.</span> <span class="nav-text">55 HoloLens</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#site-learn-opengl"><span class="nav-number">2.57.</span> <span class="nav-text">56 Site Learn OpenGL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#doc-%E6%B8%85%E5%8D%8E-aminer-%E5%9B%A2%E9%98%9F%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E7%A0%94%E7%A9%B6%E6%8A%A5%E5%91%8A"><span class="nav-number">2.58.</span> <span class="nav-text">57 Doc 清华 AMiner 团队《计算机图形学研究报告》</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#handmade-hero%E6%95%99%E5%AD%A6%E8%A7%86%E9%A2%91"><span class="nav-number">2.59.</span> <span class="nav-text">58 Handmade Hero教学视频</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ieee-754"><span class="nav-number">2.60.</span> <span class="nav-text">59 IEEE 754</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#book-%E9%AB%98%E5%8A%A8%E6%80%81%E8%8C%83%E5%9B%B4%E5%9B%BE%E5%83%8F"><span class="nav-number">2.61.</span> <span class="nav-text">60 Book 高动态范围图像</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#book-%E8%A1%A8%E8%A7%82%E5%BB%BA%E6%A8%A1"><span class="nav-number">2.62.</span> <span class="nav-text">61 Book 表观建模</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#book-polygon-mesh-processing"><span class="nav-number">2.63.</span> <span class="nav-text">62 Book Polygon Mesh Processing</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#site"><span class="nav-number">2.64.</span> <span class="nav-text">63 Site</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#site-%E5%A8%B1%E4%B9%90%E8%89%BA%E6%9C%AF%E5%AE%B6%E7%A4%BE%E5%8C%BA"><span class="nav-number">2.65.</span> <span class="nav-text">64 Site 娱乐艺术家社区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#site-1"><span class="nav-number">2.66.</span> <span class="nav-text">65 Site</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">straywriter</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">124</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/straywriter" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;straywriter" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">straywriter</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

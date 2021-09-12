@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"straywriter.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="CMake MSVC编译器选项">
+<meta property="og:url" content="https://straywriter.github.io/2021/03/22/CMake/CMake-MSVC%E7%BC%96%E8%AF%91%E5%99%A8%E9%80%89%E9%A1%B9/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-03-22T13:59:11.000Z">
+<meta property="article:modified_time" content="2021-04-17T11:00:21.479Z">
+<meta property="article:author" content="straywriter">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://straywriter.github.io/2021/03/22/CMake/CMake-MSVC%E7%BC%96%E8%AF%91%E5%99%A8%E9%80%89%E9%A1%B9/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>CMake MSVC编译器选项 | Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://straywriter.github.io/2021/03/22/CMake/CMake-MSVC%E7%BC%96%E8%AF%91%E5%99%A8%E9%80%89%E9%A1%B9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="straywriter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CMake MSVC编译器选项
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-03-22 21:59:11" itemprop="dateCreated datePublished" datetime="2021-03-22T21:59:11+08:00">2021-03-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-04-17 19:00:21" itemprop="dateModified" datetime="2021-04-17T19:00:21+08:00">2021-04-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CMake/" itemprop="url" rel="index"><span itemprop="name">CMake</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <hr>
+<h2 id="cmake-使用msvc编译器选项">CMake 使用MSVC编译器选项</h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br></pre></td><td class="code"><pre><span class="line">**********************************************************************</span><br><span class="line">** Visual Studio 2017 Developer Command Prompt v15.9.6</span><br><span class="line">** Copyright (c) 2017 Microsoft Corporation</span><br><span class="line">**********************************************************************</span><br><span class="line">[vcvarsall.bat] Environment initialized for: &#39;x64&#39;</span><br><span class="line"></span><br><span class="line">C:\Program Files (x86)\Microsoft Visual Studio\2017\Community&gt;cl &#x2F;?</span><br><span class="line">用于 x64 的 Microsoft (R) C&#x2F;C++ 优化编译器 19.16.27026.1 版</span><br><span class="line">版权所有(C) Microsoft Corporation。保留所有权利。 C&#x2F;C++ 编译器选项 -优化-</span><br><span class="line"></span><br><span class="line">&#x2F;O1 最大优化(优选空间) &#x2F;O2 最大优化(优选速度)</span><br><span class="line">&#x2F;Ob 内联扩展(默认 n&#x3D;0) &#x2F;Od 禁用优化(默认)</span><br><span class="line">&#x2F;Og 启用全局优化 &#x2F;Oi[-] 启用内部函数</span><br><span class="line">&#x2F;Os 优选代码空间 &#x2F;Ot 优选代码速度</span><br><span class="line">&#x2F;Ox 优化(优选速度)</span><br><span class="line">&#x2F;favor: 选择优化所针对的处理器，为以下值之一:</span><br><span class="line">  blend - 针对几种不同 x64 处理器的优化组合</span><br><span class="line">  AMD64 - 64 位 AMD 处理器</span><br><span class="line">  INTEL64 - Intel(R)64 架构处理器</span><br><span class="line">ATOM - Intel(R) Atom(TM) 处理器 -代码生成-</span><br><span class="line"></span><br><span class="line">&#x2F;Gu[-] 确保 distinct 函数具有非重复地址 &#x2F;Gw[-] 分隔链接器的全局变量</span><br><span class="line">&#x2F;GF 启用只读字符串池 &#x2F;Gm[-] 启用最小重新生成</span><br><span class="line">&#x2F;Gy[-] 分隔链接器函数 &#x2F;GS[-] 启用安全检查</span><br><span class="line">&#x2F;GR[-] 启用 C++ RTTI &#x2F;GX[-] 启用 C++ EH (与 &#x2F;EHsc 相同)</span><br><span class="line">&#x2F;guard:cf[-] 启用 CFG (控制流保护) &#x2F;EHs 启用 C++ EH (没有 SEH 异常)</span><br><span class="line">&#x2F;EHa 启用 C++ EH (w&#x2F; SEH 异常) &#x2F;EHc 外部 &quot;C&quot; 默认为 nothrow</span><br><span class="line">&#x2F;EHr 始终生成 noexcept 运行时终止检查</span><br><span class="line">&#x2F;fp: 选择浮点模型:</span><br><span class="line">  except[-] - 在生成代码时考虑浮点异常</span><br><span class="line">  fast - &quot;fast&quot; 浮点模型；结果可预测性比较低</span><br><span class="line">  precise - &quot;precise&quot; 浮点模型；结果可预测</span><br><span class="line">  strict - &quot;strict&quot; 浮点模型(意味着 &#x2F;fp:except)</span><br><span class="line">即使使用 &#x2F;fp:except，&#x2F;Qfast_transcendentals 也生成内联内部 FP</span><br><span class="line">&#x2F;Qspectre[-] 对 CVE 2017-5753 启用缓解措施</span><br><span class="line">&#x2F;Qpar[-] 启用并行代码生成</span><br><span class="line">&#x2F;Qpar-report:1 自动并行化诊断；指示已并行化循环</span><br><span class="line">&#x2F;Qpar-report:2 自动并行化诊断；指示未并行化循环</span><br><span class="line">&#x2F;Qvec-report:1 自动向量化诊断；指示已向量化循环</span><br><span class="line">&#x2F;Qvec-report:2 自动向量化诊断；指示未向量化循环</span><br><span class="line">&#x2F;GL[-] 启用链接时代码生成 &#x2F;volatile: 选择可变模型: iso - Acquire&#x2F;release 语义对可变访问不一定有效 ms - Acquire&#x2F;release 语义对可变访问一定有效</span><br><span class="line">&#x2F;GA 为 Windows 应用程序进行优化 &#x2F;Ge 对所有函数强制堆栈检查</span><br><span class="line">&#x2F;Gs[num] 控制堆栈检查调用 &#x2F;Gh 启用 _penter 函数调用</span><br><span class="line">&#x2F;GH 启用 _pexit 函数调用 &#x2F;GT 生成纤程安全 TLS 访问</span><br><span class="line">&#x2F;RTC1 启用快速检查(&#x2F;RTCsu) &#x2F;RTCc 转换为较小的类型检查</span><br><span class="line">&#x2F;RTCs 堆栈帧运行时检查 &#x2F;RTCu 未初始化的局部用法检查</span><br><span class="line">&#x2F;clr[:option] 为公共语言运行时编译，其中 option 是:</span><br><span class="line">  pure - 生成只包含 IL 的输出文件(没有本机可执行代码)</span><br><span class="line">  safe - 生成只包含 IL 的可验证输出文件</span><br><span class="line">  initialAppDomain - 启用 Visual C++ 2002 的初始 AppDomain 行为</span><br><span class="line">  noAssembly - 不产生程序集 nostdlib - 忽略默认的 \clr 目录</span><br><span class="line">&#x2F;homeparams 强制将传入寄存器的参数写入到堆栈中</span><br><span class="line">&#x2F;GZ 启用堆栈检查(&#x2F;RTCs)</span><br><span class="line">&#x2F;arch:AVX 允许使用支持 AVX 的 CPU 可用的指令</span><br><span class="line">&#x2F;arch:AVX2 允许使用支持 AVX2 的 CPU 可用的指令</span><br><span class="line">&#x2F;Gv __vectorcall 调用约定</span><br><span class="line">(按&lt;回车键&gt;继续) -输出文件-</span><br><span class="line"></span><br><span class="line">&#x2F;Fa[file] 命名程序集列表文件 &#x2F;FA[scu] 配置程序集列表</span><br><span class="line">&#x2F;Fd[file] 命名 .PDB 文件 &#x2F;Fe 命名可执行文件</span><br><span class="line">&#x2F;Fm[file] 命名映射文件 &#x2F;Fo 命名对象文件</span><br><span class="line">&#x2F;Fp 命名预编译头文件 &#x2F;Fr[file] 命名源浏览器文件</span><br><span class="line">&#x2F;FR[file] 命名扩展 .SBR 文件 &#x2F;Fi[file] 命名预处理的文件</span><br><span class="line">&#x2F;Fd:  命名 .PDB 文件 &#x2F;Fe:  命名可执行文件</span><br><span class="line">&#x2F;Fm:  命名映射文件 &#x2F;Fo:  命名对象文件</span><br><span class="line">&#x2F;Fp:  命名 .PCH 文件 &#x2F;FR:  命名扩展 .SBR 文件</span><br><span class="line">&#x2F;Fi:  命名预处理的文件</span><br><span class="line">&#x2F;doc[file] 处理 XML 文档注释，并可选择命名 .xdc 文件 -预处理器-</span><br><span class="line"></span><br><span class="line">&#x2F;AI&lt;dir&gt; 添加到程序集搜索路径 &#x2F;FU 强制使用程序集&#x2F;模块</span><br><span class="line">&#x2F;C 不抽出注释 &#x2F;D&#123;&#x3D;|#&#125; 定义宏</span><br><span class="line">&#x2F;E 预处理到 stdout &#x2F;EP 预处理到 stdout，无行号</span><br><span class="line">&#x2F;P 预处理到文件 &#x2F;Fx 将插入的代码合并到文件中</span><br><span class="line">&#x2F;FI 命名强制包含文件 &#x2F;U 移除预定义的宏</span><br><span class="line">&#x2F;u 移除所有预定义的宏 &#x2F;I&lt;dir&gt; 添加到包含搜索路径</span><br><span class="line">&#x2F;X 忽略“标准位置” &#x2F;PH 在预处理时生成 #pragma file_hash -语言-</span><br><span class="line"></span><br><span class="line">&#x2F;std: C++ 标准版 c++14 – ISO&#x2F;IEC 14882:2014 (默认) c++17 – ISO&#x2F;IEC 14882:2017 c++latest – 最新草案标准(功能集可更改)</span><br><span class="line">&#x2F;permissive[-] 使某些非符合代码可编译(功能集可更改)(默认开启)</span><br><span class="line">&#x2F;Ze 启用扩展(默认) &#x2F;Za 禁用扩展</span><br><span class="line">&#x2F;ZW 启用 WinRT 语言扩展 &#x2F;Zs 只进行语法检查</span><br><span class="line">&#x2F;Zc:arg1[,arg2] C++ 语言合规性，这里的参数可以是:</span><br><span class="line"> forScope[-] 对范围规则强制使用标准 C++</span><br><span class="line"> wchar_t[-] wchar_t 是本机类型，不是 typedef</span><br><span class="line">  auto[-] 对 auto 强制使用新的标准 C++ 含义</span><br><span class="line">  trigraphs[-] 启用三元祖(默认关闭)</span><br><span class="line"> rvalueCast[-] 强制实施标准 C++ 显式类型转换规则</span><br><span class="line"> strictStrings[-]   禁用从字符串文本到 [char|wchar_t]* 的转换(默认关闭)</span><br><span class="line"> implicitNoexcept[-]  在必需的函数上启用隐式 noexcept</span><br><span class="line">threadSafeInit[-]   启用线程安全的本地静态初始化</span><br><span class="line">  inline[-] remove unreferenced function or data if it is COMDAT or has internal linkage only (off by default)</span><br><span class="line">  sizedDealloc[-] enable C++14 global sized deallocation functions (on by default)</span><br><span class="line">  throwingNew[-] 假设运算符 new 在故障时引发(默认关闭)</span><br><span class="line">  referenceBinding[-]   临时引用不会绑定到非常数 lvalue 引用(默认关闭)</span><br><span class="line">  twoPhase- 禁用两阶段名称查找</span><br><span class="line">  ternary[-] 对条件运算符强制使用 C++11 规则(默认关闭)</span><br><span class="line">  noexceptTypes[-] 强制执行 C++17 noexcept 规则(在 C++17 或更高版本中默认开启)</span><br><span class="line">  alignedNew[-] 对动态分配的对象启用 C++17 对齐方式(默认开启)</span><br><span class="line">&#x2F;await 启用可恢复函数扩展</span><br><span class="line">&#x2F;constexpr:depth constexpr 评估的递归深度限制(默认值: 512)</span><br><span class="line">&#x2F;constexpr:backtrace 在诊断中显示 N constexpr 评估(默认值: 10)</span><br><span class="line">&#x2F;constexpr:steps 在 N 个步骤后终止 constexpr 评估(默认值: 100000)</span><br><span class="line">&#x2F;Zi 启用调试信息 &#x2F;Z7 启用旧式调试信息</span><br><span class="line">&#x2F;Zo[-] 为优化的代码生成更丰富的调试信息(默认开启)</span><br><span class="line">&#x2F;ZH:SHA_256 在调试信息(实验)中将 SHA256 用于文件校验和</span><br><span class="line">&#x2F;Zp[n] 在 n 字节边界上包装结构 &#x2F;Zl 省略 .OBJ 中的默认库名</span><br><span class="line">&#x2F;vd&#123;0|1|2&#125; 禁用&#x2F;启用 vtordisp &#x2F;vm 指向成员的指针类型</span><br><span class="line">&#x2F;ZI 启用“编辑并继续”调试信息 &#x2F;openmp 启用 OpenMP 2.0 语言扩展 - 杂项 -</span><br><span class="line"></span><br><span class="line">@ 选项响应文件 &#x2F;?, &#x2F;help 打印此帮助消息</span><br><span class="line">&#x2F;bigobj 生成扩展的对象格式 &#x2F;c 只编译，不链接</span><br><span class="line">&#x2F;errorReport:option 将内部编译器错误报告给 Microsoft none - 不发送报告 prompt - 提示立即发送报告 queue - 在下一次管理员登录时，提示发送报告(默认) send - 自动发送报告 &#x2F;FC 诊断中使用完整路径名</span><br><span class="line">&#x2F;H 最大外部名称长度 &#x2F;J 默认 char 类型是 unsigned</span><br><span class="line">&#x2F;MP[n] 最多使用“n”个进程进行编译 &#x2F;nologo 取消显示版权信息</span><br><span class="line">&#x2F;showIncludes 显示包含文件名 &#x2F;Tc 将文件编译为 .c</span><br><span class="line">&#x2F;Tp 将文件编译为 .cpp &#x2F;TC 将所有文件编译为 .c</span><br><span class="line">&#x2F;TP 将所有文件编译为 .cpp &#x2F;V 设置版本字符串</span><br><span class="line">&#x2F;Yc[file] 创建 .PCH 文件 &#x2F;Yd 将调试信息放在每个 .OBJ 中</span><br><span class="line">&#x2F;Yl[sym] 为调试库插入 .PCH 引用 &#x2F;Yu[file] 使用 .PCH 文件</span><br><span class="line">&#x2F;Y- 禁用所有 PCH 选项 &#x2F;Zm 最大内存分配(默认值的百分比)</span><br><span class="line">&#x2F;FS 强制使用 MSPDBSRV.EXE</span><br><span class="line">&#x2F;source-charset:|.nnnn 集源字符集</span><br><span class="line">&#x2F;execution-charset:|.nnnn 集执行字符集</span><br><span class="line">&#x2F;utf-8 集源和到 UTF-8 的执行字符集</span><br><span class="line">&#x2F;validate-charset[-] 验证 UTF-8 文件是否只有合法字符 -链接-</span><br><span class="line"></span><br><span class="line">&#x2F;LD 创建 .DLL &#x2F;LDd 创建 .DLL 调试库</span><br><span class="line">&#x2F;LN 创建 .netmodule &#x2F;F 设置堆栈大小</span><br><span class="line">&#x2F;link [链接器选项和库] &#x2F;MD 与 MSVCRT.LIB 链接</span><br><span class="line">&#x2F;MT 与 LIBCMT.LIB 链接 &#x2F;MDd 与 MSVCRTD.LIB 调试库链接</span><br><span class="line">&#x2F;MTd 与 LIBCMTD.LIB 调试库链接 -代码分析-</span><br><span class="line"></span><br><span class="line">&#x2F;analyze[-] 启用本机分析 &#x2F;analyze:quiet[-] 没有对控制台的警告</span><br><span class="line">&#x2F;analyze:log 对文件的警告 &#x2F;analyze:autolog Log to *.pftlog</span><br><span class="line">&#x2F;analyze:autolog:ext Log to *.&#x2F;analyze:autolog- 无日志文件</span><br><span class="line">&#x2F;analyze:WX- 警告不严重 &#x2F;analyze:stacksize 最大堆栈帧</span><br><span class="line">&#x2F;analyze:max_paths 最大路径 &#x2F;analyze:only Analyze, no code gen -诊断-</span><br><span class="line"></span><br><span class="line">&#x2F;diagnostics: 控制诊断消息的格式: 传统型 - 保留之前的格式 列[-] - 打印列信息 插入点[-] - 打印列和源的指示行</span><br><span class="line">&#x2F;Wall 启用所有警告 &#x2F;w   禁用所有警告</span><br><span class="line">&#x2F;W 设置警告等级(默认 n&#x3D;1)</span><br><span class="line">&#x2F;Wv:xx[.yy[.zzzzz]] 禁用在 xx.yy.zzzzz 版本后引入的警告功能</span><br><span class="line">&#x2F;WX 将警告视为错误 &#x2F;WL 启用单行诊断</span><br><span class="line">&#x2F;wd 禁用警告 n &#x2F;we 将警告 n 视为错误</span><br><span class="line">&#x2F;wo 发出一次警告 n &#x2F;w 为 n 设置警告等级 1-4</span><br><span class="line">&#x2F;external:I  – 外部标头的位置</span><br><span class="line">&#x2F;external:env: – 外部标头位置的环境变量</span><br><span class="line">&#x2F;external:anglebrackets– 将所有通过 &lt;&gt; 包含的标头视为外部</span><br><span class="line">&#x2F;external:W – 外部标头的警告级别</span><br><span class="line">&#x2F;external:templates[-]  – 跨模板实例化链评估警告级别</span><br><span class="line">&#x2F;sdl 支持其他安全功能和警告</span><br></pre></td></tr></table></figure>
+<h2 id="按类别列出的编译器选项">按类别列出的编译器选项</h2>
+<h3 id="优化">优化</h3>
+<table>
+<thead>
+<tr class="header">
+<th>选项</th>
+<th>目标</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="o1-o2-minimize-size-maximize-speed.md"><code>/O1</code></a></td>
+<td>创建小代码。</td>
+</tr>
+<tr class="even">
+<td><a href="o1-o2-minimize-size-maximize-speed.md"><code>/O2</code></a></td>
+<td>创建快速代码。</td>
+</tr>
+<tr class="odd">
+<td><a href="ob-inline-function-expansion.md"><code>/Ob</code></a></td>
+<td>控制内联展开。</td>
+</tr>
+<tr class="even">
+<td><a href="od-disable-debug.md"><code>/Od</code></a></td>
+<td>禁用优化。</td>
+</tr>
+<tr class="odd">
+<td><a href="og-global-optimizations.md"><code>/Og</code></a></td>
+<td>已弃用。 使用全局优化。</td>
+</tr>
+<tr class="even">
+<td><a href="oi-generate-intrinsic-functions.md"><code>/Oi</code></a></td>
+<td>生成内部函数。</td>
+</tr>
+<tr class="odd">
+<td><a href="os-ot-favor-small-code-favor-fast-code.md"><code>/Os</code></a></td>
+<td>代码大小优先。</td>
+</tr>
+<tr class="even">
+<td><a href="os-ot-favor-small-code-favor-fast-code.md"><code>/Ot</code></a></td>
+<td>代码速度优先。</td>
+</tr>
+<tr class="odd">
+<td><a href="ox-full-optimization.md"><code>/Ox</code></a></td>
+<td>不包含/GF 或/Gy. 的/O2 子集</td>
+</tr>
+<tr class="even">
+<td><a href="oy-frame-pointer-omission.md"><code>/Oy</code></a></td>
+<td>省略帧指针。 (仅限 x86)</td>
+</tr>
+<tr class="odd">
+<td><a href="favor-optimize-for-architecture-specifics.md"><code>/favor</code></a></td>
+<td>生成针对一个指定体系结构或一系列体系结构进行优化的代码。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="代码生成">代码生成</h2>
+<table>
+<thead>
+<tr class="header">
+<th>选项</th>
+<th>目标</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="arch-x86.md"><code>/arch</code></a></td>
+<td>使用 SSE 或 SSE2 指令生成代码。 (仅限 x86)</td>
+</tr>
+<tr class="even">
+<td><a href="clr-common-language-runtime-compilation.md"><code>/clr</code></a></td>
+<td>生成要在公共语言运行时上运行的输出文件。</td>
+</tr>
+<tr class="odd">
+<td><a href="eh-exception-handling-model.md"><code>/EH</code></a></td>
+<td>指定异常处理模型。</td>
+</tr>
+<tr class="even">
+<td><a href="fp-specify-floating-point-behavior.md"><code>/fp</code></a></td>
+<td>指定浮点行为。</td>
+</tr>
+<tr class="odd">
+<td><a href="ga-optimize-for-windows-application.md"><code>/GA</code></a></td>
+<td>针对 Windows 应用程序进行优化。</td>
+</tr>
+<tr class="even">
+<td><a href="gd-gr-gv-gz-calling-convention.md"><code>/Gd</code></a></td>
+<td>使用 <strong><code>__cdecl</code></strong> 调用约定。 (仅限 x86)</td>
+</tr>
+<tr class="odd">
+<td><a href="ge-enable-stack-probes.md"><code>/Ge</code></a></td>
+<td>已弃用。 激活堆栈探测。</td>
+</tr>
+<tr class="even">
+<td><a href="gf-eliminate-duplicate-strings.md"><code>/GF</code></a></td>
+<td>启用字符串池。</td>
+</tr>
+<tr class="odd">
+<td><a href="gh-enable-penter-hook-function.md"><code>/Gh</code></a></td>
+<td>调用挂钩函数 <code>_penter</code>。</td>
+</tr>
+<tr class="even">
+<td><a href="gh-enable-pexit-hook-function.md"><code>/GH</code></a></td>
+<td>调用挂钩函数 <code>_pexit</code>。</td>
+</tr>
+<tr class="odd">
+<td><a href="gl-whole-program-optimization.md"><code>/GL</code></a></td>
+<td>启用全程序优化。</td>
+</tr>
+<tr class="even">
+<td><a href="gm-enable-minimal-rebuild.md"><code>/Gm</code></a></td>
+<td>已弃用。 启用最小重新生成。</td>
+</tr>
+<tr class="odd">
+<td><a href="gr-enable-run-time-type-information.md"><code>/GR</code></a></td>
+<td>启用运行时类型信息 (RTTI)。</td>
+</tr>
+<tr class="even">
+<td><a href="gd-gr-gv-gz-calling-convention.md"><code>/Gr</code></a></td>
+<td>使用 <strong><code>__fastcall</code></strong> 调用约定。 (仅限 x86)</td>
+</tr>
+<tr class="odd">
+<td><a href="gs-buffer-security-check.md"><code>/GS</code></a></td>
+<td>检查缓冲区安全性。</td>
+</tr>
+<tr class="even">
+<td><a href="gs-control-stack-checking-calls.md"><code>/Gs</code></a></td>
+<td>控制堆栈探测。</td>
+</tr>
+<tr class="odd">
+<td><a href="gt-support-fiber-safe-thread-local-storage.md"><code>/GT</code></a></td>
+<td>支持使用静态线程本地存储分配的数据的纤程安全。</td>
+</tr>
+<tr class="even">
+<td><a href="guard-enable-control-flow-guard.md"><code>/guard:cf</code></a></td>
+<td>添加控制流防护安全检查。</td>
+</tr>
+<tr class="odd">
+<td><a href="guard-enable-eh-continuation-metadata.md"><code>/guard:ehcont</code></a></td>
+<td>启用 EH 继续元数据。</td>
+</tr>
+<tr class="even">
+<td><a href="gd-gr-gv-gz-calling-convention.md"><code>/Gv</code></a></td>
+<td>使用 <strong><code>__vectorcall</code></strong> 调用约定。 （仅限 x86 和 x64）</td>
+</tr>
+<tr class="odd">
+<td><a href="gw-optimize-global-data.md"><code>/Gw</code></a></td>
+<td>启用全程序全局数据优化。</td>
+</tr>
+<tr class="even">
+<td><a href="gx-enable-exception-handling.md"><code>/GX</code></a></td>
+<td>已弃用。 启用同步异常处理。 改为使用 <a href="eh-exception-handling-model.md"><code>/EH</code></a> 。</td>
+</tr>
+<tr class="odd">
+<td><a href="gy-enable-function-level-linking.md"><code>/Gy</code></a></td>
+<td>启用函数级链接。</td>
+</tr>
+<tr class="even">
+<td><a href="gz-enable-stack-frame-run-time-error-checking.md"><code>/GZ</code></a></td>
+<td>已弃用。 启用快速检查。 与) (相同 <a href="rtc-run-time-error-checks.md"><code>/RTC1</code></a></td>
+</tr>
+<tr class="odd">
+<td><a href="gd-gr-gv-gz-calling-convention.md"><code>/Gz</code></a></td>
+<td>使用 <strong><code>__stdcall</code></strong> 调用约定。 (仅限 x86)</td>
+</tr>
+<tr class="even">
+<td><a href="homeparams-copy-register-parameters-to-stack.md"><code>/homeparams</code></a></td>
+<td>强制将传入寄存器的参数写入其在函数入口的堆栈上的位置。 此编译器选项仅适用于 x64 编译器 (本机编译和跨平台编译) 。</td>
+</tr>
+<tr class="odd">
+<td><a href="hotpatch-create-hotpatchable-image.md"><code>/hotpatch</code></a></td>
+<td>创建可热修补的映像。</td>
+</tr>
+<tr class="even">
+<td><a href="qfast-transcendentals-force-fast-transcendentals.md"><code>/Qfast_transcendentals</code></a></td>
+<td>生成快速先验。</td>
+</tr>
+<tr class="odd">
+<td><a href="qifist-suppress-ftol.md"><code>/QIfist</code></a></td>
+<td>已弃用。 当需要从浮点型转换为整型时，取消调用 Helper 函数 <code>_ftol</code> 。 (仅限 x86)</td>
+</tr>
+<tr class="even">
+<td><a href="qimprecise-fwaits-remove-fwaits-inside-try-blocks.md"><code>/Qimprecise_fwaits</code></a></td>
+<td>删除 <code>fwait</code> 块内 <strong><code>try</code></strong> 的命令。</td>
+</tr>
+<tr class="odd">
+<td><a href="qintel-jcc-erratum.md"><code>/QIntel-jcc-erratum</code></a></td>
+<td>缓解 Intel JCC 错误微代码更新对性能的影响。</td>
+</tr>
+<tr class="even">
+<td><a href="qpar-auto-parallelizer.md"><code>/Qpar</code></a></td>
+<td>启用循环的自动并行化。</td>
+</tr>
+<tr class="odd">
+<td><a href="qpar-report-auto-parallelizer-reporting-level.md"><code>/Qpar-report</code></a></td>
+<td>启用自动并行化的报告级别。</td>
+</tr>
+<tr class="even">
+<td><a href="qsafe-fp-loads.md"><code>/Qsafe_fp_loads</code></a></td>
+<td>将整数移动指令用于浮点值，并禁用特定浮点加载优化。</td>
+</tr>
+<tr class="odd">
+<td><a href="qspectre.md"><code>/Qspectre</code></a></td>
+<td>为 CVE 2017-5753 启用缓解，适用于一类 Spectre 攻击。</td>
+</tr>
+<tr class="even">
+<td><a href="qspectre-load.md"><code>/Qspectre-load</code></a></td>
+<td>为每个加载指令生成序列化说明。</td>
+</tr>
+<tr class="odd">
+<td><a href="qspectre-load-cf.md"><code>/Qspectre-load-cf</code></a></td>
+<td>为每个加载内存的控制流指令生成序列化说明。</td>
+</tr>
+<tr class="even">
+<td><a href="qvec-report-auto-vectorizer-reporting-level.md"><code>/Qvec-report</code></a></td>
+<td>启用自动矢量化的报告级别。</td>
+</tr>
+<tr class="odd">
+<td><a href="rtc-run-time-error-checks.md"><code>/RTC</code></a></td>
+<td>启用运行时错误检查。</td>
+</tr>
+<tr class="even">
+<td><a href="volatile-volatile-keyword-interpretation.md"><code>/volatile</code></a></td>
+<td>选择如何解释 volatile 关键字。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="输出文件">输出文件</h2>
+<table>
+<thead>
+<tr class="header">
+<th>选项</th>
+<th>目标</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="doc-process-documentation-comments-c-cpp.md"><code>/doc</code></a></td>
+<td>将文档注释处理到一个 XML 文件中。</td>
+</tr>
+<tr class="even">
+<td><a href="fa-fa-listing-file.md"><code>/FA</code></a></td>
+<td>配置程序集列表文件。</td>
+</tr>
+<tr class="odd">
+<td><a href="fa-fa-listing-file.md"><code>/Fa</code></a></td>
+<td>创建程序集列表文件。</td>
+</tr>
+<tr class="even">
+<td><a href="fd-program-database-file-name.md"><code>/Fd</code></a></td>
+<td>重命名程序数据库文件。</td>
+</tr>
+<tr class="odd">
+<td><a href="fe-name-exe-file.md"><code>/Fe</code></a></td>
+<td>重命名可执行文件。</td>
+</tr>
+<tr class="even">
+<td><a href="fi-preprocess-output-file-name.md"><code>/Fi</code></a></td>
+<td>指定预处理输出文件名。</td>
+</tr>
+<tr class="odd">
+<td><a href="fm-name-mapfile.md"><code>/Fm</code></a></td>
+<td>创建映射文件。</td>
+</tr>
+<tr class="even">
+<td><a href="fo-object-file-name.md"><code>/Fo</code></a></td>
+<td>创建对象文件。</td>
+</tr>
+<tr class="odd">
+<td><a href="fp-name-dot-pch-file.md"><code>/Fp</code></a></td>
+<td>指定预编译头文件名。</td>
+</tr>
+<tr class="even">
+<td><a href="fr-fr-create-dot-sbr-file.md"><code>/FR</code>, <code>/Fr</code></a></td>
+<td>名称生成 <em><code>.sbr</code></em> 的浏览器文件。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="预处理器">预处理器</h2>
+<table>
+<thead>
+<tr class="header">
+<th>选项</th>
+<th>目标</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="ai-specify-metadata-directories.md"><code>/AI</code></a></td>
+<td>指定在解析传递到 <a href="../../preprocessor/hash-using-directive-cpp.md">#using</a> 指令的文件引用时搜索的目录。</td>
+</tr>
+<tr class="even">
+<td><a href="c-preserve-comments-during-preprocessing.md"><code>/C</code></a></td>
+<td>在预处理期间保留注释。</td>
+</tr>
+<tr class="odd">
+<td><a href="d-preprocessor-definitions.md"><code>/D</code></a></td>
+<td>定义常数和宏。</td>
+</tr>
+<tr class="even">
+<td><a href="e-preprocess-to-stdout.md"><code>/E</code></a></td>
+<td>将预处理器输出复制到标准输出。</td>
+</tr>
+<tr class="odd">
+<td><a href="ep-preprocess-to-stdout-without-hash-line-directives.md"><code>/EP</code></a></td>
+<td>将预处理器输出复制到标准输出。</td>
+</tr>
+<tr class="even">
+<td><a href="fi-name-forced-include-file.md"><code>/FI</code></a></td>
+<td>预处理指定的包含文件。</td>
+</tr>
+<tr class="odd">
+<td><a href="fu-name-forced-hash-using-file.md"><code>/FU</code></a></td>
+<td>强制使用文件名，就像它已被传递到 <a href="../../preprocessor/hash-using-directive-cpp.md">#using</a> 指令一样。</td>
+</tr>
+<tr class="even">
+<td><a href="fx-merge-injected-code.md"><code>/Fx</code></a></td>
+<td>将插入的代码与源文件合并。</td>
+</tr>
+<tr class="odd">
+<td><a href="i-additional-include-directories.md"><code>/I</code></a></td>
+<td>在目录中搜索包含文件。</td>
+</tr>
+<tr class="even">
+<td><a href="p-preprocess-to-a-file.md"><code>/P</code></a></td>
+<td>将预处理器输出写入文件。</td>
+</tr>
+<tr class="odd">
+<td><a href="u-u-undefine-symbols.md"><code>/U</code></a></td>
+<td>移除预定义宏。</td>
+</tr>
+<tr class="even">
+<td><a href="u-u-undefine-symbols.md"><code>/u</code></a></td>
+<td>移除所有的预定义宏。</td>
+</tr>
+<tr class="odd">
+<td><a href="x-ignore-standard-include-paths.md"><code>/X</code></a></td>
+<td>忽略标准包含目录。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="语言">语言</h2>
+<table>
+<thead>
+<tr class="header">
+<th>选项</th>
+<th>目标</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="constexpr-control-constexpr-evaluation.md"><code>/constexpr</code></a></td>
+<td><strong><code>constexpr</code></strong> 在编译时控制计算。</td>
+</tr>
+<tr class="even">
+<td><a href="openmp-enable-openmp-2-0-support.md"><code>/openmp</code></a></td>
+<td><a href="../../preprocessor/omp.md"><code>#pragma omp</code></a>在源代码中启用。</td>
+</tr>
+<tr class="odd">
+<td><a href="vd-disable-construction-displacements.md"><code>/vd</code></a></td>
+<td>取消或启用隐藏的 <code>vtordisp</code> 类成员。</td>
+</tr>
+<tr class="even">
+<td><a href="vmb-vmg-representation-method.md"><code>/vmb</code></a></td>
+<td>对指向成员的指针使用最佳的基。</td>
+</tr>
+<tr class="odd">
+<td><a href="vmb-vmg-representation-method.md"><code>/vmg</code></a></td>
+<td>对指向成员的指针使用完全一般性。</td>
+</tr>
+<tr class="even">
+<td><a href="vmm-vms-vmv-general-purpose-representation.md"><code>/vmm</code></a></td>
+<td>声明多重继承。</td>
+</tr>
+<tr class="odd">
+<td><a href="vmm-vms-vmv-general-purpose-representation.md"><code>/vms</code></a></td>
+<td>声明单一继承。</td>
+</tr>
+<tr class="even">
+<td><a href="vmm-vms-vmv-general-purpose-representation.md"><code>/vmv</code></a></td>
+<td>声明虚拟继承。</td>
+</tr>
+<tr class="odd">
+<td><a href="z7-zi-zi-debug-information-format.md"><code>/Z7</code></a></td>
+<td>生成与 C 7.0 兼容的调试信息。</td>
+</tr>
+<tr class="even">
+<td><a href="za-ze-disable-language-extensions.md"><code>/Za</code></a></td>
+<td>禁用 C89 语言扩展。</td>
+</tr>
+<tr class="odd">
+<td><a href="zc-conformance.md"><code>/Zc</code></a></td>
+<td>指定下的标准行为 <a href="za-ze-disable-language-extensions.md"><code>/Ze</code></a> 。</td>
+</tr>
+<tr class="even">
+<td><a href="za-ze-disable-language-extensions.md"><code>/Ze</code></a></td>
+<td>已弃用。 启用 C89 语言扩展。</td>
+</tr>
+<tr class="odd">
+<td><a href="zf.md"><code>/Zf</code></a></td>
+<td>在并行生成中改善 PDB 生成时间。</td>
+</tr>
+<tr class="even">
+<td><a href="zh.md"><code>/ZH</code></a></td>
+<td>为调试信息中的校验和指定 MD5、SHA-1 或 SHA-256。</td>
+</tr>
+<tr class="odd">
+<td><a href="z7-zi-zi-debug-information-format.md"><code>/ZI</code></a></td>
+<td>将调试信息包含在与“编辑并继续”兼容的程序数据库中。 (仅限 x86)</td>
+</tr>
+<tr class="even">
+<td><a href="z7-zi-zi-debug-information-format.md"><code>/Zi</code></a></td>
+<td>生成完整的调试信息。</td>
+</tr>
+<tr class="odd">
+<td><a href="zl-omit-default-library-name.md"><code>/Zl</code></a></td>
+<td>删除文件中的默认库名称 <em><code>.obj</code></em> 。</td>
+</tr>
+<tr class="even">
+<td><a href="zp-struct-member-alignment.md"><code>/Zp</code></a><em>n</em></td>
+<td>封装结构成员。</td>
+</tr>
+<tr class="odd">
+<td><a href="zs-syntax-check-only.md"><code>/Zs</code></a></td>
+<td>只检查语法。</td>
+</tr>
+<tr class="even">
+<td><a href="zw-windows-runtime-compilation.md"><code>/ZW</code></a></td>
+<td>生成要在 Windows 运行时上运行的输出文件。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="链接">链接</h2>
+<table>
+<thead>
+<tr class="header">
+<th>选项</th>
+<th>目标</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="f-set-stack-size.md"><code>/F</code></a></td>
+<td>设置堆栈大小。</td>
+</tr>
+<tr class="even">
+<td><a href="md-mt-ld-use-run-time-library.md"><code>/LD</code></a></td>
+<td>创建动态链接库。</td>
+</tr>
+<tr class="odd">
+<td><a href="md-mt-ld-use-run-time-library.md"><code>/LDd</code></a></td>
+<td>创建调试动态链接库。</td>
+</tr>
+<tr class="even">
+<td><a href="link-pass-options-to-linker.md"><code>/link</code></a></td>
+<td>将指定的选项传递给 LINK。</td>
+</tr>
+<tr class="odd">
+<td><a href="ln-create-msil-module.md"><code>/LN</code></a></td>
+<td>创建 MSIL 模块。</td>
+</tr>
+<tr class="even">
+<td><a href="md-mt-ld-use-run-time-library.md"><code>/MD</code></a></td>
+<td>使用 <em>msvcrt.lib</em> 编译以创建多线程 DLL。</td>
+</tr>
+<tr class="odd">
+<td><a href="md-mt-ld-use-run-time-library.md"><code>/MDd</code></a></td>
+<td>使用 <em>msvcrtd.lib</em> 编译以创建调试多线程 DLL。</td>
+</tr>
+<tr class="even">
+<td><a href="md-mt-ld-use-run-time-library.md"><code>/MT</code></a></td>
+<td>使用 <em>libcmt.lib</em> 编译以创建多线程可执行文件。</td>
+</tr>
+<tr class="odd">
+<td><a href="md-mt-ld-use-run-time-library.md"><code>/MTd</code></a></td>
+<td>使用 <em>libcmtd.lib</em> 编译以创建调试多线程可执行文件。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="杂项">杂项</h2>
+<table>
+<thead>
+<tr class="header">
+<th>选项</th>
+<th>目标</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="help-compiler-command-line-help.md"><code>/?</code></a></td>
+<td>列出编译器选项。</td>
+</tr>
+<tr class="even">
+<td><a href="at-specify-a-compiler-response-file.md"><code>@</code></a></td>
+<td>指定响应文件。</td>
+</tr>
+<tr class="odd">
+<td><a href="analyze-code-analysis.md"><code>/analyze</code></a></td>
+<td>启用代码分析。</td>
+</tr>
+<tr class="even">
+<td><a href="bigobj-increase-number-of-sections-in-dot-obj-file.md"><code>/bigobj</code></a></td>
+<td>增加 .obj 文件中可寻址节的数目。</td>
+</tr>
+<tr class="odd">
+<td><a href="c-compile-without-linking.md"><code>/c</code></a></td>
+<td>编译但不链接。</td>
+</tr>
+<tr class="even">
+<td><a href="cgthreads-code-generation-threads.md"><code>/cgthreads</code></a></td>
+<td>指定用于优化和代码生成的 <em>cl.exe</em> 线程数。</td>
+</tr>
+<tr class="odd">
+<td><a href="errorreport-report-internal-compiler-errors.md"><code>/errorReport</code></a></td>
+<td>已弃用。 错误报告由 <a href="/windows/win32/wer/windows-error-reporting">Windows 错误报告 (WER)</a> 设置控制。</td>
+</tr>
+<tr class="even">
+<td><a href="fc-full-path-of-source-code-file-in-diagnostics.md"><code>/FC</code></a></td>
+<td>在诊断文本中显示传递给 <em>cl.exe</em> 的源代码文件的完整路径。</td>
+</tr>
+<tr class="odd">
+<td><a href="fs-force-synchronous-pdb-writes.md"><code>/FS</code></a></td>
+<td>强制写入 PDB 文件，以便通过 <em>MSPDBSRV.EXE</em> 进行序列化。</td>
+</tr>
+<tr class="even">
+<td><a href="fsanitize.md"><code>/fsanitize</code></a></td>
+<td>启用 sanitizer 检测的编译，如 AddressSanitizer。</td>
+</tr>
+<tr class="odd">
+<td><a href="h-restrict-length-of-external-names.md"><code>/H</code></a></td>
+<td>已弃用。 限制外部（公共）名称的长度。</td>
+</tr>
+<tr class="even">
+<td><a href="help-compiler-command-line-help.md"><code>/HELP</code></a></td>
+<td>列出编译器选项。</td>
+</tr>
+<tr class="odd">
+<td><a href="j-default-char-type-is-unsigned.md"><code>/J</code></a></td>
+<td>更改默认 <strong><code>char</code></strong> 类型。</td>
+</tr>
+<tr class="even">
+<td><a href="jmc.md"><code>/JMC</code></a></td>
+<td>支持本机 c + + 仅我的代码调试。</td>
+</tr>
+<tr class="odd">
+<td><a href="kernel-create-kernel-mode-binary.md"><code>/kernel</code></a></td>
+<td>编译器和链接器将创建可在 Windows 内核中执行的二进制文件。</td>
+</tr>
+<tr class="even">
+<td><a href="mp-build-with-multiple-processes.md"><code>/MP</code></a></td>
+<td>同时生成多个源文件。</td>
+</tr>
+<tr class="odd">
+<td><a href="nologo-suppress-startup-banner-c-cpp.md"><code>/nologo</code></a></td>
+<td>取消显示登录版权标志。</td>
+</tr>
+<tr class="even">
+<td><a href="sdl-enable-additional-security-checks.md"><code>/sdl</code></a></td>
+<td>启用更多安全功能和警告。</td>
+</tr>
+<tr class="odd">
+<td><a href="showincludes-list-include-files.md"><code>/showIncludes</code></a></td>
+<td>在编译期间显示所有包含文件的列表。</td>
+</tr>
+<tr class="even">
+<td><a href="sourcedependencies.md"><code>/sourceDependencies</code></a></td>
+<td>列出标头、模块和其他源依赖项。</td>
+</tr>
+<tr class="odd">
+<td><a href="tc-tp-tc-tp-specify-source-file-type.md"><code>/Tc</code></a></td>
+<td>指定 C 源文件。</td>
+</tr>
+<tr class="even">
+<td><a href="tc-tp-tc-tp-specify-source-file-type.md"><code>/TC</code></a></td>
+<td>指定所有源文件均为 C。</td>
+</tr>
+<tr class="odd">
+<td><a href="tc-tp-tc-tp-specify-source-file-type.md"><code>/Tp</code></a></td>
+<td>指定 C++ 源文件。</td>
+</tr>
+<tr class="even">
+<td><a href="tc-tp-tc-tp-specify-source-file-type.md"><code>/TP</code></a></td>
+<td>指定所有源文件均为 c + +。</td>
+</tr>
+<tr class="odd">
+<td><a href="v-version-number.md"><code>/V</code></a></td>
+<td>已弃用。 设置版本字符串。</td>
+</tr>
+<tr class="even">
+<td><a href="compiler-option-warning-level.md"><code>/w</code></a></td>
+<td>禁用所有警告。</td>
+</tr>
+<tr class="odd">
+<td><a href="compiler-option-warning-level.md"><code>/W0</code>, <code>/W1</code>, <code>/W2</code>, <code>/W3</code>, <code>/W4</code></a></td>
+<td>设置输出警告级别。</td>
+</tr>
+<tr class="even">
+<td><a href="compiler-option-warning-level.md"><code>/w1</code>, <code>/w2</code>, <code>/w3</code>, <code>/w4</code></a></td>
+<td>针对指定的警告设置警告级别。</td>
+</tr>
+<tr class="odd">
+<td><a href="compiler-option-warning-level.md"><code>/Wall</code></a></td>
+<td>启用所有警告，包括默认情况下禁用的警告。</td>
+</tr>
+<tr class="even">
+<td><a href="compiler-option-warning-level.md"><code>/wd</code></a></td>
+<td>禁用指定的警告。</td>
+</tr>
+<tr class="odd">
+<td><a href="compiler-option-warning-level.md"><code>/we</code></a></td>
+<td>将指定的警告视为错误。</td>
+</tr>
+<tr class="even">
+<td><a href="wl-enable-one-line-diagnostics.md"><code>/WL</code></a></td>
+<td>在从命令行编译 C++ 源代码时启用错误消息和警告消息的单行诊断。</td>
+</tr>
+<tr class="odd">
+<td><a href="compiler-option-warning-level.md"><code>/wo</code></a></td>
+<td>仅显示指定的警告一次。</td>
+</tr>
+<tr class="even">
+<td><a href="compiler-option-warning-level.md"><code>/Wv</code></a></td>
+<td>禁用更高版本的编译器引入的警告。</td>
+</tr>
+<tr class="odd">
+<td><a href="compiler-option-warning-level.md"><code>/WX</code></a></td>
+<td>将警告视为错误。</td>
+</tr>
+<tr class="even">
+<td><a href="yc-create-precompiled-header-file.md"><code>/Yc</code></a></td>
+<td>创建 <em><code>.PCH</code></em> 文件。</td>
+</tr>
+<tr class="odd">
+<td><a href="yd-place-debug-information-in-object-file.md"><code>/Yd</code></a></td>
+<td>已弃用。 将完整的调试信息放在所有对象文件中。 改为使用 <a href="z7-zi-zi-debug-information-format.md"><code>/Zi</code></a> 。</td>
+</tr>
+<tr class="even">
+<td><a href="yl-inject-pch-reference-for-debug-library.md"><code>/Yl</code></a></td>
+<td>创建调试库时插入 PCH 引用。</td>
+</tr>
+<tr class="odd">
+<td><a href="yu-use-precompiled-header-file.md"><code>/Yu</code></a></td>
+<td>在生成期间使用预编译头文件。</td>
+</tr>
+<tr class="even">
+<td><a href="y-ignore-precompiled-header-options.md"><code>/Y-</code></a></td>
+<td>忽略当前生成中的所有其他预编译头编译器选项。</td>
+</tr>
+<tr class="odd">
+<td><a href="zm-specify-precompiled-header-memory-allocation-limit.md"><code>/Zm</code></a></td>
+<td>指定预编译头内存分配限制。</td>
+</tr>
+<tr class="even">
+<td><a href="await-enable-coroutine-support.md"><code>/await</code></a></td>
+<td>) 扩展启用协同程序 (可恢复的函数。</td>
+</tr>
+<tr class="odd">
+<td><a href="source-charset-set-source-character-set.md"><code>/source-charset</code></a></td>
+<td>设置源字符集。</td>
+</tr>
+<tr class="even">
+<td><a href="execution-charset-set-execution-character-set.md"><code>/execution-charset</code></a></td>
+<td>设置执行字符集。</td>
+</tr>
+<tr class="odd">
+<td><a href="utf-8-set-source-and-executable-character-sets-to-utf-8.md"><code>/utf-8</code></a></td>
+<td>将源和执行字符集设置为 UTF-8。</td>
+</tr>
+<tr class="even">
+<td><a href="validate-charset-validate-for-compatible-characters.md"><code>/validate-charset</code></a></td>
+<td>仅验证 UTF-8 文件的兼容字符。</td>
+</tr>
+<tr class="odd">
+<td><a href="diagnostics-compiler-diagnostic-options.md"><code>/diagnostics</code></a></td>
+<td>控制诊断消息的格式。</td>
+</tr>
+<tr class="even">
+<td><a href="permissive-standards-conformance.md"><code>/permissive-</code></a></td>
+<td>设置标准一致性模式。</td>
+</tr>
+<tr class="odd">
+<td><a href="std-specify-language-standard-version.md"><code>/std</code></a></td>
+<td>C + + 标准版本兼容性选择器。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="实验性选项">实验性选项</h2>
+<p>实验性选项只能由某些版本的编译器支持。 它们在不同的编译器版本中也可能具有不同的行为。 对于试验性选项，通常是最好的文档，也是 <a target="_blank" rel="noopener" href="https://devblogs.microsoft.com/cppblog/">Microsoft c + + 团队博客</a>。</p>
+<table>
+<thead>
+<tr class="header">
+<th>选项</th>
+<th>目标</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="experimental-module.md"><code>/experimental:module</code></a></td>
+<td>启用实验性模块支持。</td>
+</tr>
+<tr class="even">
+<td><a href="experimental-preprocessor.md"><code>/experimental:preprocessor</code></a></td>
+<td>已弃用。 启用实验相容预处理器支持。 使用 <a href="zc-preprocessor.md"><code>/Zc:preprocessor</code></a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="弃用并删除的编译器选项">弃用并删除的编译器选项</h2>
+<table>
+<thead>
+<tr class="header">
+<th>选项</th>
+<th>目标</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="clr-common-language-runtime-compilation.md"><code>/clr:noAssembly</code></a></td>
+<td>已弃用。 改用<a href="ln-create-msil-module.md"><code>/LN</code> (创建 MSIL 模块)</a> 。</td>
+</tr>
+<tr class="even">
+<td><a href="errorreport-report-internal-compiler-errors.md"><code>/errorReport</code></a></td>
+<td>已弃用。 错误报告由 <a href="/windows/win32/wer/windows-error-reporting">Windows 错误报告 (WER)</a> 设置控制。</td>
+</tr>
+<tr class="odd">
+<td><a href="fr-fr-create-dot-sbr-file.md"><code>/Fr</code></a></td>
+<td>已弃用。 创建无局部变量的浏览信息文件。</td>
+</tr>
+<tr class="even">
+<td><a href="ge-enable-stack-probes.md"><code>/Ge</code></a></td>
+<td>已弃用。 激活堆栈探测。 默认已启用。</td>
+</tr>
+<tr class="odd">
+<td><a href="gm-enable-minimal-rebuild.md"><code>/Gm</code></a></td>
+<td>已弃用。 启用最小重新生成。</td>
+</tr>
+<tr class="even">
+<td><a href="gx-enable-exception-handling.md"><code>/GX</code></a></td>
+<td>已弃用。 启用同步异常处理。 改为使用 <a href="eh-exception-handling-model.md"><code>/EH</code></a> 。</td>
+</tr>
+<tr class="odd">
+<td><a href="gz-enable-stack-frame-run-time-error-checking.md"><code>/GZ</code></a></td>
+<td>已弃用。 启用快速检查。 改为使用 <a href="rtc-run-time-error-checks.md"><code>/RTC1</code></a> 。</td>
+</tr>
+<tr class="even">
+<td><a href="h-restrict-length-of-external-names.md"><code>/H</code></a></td>
+<td>已弃用。 限制外部（公共）名称的长度。</td>
+</tr>
+<tr class="odd">
+<td><a href="og-global-optimizations.md"><code>/Og</code></a></td>
+<td>已弃用。 使用全局优化。</td>
+</tr>
+<tr class="even">
+<td><a href="qifist-suppress-ftol.md"><code>/QIfist</code></a></td>
+<td>已弃用。 曾用来指定如何从浮点类型转换到整型类型。</td>
+</tr>
+<tr class="odd">
+<td><a href="v-version-number.md"><code>/V</code></a></td>
+<td>已弃用。 设置 <em><code>.obj</code></em> 文件版本字符串。</td>
+</tr>
+<tr class="even">
+<td><a href="wp64-detect-64-bit-portability-issues.md"><code>/Wp64</code></a></td>
+<td>已过时。 检测 64 位可移植性问题。</td>
+</tr>
+<tr class="odd">
+<td><a href="yd-place-debug-information-in-object-file.md"><code>/Yd</code></a></td>
+<td>已弃用。 将完整的调试信息放在所有对象文件中。 改为使用 <a href="z7-zi-zi-debug-information-format.md"><code>/Zi</code></a> 。</td>
+</tr>
+<tr class="even">
+<td><a href="zc-forscope-force-conformance-in-for-loop-scope.md"><code>/Zc:forScope-</code></a></td>
+<td>已弃用。 在 for 循环范围中禁用一致性。</td>
+</tr>
+<tr class="odd">
+<td><a href="za-ze-disable-language-extensions.md"><code>/Ze</code></a></td>
+<td>已弃用。 启用语言扩展。</td>
+</tr>
+<tr class="even">
+<td><a href="zg-generate-function-prototypes.md"><code>/Zg</code></a></td>
+<td>在 Visual Studio 2015 中移除。 生成函数原型。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="另请参阅">另请参阅</h2>
+<p><a href="c-cpp-building-reference.md">C/c + + 生成参考</a><br>
+<a href="compiler-options.md">MSVC 编译器选项</a><br>
+[MSVC 编译器命令行语法](</p>
+<h2 id="相关参考">相关参考</h2>
+<p><a target="_blank" rel="noopener" href="https://www.huaweicloud.com/articles/8e2a27051f203c6145ed5b64395b6944.html">Microsoft C/C++ 编译器选项</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/03/22/C++/C++%E5%AE%B9%E5%99%A8/" rel="prev" title="C++ STL容器用法">
+      <i class="fa fa-chevron-left"></i> C++ STL容器用法
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/03/22/C++/C++STL%E5%AE%B9%E5%99%A8/" rel="next" title="C++ STL容器用法">
+      C++ STL容器用法 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#cmake-%E4%BD%BF%E7%94%A8msvc%E7%BC%96%E8%AF%91%E5%99%A8%E9%80%89%E9%A1%B9"><span class="nav-number">1.</span> <span class="nav-text">CMake 使用MSVC编译器选项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%89%E7%B1%BB%E5%88%AB%E5%88%97%E5%87%BA%E7%9A%84%E7%BC%96%E8%AF%91%E5%99%A8%E9%80%89%E9%A1%B9"><span class="nav-number">2.</span> <span class="nav-text">按类别列出的编译器选项</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E5%8C%96"><span class="nav-number">2.1.</span> <span class="nav-text">优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90"><span class="nav-number">3.</span> <span class="nav-text">代码生成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%93%E5%87%BA%E6%96%87%E4%BB%B6"><span class="nav-number">4.</span> <span class="nav-text">输出文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%84%E5%A4%84%E7%90%86%E5%99%A8"><span class="nav-number">5.</span> <span class="nav-text">预处理器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%AD%E8%A8%80"><span class="nav-number">6.</span> <span class="nav-text">语言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%93%BE%E6%8E%A5"><span class="nav-number">7.</span> <span class="nav-text">链接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%82%E9%A1%B9"><span class="nav-number">8.</span> <span class="nav-text">杂项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E6%80%A7%E9%80%89%E9%A1%B9"><span class="nav-number">9.</span> <span class="nav-text">实验性选项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%83%E7%94%A8%E5%B9%B6%E5%88%A0%E9%99%A4%E7%9A%84%E7%BC%96%E8%AF%91%E5%99%A8%E9%80%89%E9%A1%B9"><span class="nav-number">10.</span> <span class="nav-text">弃用并删除的编译器选项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%A6%E8%AF%B7%E5%8F%82%E9%98%85"><span class="nav-number">11.</span> <span class="nav-text">另请参阅</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E5%8F%82%E8%80%83"><span class="nav-number">12.</span> <span class="nav-text">相关参考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">straywriter</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">124</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/straywriter" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;straywriter" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">straywriter</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"straywriter.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="C++ 操作符重载">
+<meta property="og:url" content="https://straywriter.github.io/2021/03/18/C++/C++%E6%93%8D%E4%BD%9C%E7%AC%A6%E9%87%8D%E8%BD%BD/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://straywriter.github.io/2021/03/18/C++/C++%E6%93%8D%E4%BD%9C%E7%AC%A6%E9%87%8D%E8%BD%BD/image-20210321151536915.png">
+<meta property="og:image" content="https://straywriter.github.io/2021/03/18/C++/C++%E6%93%8D%E4%BD%9C%E7%AC%A6%E9%87%8D%E8%BD%BD/image-20210321135819650.png">
+<meta property="article:published_time" content="2021-03-18T05:45:33.000Z">
+<meta property="article:modified_time" content="2021-04-04T13:49:51.134Z">
+<meta property="article:author" content="straywriter">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://straywriter.github.io/2021/03/18/C++/C++%E6%93%8D%E4%BD%9C%E7%AC%A6%E9%87%8D%E8%BD%BD/image-20210321151536915.png">
+
+<link rel="canonical" href="https://straywriter.github.io/2021/03/18/C++/C++%E6%93%8D%E4%BD%9C%E7%AC%A6%E9%87%8D%E8%BD%BD/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>C++ 操作符重载 | Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://straywriter.github.io/2021/03/18/C++/C++%E6%93%8D%E4%BD%9C%E7%AC%A6%E9%87%8D%E8%BD%BD/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="straywriter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C++ 操作符重载
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-03-18 13:45:33" itemprop="dateCreated datePublished" datetime="2021-03-18T13:45:33+08:00">2021-03-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-04-04 21:49:51" itemprop="dateModified" datetime="2021-04-04T21:49:51+08:00">2021-04-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="/2021/03/18/C++/C++%E6%93%8D%E4%BD%9C%E7%AC%A6%E9%87%8D%E8%BD%BD/image-20210321151536915.png"></p>
+<h2 id="简介">简介</h2>
+<p>为用户定义类型的操作数定制 C++ 运算符。</p>
+<p><strong>语法</strong></p>
+<p><img src="/2021/03/18/C++/C++%E6%93%8D%E4%BD%9C%E7%AC%A6%E9%87%8D%E8%BD%BD/image-20210321135819650.png"></p>
+<hr>
+<p><strong>实现方式</strong></p>
+<ul>
+<li><p><strong>类成员方式</strong></p>
+<p>即在类中定义一个成员函数来重载运算符。</p></li>
+<li><p><strong>友元函数方式</strong></p>
+<p>在类外部定义一个函数来重载运算符，并将这个函数声明为该类的友元函数，以达到可以访问类的私有属性的目的。</p>
+<p>用成员函数重载双目运算符时，左操作数无须用参数输入，而是通过隐含的<code>this</code>指针传入，这种做法的效率比较高。 此外，操作符还可重载为友元函数形式，这将没有隐含的参数<code>this</code>指针。对双目运算符，友元函数有2个参数，对单目运算符，友元函数有一个参数。</p></li>
+<li><p><strong>普通函数方式</strong></p>
+<p>普通函数形式重载运算符，要求待操作的属性必须是<code>public</code>类型的。</p></li>
+</ul>
+<hr>
+<p><strong>下面是不可重载的运算符列表：</strong></p>
+<ul>
+<li><strong>.</strong> ：成员访问运算符</li>
+<li><strong>.*</strong>, <strong>-&gt;*</strong> ：成员指针访问运算符</li>
+<li><strong>::</strong> ：域运算符</li>
+<li><strong>sizeof</strong>：长度运算符</li>
+<li><strong>?:</strong> ：条件运算符</li>
+<li><strong>#</strong> ： 预处理符号</li>
+</ul>
+<hr>
+<p><strong>可重载运算符/不可重载运算符</strong></p>
+<p>下面是可重载的运算符列表：</p>
+<table>
+<thead>
+<tr class="header">
+<th>运算符</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>一元运算符</td>
+<td>!(非)，-(负)，*(指针)，&amp;(取地址)</td>
+</tr>
+<tr class="even">
+<td>二元算术运算符</td>
+<td>+ (加)，-(减)，*(乘)，/(除)，% (取模)</td>
+</tr>
+<tr class="odd">
+<td>逻辑运算符</td>
+<td>||(逻辑或)，&amp;&amp;(逻辑与)，!(逻辑非)</td>
+</tr>
+<tr class="even">
+<td>关系运算符</td>
+<td>==(等于)，!= (不等于)，&lt; (小于)，&gt; (大于)，&lt;=(小于等于)，&gt;=(大于等于)</td>
+</tr>
+<tr class="odd">
+<td>自增自减运算符</td>
+<td>++(自增)，--(自减)</td>
+</tr>
+<tr class="even">
+<td>位运算符</td>
+<td>| (按位或)，&amp; (按位与)，~(按位取反)，^(按位异或),，&lt;&lt; (左移)，&gt;&gt;(右移)</td>
+</tr>
+<tr class="odd">
+<td>赋值运算符</td>
+<td>=, +=, -=, *=, /= , % = , &amp;=, |=, ^=, &lt;&lt;=, &gt;&gt;=</td>
+</tr>
+<tr class="even">
+<td>空间申请与释放</td>
+<td>new, delete, new[ ] , delete[]</td>
+</tr>
+<tr class="odd">
+<td>其他运算符</td>
+<td><strong>()</strong>(函数调用)，<strong>-&gt;</strong>(成员访问)，<strong>,</strong>(逗号)，<strong>[]</strong>(下标)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="算术运算符重载">算术运算符重载</h2>
+<hr>
+<h3 id="一元运算符重载">一元运算符重载</h3>
+<p>一元运算符只对一个操作数进行操作</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//类成员方式</span></span><br><span class="line">T <span class="keyword">operator</span>!();</span><br><span class="line">T <span class="keyword">operator</span>-();</span><br><span class="line">T <span class="keyword">operator</span>*();</span><br><span class="line">T <span class="keyword">operator</span>&amp;();</span><br></pre></td></tr></table></figure>
+<h3 id="自增自减运算符">自增自减运算符</h3>
+<p>vq 代表<strong>volatile</strong>或者非<strong>no cv-qualifier</strong> .</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//类内实现</span></span><br><span class="line"><span class="comment">//前缀</span></span><br><span class="line">T&amp; <span class="keyword">operator</span>++();</span><br><span class="line">T&amp; <span class="keyword">operator</span>--();</span><br><span class="line"><span class="comment">//后缀</span></span><br><span class="line">T <span class="keyword">operator</span>--(<span class="keyword">int</span>);</span><br><span class="line">T <span class="keyword">operator</span>--(<span class="keyword">int</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//类外实现</span></span><br><span class="line">T *vq &amp; <span class="keyword">operator</span>++(T *vq &amp;);</span><br><span class="line">T *vq &amp; <span class="keyword">operator</span>--(T *vq &amp;);</span><br><span class="line">T * <span class="keyword">operator</span>++(T *vq &amp;, <span class="keyword">int</span>);</span><br><span class="line">T * <span class="keyword">operator</span>--(T *vq &amp;, <span class="keyword">int</span>);</span><br></pre></td></tr></table></figure>
+<p><strong>示例：</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">X</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="comment">// 前缀自增</span></span><br><span class="line">    X&amp; <span class="keyword">operator</span>++()</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 实际上的自增在此进行</span></span><br><span class="line">        <span class="keyword">return</span> *<span class="keyword">this</span>; <span class="comment">// 以引用返回新值</span></span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// 后缀自增</span></span><br><span class="line">    X <span class="keyword">operator</span>++(<span class="keyword">int</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        X old = *<span class="keyword">this</span>; <span class="comment">// 复制旧值</span></span><br><span class="line">        <span class="keyword">operator</span>++();  <span class="comment">// 前缀自增</span></span><br><span class="line">        <span class="keyword">return</span> old;    <span class="comment">// 返回旧值</span></span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// 前缀自减</span></span><br><span class="line">    X&amp; <span class="keyword">operator</span>--()</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 实际上的自减在此进行</span></span><br><span class="line">        <span class="keyword">return</span> *<span class="keyword">this</span>; <span class="comment">// 以引用返回新值</span></span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// 后缀自减</span></span><br><span class="line">    X <span class="keyword">operator</span>--(<span class="keyword">int</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        X old = *<span class="keyword">this</span>; <span class="comment">// 复制旧值</span></span><br><span class="line">        <span class="keyword">operator</span>--();  <span class="comment">// 前缀自减</span></span><br><span class="line">        <span class="keyword">return</span> old;    <span class="comment">// 返回旧值</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="二元运算符重载">二元运算符重载</h3>
+<p>可重载的二元运算符</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">运算符</th>
+<th style="text-align: left;">名称</th>
+<th style="text-align: left;">运算符</th>
+<th style="text-align: left;">名称</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">,</td>
+<td style="text-align: left;">逗号</td>
+<td style="text-align: left;">&lt;</td>
+<td style="text-align: left;">小于</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">!=</td>
+<td style="text-align: left;">不等于</td>
+<td style="text-align: left;">&lt;&lt;</td>
+<td style="text-align: left;">左移</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">%</td>
+<td style="text-align: left;">求模</td>
+<td style="text-align: left;">&lt;&lt;=</td>
+<td style="text-align: left;">左移并赋值</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">%=</td>
+<td style="text-align: left;">求模并赋值</td>
+<td style="text-align: left;">&lt;=</td>
+<td style="text-align: left;">小于或等于</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">&amp;</td>
+<td style="text-align: left;">按位与</td>
+<td style="text-align: left;">=</td>
+<td style="text-align: left;">赋值、复制赋值和移动赋值</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">&amp;&amp;</td>
+<td style="text-align: left;">逻辑与</td>
+<td style="text-align: left;">==</td>
+<td style="text-align: left;">等于</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">&amp;=</td>
+<td style="text-align: left;">按位与并赋值</td>
+<td style="text-align: left;">&gt;</td>
+<td style="text-align: left;">大于</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">*</td>
+<td style="text-align: left;">乘</td>
+<td style="text-align: left;">&gt;=</td>
+<td style="text-align: left;">大于或等于</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">*=</td>
+<td style="text-align: left;">乘并赋值</td>
+<td style="text-align: left;">&gt;&gt;</td>
+<td style="text-align: left;">右移</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">+</td>
+<td style="text-align: left;">加</td>
+<td style="text-align: left;">&gt;&gt;=</td>
+<td style="text-align: left;">右移并赋值</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">+=</td>
+<td style="text-align: left;">加并赋值</td>
+<td style="text-align: left;">^</td>
+<td style="text-align: left;">异或</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">减</td>
+<td style="text-align: left;">^=</td>
+<td style="text-align: left;">异或并赋值</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">-=</td>
+<td style="text-align: left;">减并赋值</td>
+<td style="text-align: left;">|</td>
+<td style="text-align: left;">按位或</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">-&gt;*</td>
+<td style="text-align: left;">指向成员的指针</td>
+<td style="text-align: left;">|=</td>
+<td style="text-align: left;">按位或并赋值</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">/</td>
+<td style="text-align: left;">除</td>
+<td style="text-align: left;">||</td>
+<td style="text-align: left;">逻辑或</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">/=</td>
+<td style="text-align: left;">除并赋值</td>
+<td style="text-align: left;">[]</td>
+<td style="text-align: left;">下标运算符</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>典型情况下，二元运算符都被实现为非成员以维持对称性</strong></p>
+<p><strong>（例如，将复数与整数相加时，若 <code>operator+</code> 是复数类型的成员函数，则唯有复数+整数能编译，而整数+复数不能）</strong></p>
+<p><strong>。因为对于每个二元算术运算符都存在对应的复合赋值运算符，所以二元运算符的规范形式是基于其对应的复合赋值实现的：</strong></p>
+</blockquote>
+<ul>
+<li><strong>LR</strong>是返回类型</li>
+</ul>
+<h2 id="section"><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">LR <span class="keyword">operator</span>*(L , R );</span><br><span class="line">LR <span class="keyword">operator</span>/(L , R );</span><br><span class="line">LR <span class="keyword">operator</span>+(L , R );</span><br><span class="line">LR <span class="keyword">operator</span>-(L , R );</span><br><span class="line"><span class="keyword">bool</span> <span class="keyword">operator</span>&lt;(L , R );</span><br><span class="line"><span class="keyword">bool</span> <span class="keyword">operator</span>&gt;(L , R );</span><br><span class="line"><span class="keyword">bool</span> <span class="keyword">operator</span>&lt;=(L , R );</span><br><span class="line"><span class="keyword">bool</span> <span class="keyword">operator</span>&gt;=(L , R );</span><br><span class="line"><span class="keyword">bool</span> <span class="keyword">operator</span>==(L , R );</span><br><span class="line"><span class="keyword">bool</span> <span class="keyword">operator</span>!=(L , R );</span><br></pre></td></tr></table></figure></h2>
+<p><strong>比较运算符</strong></p>
+<p>比较运算符推荐使用友元重载，或类外部重载</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">inline</span> <span class="keyword">bool</span> <span class="keyword">operator</span>&lt; (<span class="keyword">const</span> X&amp; lhs, <span class="keyword">const</span> X&amp; rhs)&#123; <span class="comment">/* 做实际比较 */</span> &#125;</span><br><span class="line"><span class="keyword">inline</span> <span class="keyword">bool</span> <span class="keyword">operator</span>&gt; (<span class="keyword">const</span> X&amp; lhs, <span class="keyword">const</span> X&amp; rhs)&#123; <span class="keyword">return</span> rhs &lt; lhs; &#125;</span><br><span class="line"><span class="keyword">inline</span> <span class="keyword">bool</span> <span class="keyword">operator</span>&lt;=(<span class="keyword">const</span> X&amp; lhs, <span class="keyword">const</span> X&amp; rhs)&#123; <span class="keyword">return</span> !(lhs &gt; rhs); &#125;</span><br><span class="line"><span class="keyword">inline</span> <span class="keyword">bool</span> <span class="keyword">operator</span>&gt;=(<span class="keyword">const</span> X&amp; lhs, <span class="keyword">const</span> X&amp; rhs)&#123; <span class="keyword">return</span> !(lhs &lt; rhs); &#125;</span><br><span class="line"><span class="keyword">inline</span> <span class="keyword">bool</span> <span class="keyword">operator</span>==(<span class="keyword">const</span> X&amp; lhs, <span class="keyword">const</span> X&amp; rhs)&#123; <span class="comment">/* 做实际比较 */</span> &#125;</span><br><span class="line"><span class="keyword">inline</span> <span class="keyword">bool</span> <span class="keyword">operator</span>!=(<span class="keyword">const</span> X&amp; lhs, <span class="keyword">const</span> X&amp; rhs)&#123; <span class="keyword">return</span> !(lhs == rhs); &#125;</span><br></pre></td></tr></table></figure>
+<p><strong>其他二元运算符：</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">LR <span class="keyword">operator</span>%(L , R );</span><br><span class="line">LR <span class="keyword">operator</span>&amp;(L , R );</span><br><span class="line">LR <span class="keyword">operator</span>^(L , R );</span><br><span class="line">LR <span class="keyword">operator</span>|(L , R );</span><br><span class="line">L <span class="keyword">operator</span>&lt;&lt;(L , R );</span><br><span class="line">L <span class="keyword">operator</span>&gt;&gt;(L , R );</span><br><span class="line"></span><br><span class="line">vq L &amp; <span class="keyword">operator</span>%=(vq L &amp;, R );</span><br><span class="line">vq L &amp; <span class="keyword">operator</span>&lt;&lt;=(vq L &amp;, R );</span><br><span class="line">vq L &amp; <span class="keyword">operator</span>&gt;&gt;=(vq L &amp;, R );</span><br><span class="line">vq L &amp; <span class="keyword">operator</span>&amp;=(vq L &amp;, R );</span><br><span class="line">vq L &amp; <span class="keyword">operator</span>^=(vq L &amp;, R );</span><br><span class="line">vq L &amp; <span class="keyword">operator</span>|=(vq L &amp;, R );</span><br><span class="line"></span><br><span class="line"><span class="keyword">bool</span> <span class="keyword">operator</span>!(<span class="keyword">bool</span>);</span><br><span class="line"><span class="keyword">bool</span> <span class="keyword">operator</span>&amp;&amp;(<span class="keyword">bool</span>, <span class="keyword">bool</span>);</span><br><span class="line"><span class="keyword">bool</span> <span class="keyword">operator</span>||(<span class="keyword">bool</span>, <span class="keyword">bool</span>);</span><br><span class="line"></span><br><span class="line">LR <span class="keyword">operator</span>?:(<span class="keyword">bool</span>, L , R );</span><br><span class="line">T <span class="keyword">operator</span>?:(<span class="keyword">bool</span>, T , T );</span><br></pre></td></tr></table></figure>
+<h3 id="数组下标运算符">数组下标运算符</h3>
+<p>提供数组式访问并同时允许读写的用户定义类，典型地为 operator[] 定义两个重载：const 和非 const 变体：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">T</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">          <span class="keyword">value_t</span>&amp; <span class="keyword">operator</span>[](<span class="built_in">std</span>::<span class="keyword">size_t</span> idx)       &#123; <span class="keyword">return</span> mVector[idx]; &#125;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">value_t</span>&amp; <span class="keyword">operator</span>[](<span class="built_in">std</span>::<span class="keyword">size_t</span> idx) <span class="keyword">const</span> &#123; <span class="keyword">return</span> mVector[idx]; &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>若已知值类型是内建类型，则 const 变体应当按值返回。</p>
+<h3 id="逐位算术运算符">逐位算术运算符</h3>
+<p>实现位掩码类型 (BitmaskType) 的规定的用户定义类和枚举，要求重载逐位算术运算符 operator&amp;、operator|、operator^、operator~、operator&amp;=、operator|= 及 operator^=，而且可选地重载位移运算符 operator&lt;&lt;、operator&gt;&gt;、operator&gt;&gt;= 及 operator&lt;&lt;=。规范实现通常遵循上述的二元算术运算符。</p>
+<hr>
+<h2 id="类型转换操作符">类型转换操作符</h2>
+<p>类型转换运算符是类的一种特殊成员函数，它负责将一个类类型的值转换成其他类型。 类型转换函数的一般形式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">operator type() const;</span><br></pre></td></tr></table></figure>
+<p>其中type表示某种类型。</p>
+<ul>
+<li>一个类型转换函数必须是类的成员函数；它不能声明返回类型，形参列表也必须为空。类型转换函数通常应该是const。</li>
+<li>因为类型转换运算符是隐式执行的，所以不能在类型转换运算符的定义中使用任何形参。尽管类型转换函数不负责指定返回类型，但实际上每个类型转换函数都会返回一个对应类型的值。</li>
+</ul>
+<h2 id="空间申请与释放">空间申请与释放</h2>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> *<span class="keyword">operator</span> <span class="title">new</span><span class="params">(<span class="keyword">size_t</span>)</span></span>;     <span class="comment">//allocate an object</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="keyword">operator</span> <span class="title">delete</span><span class="params">(<span class="keyword">void</span> *)</span></span>;    <span class="comment">//free an object</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> *<span class="keyword">operator</span> <span class="keyword">new</span>[](<span class="keyword">size_t</span>);     <span class="comment">//allocate an array</span></span><br><span class="line"><span class="keyword">void</span> *<span class="keyword">operator</span> <span class="keyword">delete</span>[](<span class="keyword">void</span> *);    <span class="comment">//free an array</span></span><br></pre></td></tr></table></figure>
+<p>示例 在静态储存器创建动态对象</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/naughfy/article/details/78409213">重载new/delete自定义内存管理</a></p>
+<h2 id="函数运算符-operator">函数运算符 operator()</h2>
+<p>当用户定义的类重载了函数调用运算符 operator() 时，它就成为函数对象 (FunctionObject) 类型。</p>
+<p>这种类型的对象能用于函数调用式的表达式：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 此类型的对象表示一个变量的线性函数 a*x + b 。</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Linear</span> &#123;</span></span><br><span class="line">    <span class="keyword">double</span> a, b;</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">operator</span><span class="params">()</span><span class="params">(<span class="keyword">double</span> x)</span> <span class="keyword">const</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> a*x + b;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Linear f&#123;<span class="number">2</span>, <span class="number">1</span>&#125;; <span class="comment">// 表示函数 2x + 1 。</span></span><br><span class="line">    Linear g&#123;<span class="number">-1</span>, <span class="number">0</span>&#125;; <span class="comment">// 表示函数 -x 。</span></span><br><span class="line">    <span class="comment">// f 与 g 为能像函数一样使用的对象。</span></span><br><span class="line"> </span><br><span class="line">    <span class="keyword">double</span> f_0 = f(<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">double</span> f_1 = f(<span class="number">1</span>);</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">double</span> g_0 = g(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>下面是不使用重载但拥有缺点的两个替代品。 1. 使用全局变量：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">double</span> a, b; <span class="comment">// 坏：全局变量。</span></span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">linear</span><span class="params">(<span class="keyword">double</span> x)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a*x + b;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    a = <span class="number">2</span>; b = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">double</span> f_0 = linear(<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">double</span> f_1 = linear(<span class="number">1</span>);</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// 坏：需要重新赋值参数使得能够计算不同的函数：</span></span><br><span class="line">    a = <span class="number">-1</span>; b = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">double</span> g_0 = linear(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="2" type="1">
+<li>使用额外参数：</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">linear</span><span class="params">(<span class="keyword">double</span> a, <span class="keyword">double</span> b, <span class="keyword">double</span> x)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a*x + b;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">double</span> f_0 = linear(<span class="number">2</span>, <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">    <span class="comment">// 坏：必须重复输入同一参数：</span></span><br><span class="line">    <span class="keyword">double</span> f_1 = linear(<span class="number">2</span>, <span class="number">1</span>, <span class="number">1</span>);</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">double</span> g_0 = linear(<span class="number">-1</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>许多标准算法，从 <a target="_blank" rel="noopener" href="http://zh.cppreference.com/w/cpp/algorithm/sort">std::sort</a> 到 <a target="_blank" rel="noopener" href="http://zh.cppreference.com/w/cpp/algorithm/accumulate">std::accumulate</a> 的许多标准算法都接受<a target="_blank" rel="noopener" href="https://zh.cppreference.com/w/cpp/named_req/FunctionObject"><em>函数对象</em> <em>(FunctionObject)</em></a>以定制其行为。operator() 没有特别值得注意的规范形式，此处演示其用法</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Sum</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">int</span> sum;</span><br><span class="line">    Sum() : sum(<span class="number">0</span>) &#123; &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">operator</span><span class="params">()</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123; sum += n; &#125;</span><br><span class="line">&#125;;</span><br><span class="line">Sum s = <span class="built_in">std</span>::for_each(v.begin(), v.end(), Sum());</span><br></pre></td></tr></table></figure>
+<h2 id="流的提取与插入">流的提取与插入</h2>
+<p>接受 std::istream&amp; 或 std::ostream&amp; 作为左侧实参的 operator&gt;&gt; 与 operator&lt;&lt; 的重载，被称为插入与提取运算符。因为它们接收用户定义类型为右实参（a@b 中的 b），所以它们必须实现为非成员。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::ostream&amp; <span class="keyword">operator</span>&lt;&lt;(<span class="built_in">std</span>::ostream&amp; os, <span class="keyword">const</span> T&amp; obj)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 向流写入 obj</span></span><br><span class="line">    <span class="keyword">return</span> os;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">std</span>::istream&amp; <span class="keyword">operator</span>&gt;&gt;(<span class="built_in">std</span>::istream&amp; is, T&amp; obj)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 从流读取 obj</span></span><br><span class="line">    <span class="keyword">if</span>( <span class="comment">/* 不能构造 T */</span> )</span><br><span class="line">        is.setstate(<span class="built_in">std</span>::ios::failbit);</span><br><span class="line">    <span class="keyword">return</span> is;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>这些运算符有时实现为友元函数。</strong></p>
+<h2 id="自定义字面量">自定义字面量</h2>
+<p>C++11新标准中引入了用户自定义字面量，也叫自定义后缀操作符，即通过实现一个后缀操作符，将申明了该后缀标识的字面量转化为需要的类型。</p>
+<h2 id="赋值运算符">赋值运算符</h2>
+<p>重载赋值运算符（ = ），用于创建一个对象，比如拷贝构造函数。</p>
+<h2 id="c20">C++20</h2>
+<h3 id="operator">operator&lt;=&gt;</h3>
+<p>若定义 operator== 则编译器会自动生成不等运算符。类似地，若定义三路比较运算符 operator&lt;=&gt; 则编译器会自动生成四个关系运算符。若定义 operator&lt;=&gt; 为预置，则编译器会生成 operator== 与 operator&lt;=&gt; ：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Record</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">string</span> name;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> <span class="built_in">floor</span>;</span><br><span class="line">    <span class="keyword">double</span> weight;</span><br><span class="line">    <span class="keyword">auto</span> <span class="keyword">operator</span>&lt;=&gt;(<span class="keyword">const</span> Record&amp;) = <span class="keyword">default</span>;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 现在能用 ==、!=、&lt;、&lt;=、&gt; 和 &gt;= 比较 Record</span></span><br></pre></td></tr></table></figure>
+<h3 id="co_await">co_await</h3>
+<p><a target="_blank" rel="noopener" href="https://zh.cppreference.com/w/cpp/language/coroutines#co_await">https://zh.cppreference.com/w/cpp/language/coroutines#co_await</a></p>
+<h2 id="注意">注意</h2>
+<ul>
+<li>赋值(=),下标([]),调用( ( ) ),和成员访问箭头(-&gt;)运算符必须是成员函数。</li>
+<li>改变对象状态的运算符或者与给定类型密切相关的运算符，如递增,递减,和解引用运算符,通常应该是成员。</li>
+<li>具有对称性的运算符可能转换任意一端的运算对象,例如算术,相等性,关系和位运算符等,因此它们通常应该是普通的非成员函数。</li>
+<li>对于一个运算符函数来说，它或者是类的成员，或者至少含有一个类类型的参数 int operator+(int ,int); //error,不能为int重定义内置的运算符</li>
+<li>重载运算符限制在C++语言中已有的运算符范围内的允许重载的运算符之中，不能创建新的运算符。</li>
+<li>重载之后的运算符不能改变运算符的优先级和结合性，也不能改变运算符操作数的个数及语法结构。</li>
+<li>&amp;&amp;和||运算符的重载版本无法保留内置运算符的短路求值属性，两个运算对象总是会被求值。因此不建议重载它们。</li>
+<li>通常情况下，不应该重载逗号，取地址，逻辑与和逻辑或运算符。</li>
+<li>使用与内置类型一致的含义。重载运算符的返回类型通常情况下应该与其内置版本的返回类型兼容：逻辑运算符和关系运算符应该返回bool，算术运算符应该返回一个类类型的值，赋值运算符和复合赋值运算符应该返回左侧运算对象的一个引用。</li>
+<li>事实上，我们的重载运算符返回void、返回对象本身、返回对象引用都是可以的，并不是说一定要返回一个引用，只不过在不同的情况下需要不同的返回值。</li>
+<li>后置++的返回值是对象而非引用，因为，如果返回是引用，那么返回的是一块临时变量（old）的引用，当后置++的函数调用结束后，该临时变量会被自动释放掉，那么返回的引用的值就会是一个-37983219之类的为初始化的值了，发生bug。</li>
+</ul>
+<blockquote>
+<p><strong>那么什么情况下要返回对象的引用呢？</strong></p>
+<p>原因有两个：1.允许进行连续赋值2.防止返回对象（返回对象也可以进行连续赋值）的时候调用拷贝构造函数和析构函数导致不必要的开销，降低赋值运算符等的效率。</p>
+<p>对于第二点原因：如果用”值传递“的方式，虽然功能任然正确，但由于return语句要把*this拷贝到保存返回值的外部存储单元之中，增加了不必要的开销，会降低赋值函数的效率。</p>
+</blockquote>
+<h2 id="相关参考">相关参考</h2>
+<p><a target="_blank" rel="noopener" href="https://zh.cppreference.com/w/cpp/language/operators">cppreference</a></p>
+<p><a target="_blank" rel="noopener" href="https://zh.cppreference.com/w/cpp/language/coroutines#co_await">co await</a></p>
+<p>相关文章</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/afei__/article/details/82082003">C++ 运算符重载详解</a></p>
+<p><a target="_blank" rel="noopener" href="https://harttle.land/2015/09/19/effective-cpp-50.html">Effective C++ 50：为什么需要自定义 new 和 delete？</a></p>
+<p><a target="_blank" rel="noopener" href="https://harttle.land/2015/09/20/effective-cpp-51.html">Effective C++ 51：写 new 和 delete 时请遵循惯例</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/K346K346/article/details/85322227">自定义字面量</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/03/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/3D%E6%95%B0%E5%AD%A6-%E5%90%91%E9%87%8F/" rel="prev" title="图形学数学-向量">
+      <i class="fa fa-chevron-left"></i> 图形学数学-向量
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/03/18/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/%E5%85%A8%E5%B1%80%E7%85%A7%E6%98%8EBRDF%E9%87%87%E6%A0%B7%E6%96%B9%E6%B3%95/" rel="next" title="An Importance Sampling Method for arbitrary BRDFs used in Global Illumination Applications 读书总结">
+      An Importance Sampling Method for arbitrary BRDFs used in Global Illumination Applications 读书总结 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%97%E6%9C%AF%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD"><span class="nav-number">2.</span> <span class="nav-text">算术运算符重载</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E5%85%83%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD"><span class="nav-number">2.1.</span> <span class="nav-text">一元运算符重载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%A2%9E%E8%87%AA%E5%87%8F%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">2.2.</span> <span class="nav-text">自增自减运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E5%85%83%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD"><span class="nav-number">2.3.</span> <span class="nav-text">二元运算符重载</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#section"><span class="nav-number">3.</span> <span class="nav-text">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+LR operator*(L , R );
+LR operator&#x2F;(L , R );
+LR operator+(L , R );
+LR operator-(L , R );
+bool operator&lt;(L , R );
+bool operator&gt;(L , R );
+bool operator&lt;&#x3D;(L , R );
+bool operator&gt;&#x3D;(L , R );
+bool operator&#x3D;&#x3D;(L , R );
+bool operator!&#x3D;(L , R );
+</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E7%BB%84%E4%B8%8B%E6%A0%87%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">3.1.</span> <span class="nav-text">数组下标运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%90%E4%BD%8D%E7%AE%97%E6%9C%AF%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">3.2.</span> <span class="nav-text">逐位算术运算符</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="nav-number">4.</span> <span class="nav-text">类型转换操作符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A9%BA%E9%97%B4%E7%94%B3%E8%AF%B7%E4%B8%8E%E9%87%8A%E6%94%BE"><span class="nav-number">5.</span> <span class="nav-text">空间申请与释放</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E8%BF%90%E7%AE%97%E7%AC%A6-operator"><span class="nav-number">6.</span> <span class="nav-text">函数运算符 operator()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E7%9A%84%E6%8F%90%E5%8F%96%E4%B8%8E%E6%8F%92%E5%85%A5"><span class="nav-number">7.</span> <span class="nav-text">流的提取与插入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%AD%97%E9%9D%A2%E9%87%8F"><span class="nav-number">8.</span> <span class="nav-text">自定义字面量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B5%8B%E5%80%BC%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">9.</span> <span class="nav-text">赋值运算符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c20"><span class="nav-number">10.</span> <span class="nav-text">C++20</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#operator"><span class="nav-number">10.1.</span> <span class="nav-text">operator&lt;&#x3D;&gt;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#co_await"><span class="nav-number">10.2.</span> <span class="nav-text">co_await</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F"><span class="nav-number">11.</span> <span class="nav-text">注意</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E5%8F%82%E8%80%83"><span class="nav-number">12.</span> <span class="nav-text">相关参考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">straywriter</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">124</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/straywriter" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;straywriter" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">straywriter</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

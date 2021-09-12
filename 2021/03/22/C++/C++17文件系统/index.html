@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"straywriter.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="C++17文件系统">
+<meta property="og:url" content="https://straywriter.github.io/2021/03/22/C++/C++17%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-03-22T13:59:11.315Z">
+<meta property="article:modified_time" content="2021-05-17T03:20:14.635Z">
+<meta property="article:author" content="straywriter">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://straywriter.github.io/2021/03/22/C++/C++17%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>C++17文件系统 | Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://straywriter.github.io/2021/03/22/C++/C++17%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="straywriter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C++17文件系统
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-03-22 21:59:11" itemprop="dateCreated datePublished" datetime="2021-03-22T21:59:11+08:00">2021-03-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-05-17 11:20:14" itemprop="dateModified" datetime="2021-05-17T11:20:14+08:00">2021-05-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <hr>
+<hr>
+<h2 id="c-17-文件系统">C++ 17 文件系统</h2>
+<ul>
+<li><code>file</code> : 存放数据的文件系统对象，可读可写。拥有文件名字和属性。
+<ul>
+<li><code>directory</code> : 文件目录</li>
+<li><code>hard link</code> : 硬链接</li>
+<li><code>symbolic link</code> : <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/符号链接">符号链接</a></li>
+<li><code>regular file</code> : 常规文件</li>
+</ul></li>
+<li><code>file name</code> : 文件的名字，通常为一个字符串</li>
+<li><code>path</code>
+<ul>
+<li><code>absolute path</code> : 绝对路径</li>
+<li><code>canonical path</code> : 规范路径（不包含符号链接，<code>.</code> 和 <code>..</code> 的路径）</li>
+<li><code>relative path</code> : 相对路径（一个路径相对于另一个路径的路径，字符串中可能包含 <code>.</code> 和 <code>..</code>）</li>
+</ul></li>
+</ul>
+<h2 id="path-类">path 类</h2>
+<p>文件系统中对于路径名的定义包括以下几个部分</p>
+<ul>
+<li><p>``` path name syntax <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">  - &#96;root-name&#96; : 根的名字，例如 &#96;C:&#96; 或 &#96;&#x2F;&#x2F;myserver&#96;</span><br><span class="line">  - &#96;root-directory&#96; : 根目录，将该路径标记为绝对路径的目录分隔符。</span><br><span class="line">  - &#96;file-name&#96; : 文件名</span><br><span class="line">  - &#96;directory-separator&#96; : 目录分隔符</span><br><span class="line"></span><br><span class="line">path 类有一个常成员变量 &#96;constexpr value_type preferred_separator&#96;。在 windows 系统中为 &#96;\&#96;，在 POSIX 中为 &#96;&#x2F;&#96;。</span><br><span class="line"></span><br><span class="line">### 路径规范化算法</span><br><span class="line"></span><br><span class="line">path 可以通过以下算法进行规范化：</span><br><span class="line"></span><br><span class="line">1. 如果路径为空，则停止；</span><br><span class="line">2. 替换连续的多个目录分隔符为单独的一个 &#96;preferred_separator&#96;，eg: &#96;&#x2F;usr&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;&#x2F;lib&#96; -&gt; &#96;&#x2F;usr&#x2F;lib&#96;</span><br><span class="line">3. 替换 &#96;root-name&#96; 中的每个斜杠字符为 &#96;prefered_separator&#96;</span><br><span class="line">4. 移除紧跟斜杠字符后的 &#96;.&#96; 符号</span><br><span class="line">5. 移除紧跟斜杠字符后的 &#96;..&#96; 符号，并将 &#96;..&#96; 前的非 &#96;..&#96; 文件名去掉，eg: &#96;&#x2F;usr&#x2F;local&#x2F;include&#x2F;..&#x2F;opencv2&#96; -&gt; &#96;&#x2F;usr&#x2F;local&#x2F;include&#x2F;opencv2&#96;</span><br><span class="line">6. 如果存在根目录，删除所有 &#96;..&#96; 和紧随其后的所有目录分隔符</span><br><span class="line">7. 如果最后一个文件名是 &#96;..&#96;，删除所有结尾的目录分隔符</span><br><span class="line">8. 如果路径为空，则添加 &#96;.&#96;</span><br><span class="line"></span><br><span class="line">### 路径的格式</span><br><span class="line"></span><br><span class="line">路径有两种格式，&#96;native_format&#96; 和 &#96;generate_format&#96;。对于 POSIX-like 的文件系统，这两种格式是相同的。对于 Windows 文件系统，则是不同的。</span><br><span class="line"></span><br><span class="line">- generic format 路径格式：&#96;&#x2F;home&#x2F;mypc&#x2F;myfile.txt&#96;</span><br><span class="line">- native format 路径格式（windows）：&#96;F:\\MyDirectory\\myFile.txt&#96; 或 &#96;F:\MyDirectory\myFile.txt&#96;</span><br><span class="line"></span><br><span class="line">### 路径的操作</span><br><span class="line"></span><br><span class="line">- &#96;(constructor)&#96; &amp; &#96;(destructor)&#96; &amp; &#96;operator&#x3D;&#96; &amp; &#96;assign&#96;</span><br><span class="line">  - 路径有构造函数和析构函数，可以通过 &#96;operator&#x3D;&#96; 进行赋值，也可以使用 &#96;assign&#96; 进行赋值。</span><br><span class="line">- &#96;append&#96; &amp; &#96;operator&#x2F;&#x3D;&#96; &amp; &#96;concat&#96; &amp; &#96;operator+&#x3D;&#96;</span><br><span class="line">  - 路径有两个连接操作，&#96;operator&#x2F;&#x3D;&#96; 和 &#96;append&#96; 可以将两个路径进行连接，同时会添加一个分隔符。&#96;operator+&#x3D;&#96; 和 &#96;concat&#96; 也可以将两个路径进行连接，但是不会添加分隔符。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">- &#96;clear&#96; : 清除路径中的内容</span><br><span class="line"></span><br><span class="line">- &#96;swap&#96; : 交换两个路径中的内容</span><br><span class="line"></span><br><span class="line">- &#96;make_preferred&#96; : 将路径中的分隔符替换为 &#96;preferred_separator&#96;</span><br><span class="line"></span><br><span class="line">- &#96;remove_filename&#96; : 将路径中的文件名去掉，具体是指删除最后一个文件分隔符之后的内容</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">  Cpp</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br></pre></td></tr></table></figure> #include <iostream> #include <filesystem> namespace fs = std::filesystem;</filesystem></iostream></p>
+<p>int main() { fs::path p1 = "/a/b/c/d"; std::cout &lt;&lt; p1.remove_filename() &lt;&lt; ''; // /a/b/c return 0; } <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- &#96;replace_filename&#96; : 替换路径中的最后一部分为其他路径</span><br><span class="line"></span><br><span class="line">- &#96;replace_extension&#96; : 替换文件后缀</span><br><span class="line"></span><br><span class="line">- &#96;c_str&#96; &amp; &#96;native&#96; &amp; &#96;operator string_type&#96;</span><br><span class="line"></span><br><span class="line">  - 将路径转换为字符串</span><br><span class="line"></span><br><span class="line">- &#96;string&#96; &amp; &#96;wstring&#96; &amp; &#96;u8string&#96; &amp; &#96;u16string&#96; &amp; &#96;u32string&#96;</span><br><span class="line"></span><br><span class="line">  - 根据具体的编码将路径转换为具体的 native 字符串格式</span><br><span class="line"></span><br><span class="line">- &#96;generic_string&#96; &amp; &#96;generic_wstring&#96; &amp; &#96;generic_u8string&#96; &amp; &#96;generic_u16string&#96; &amp; &#96;generic_u32string&#96;</span><br><span class="line"></span><br><span class="line">  - 根据具体的编码将路径转换为具体的 generic 字符串格式</span><br><span class="line"></span><br><span class="line">- &#96;compare&#96; : 比较两个路径</span><br><span class="line"></span><br><span class="line">- &#96;lexically_normal&#96; : 转换路径为 normal 格式（不包含 &#96;.&#96; 和 &#96;..&#96;）</span><br><span class="line"></span><br><span class="line">- &#96;lexically_relative&#96; : 转换路径为 relative 格式</span><br><span class="line"></span><br><span class="line">- &#96;lexically_proximate&#96; : 转换路径为 proximate 格式</span><br><span class="line"></span><br><span class="line">- &#96;empty&#96; : 检测路径是否为空</span><br><span class="line"></span><br><span class="line">- &#96;is_absolute&#96; : 检查路径是否为绝对路径</span><br><span class="line"></span><br><span class="line">- &#96;is_relative&#96; : 检查路径是否为相对路径</span><br><span class="line"></span><br><span class="line">- &#96;begin&#96; : begin 迭代器</span><br><span class="line"></span><br><span class="line">- &#96;end&#96; : end 迭代器</span><br><span class="line"></span><br><span class="line">  - 迭代器所指向的序列包括：</span><br><span class="line">    - &#96;root-name&#96;</span><br><span class="line">    - &#96;root-directory&#96;</span><br><span class="line">    - sequence of &#96;file-name&#96;(不包括分隔符)</span><br><span class="line">    - 如果路径最后是分隔符，则序列的最后一个为空字符串</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">  Cpp</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br></pre></td></tr></table></figure> #include <iostream> #include <filesystem></filesystem></iostream></p>
+<p>namespace fs = std::filesystem;</p>
+<p>int main() { fs::path p = R"(C:)"; for (auto it = p.begin(); it != p.end(); it++) { std::cout &lt;&lt; *it &lt;&lt; ''; } for (auto &amp; e : p) { std::cout &lt;&lt; e &lt;&lt; ''; } return 0; } // Output: // "C:" // "\" // "Users" // "yangshun" // "AppData" // "Local" // "Temp" // "" <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">获取以及检查路径的几个部分</span><br><span class="line"></span><br><span class="line">| 获取函数         | 检查函数             | 描述                                                  |</span><br><span class="line">| :--------------- | :------------------- | :---------------------------------------------------- |</span><br><span class="line">| &#96;root_name&#96;      | &#96;has_root_name&#96;      | 获取（检查）路径根的名字                              |</span><br><span class="line">| &#96;root_directory&#96; | &#96;has_root_directory&#96; | 获取（检查）路径根目录（绝对路径的目录分隔符）        |</span><br><span class="line">| &#96;root_path&#96;      | &#96;has_rootpath&#96;       | 获取（检查）根路径，&#96;root_name&#96; + &#96;root_directory&#96;    |</span><br><span class="line">| &#96;relative_path&#96;  | &#96;has_relative_path&#96;  | 获取（检查）相对路径，除去 &#96;root_path&#96; 之后剩余的部分 |</span><br><span class="line">| &#96;parent_path&#96;    | &#96;has_parent_path&#96;    | 获取（检查）除去文件名外的路径部分                    |</span><br><span class="line">| &#96;filename&#96;       | &#96;has_filename&#96;       | 获取（检查）文件名                                    |</span><br><span class="line">| &#96;stem&#96;           | &#96;has_stem&#96;           | 获取（检查）文件名称                                  |</span><br><span class="line">| &#96;extension&#96;      | &#96;has_extension&#96;      | 获取（检查）文件扩展                                  |</span><br><span class="line"></span><br><span class="line">## </span><br><span class="line"></span><br><span class="line">## filesystem_error 类</span><br><span class="line"></span><br><span class="line">&#96;filesystem_error&#96; 类是在对文件系统进行操作出现异常是抛出的错误，其成员变量包括 &#96;(constructor)&#96;, &#96;operator&#x3D;&#96;, &#96;path1&#96;, &#96;path2&#96; 和 &#96;what&#96;。&#96;path1&#96; 和 &#96;path2&#96; 是造成异常的路径。</span><br><span class="line"></span><br><span class="line">## directory_entry 类</span><br><span class="line"></span><br><span class="line">&#96;directory_entry&#96; 代表目录条目。其对象会存储一个路径以及额外的一些文件属性（hard link count, status, symlink status file size, and last write time）</span><br><span class="line"></span><br><span class="line">- &#96;(constructor)&#96; &amp; &#96;(destructor)&#96; &amp; &#96;operator&#x3D;&#96; &amp; &#96;assign&#96;</span><br><span class="line">- &#96;replace_filename&#96; : 更改目录条目的文件名</span><br><span class="line">- &#96;refresh&#96; : 刷新文件系统对象的属性状态</span><br><span class="line">- &#96;path&#96; : 返回目录条目引用的完整路径</span><br><span class="line">- &#96;exists&#96; : 检查目录条目是否存在</span><br><span class="line">- &#96;is_block_file&#96; : 检查目录条目是否为块设备</span><br><span class="line">- &#96;is_character_file&#96; : 检查目录条目是否为字符设备</span><br><span class="line">- &#96;is_directory&#96; : 检查目录条目是否为目录</span><br><span class="line">- &#96;is_fifo&#96; : 检查目录条目是否为命名管道</span><br><span class="line">- &#96;is_other&#96; : 检查目录条目是否为其他文件</span><br><span class="line">- &#96;is_regular_file&#96; : 检查目录条目是否引用常规文件</span><br><span class="line">- &#96;is_socket&#96; : 检查目录条目是否引用常规文件</span><br><span class="line">- &#96;is_symlink&#96; : 检查目录条目是否引用符号链接</span><br><span class="line">- &#96;file_size&#96; : 返回目录条目引用的文件的大小</span><br><span class="line">- &#96;hard_link_count&#96; : 返回引用目录条目所引用文件的硬链接数</span><br><span class="line">- &#96;last_write_time&#96; : 获取或设置目录条目所引用文件的最后一次数据修改的时间</span><br><span class="line">- &#96;status&#96; &amp; &#96;symlink_status&#96; : 目录条目指定的文件的状态</span><br><span class="line"></span><br><span class="line">## directory_iterator 类</span><br><span class="line"></span><br><span class="line">- 指向 directory_entry 中元素的迭代器，类型为输入迭代器。该迭代器不会遍历子文件夹。</span><br><span class="line"></span><br><span class="line">## recursive_directory_iterator 类</span><br><span class="line"></span><br><span class="line">- 指向 directory_entry 中元素的迭代器，类型为输入迭代器。该迭代器会遍历所有子文件夹。除了迭代器通有的操作外，该迭代器还包括以下函数</span><br><span class="line">- &#96;depth&#96; : 返回当前递归的深度</span><br><span class="line">- &#96;recursion_pending&#96; : 检查是否对当前目录禁用了递归</span><br><span class="line">- &#96;pop&#96; : 在目录层次结构中将迭代器上移一级</span><br><span class="line">- &#96;disable_recuresion_pending&#96; : 禁用递归，直到下一个增量</span><br><span class="line"></span><br><span class="line">## file_status 类</span><br><span class="line"></span><br><span class="line">&#96;file_status&#96; 类存储了文件的类型和权限信息，&#96;type&#96; 函数可以获取或设置文件类型（返回 &#96;file_type&#96; 枚举类），&#96;permissions&#96; 函数可以获取或设置文件的权限（返回 &#96;perms&#96; 类）</span><br><span class="line"></span><br><span class="line">## space_info 结构体</span><br><span class="line"></span><br><span class="line">表示由空间确定的文件系统信息。包括 &#96;capcity&#96;, &#96;free&#96; 和 &#96;available&#96;.</span><br><span class="line"></span><br><span class="line">## file_type 枚举类</span><br><span class="line"></span><br><span class="line">- &#96;&#96;&#96;</span><br><span class="line">  type</span><br></pre></td></tr></table></figure></p>
+<p>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">file_type</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>none</code></li>
+<li><code>not_found</code></li>
+<li><code>regular</code></li>
+<li><code>directory</code></li>
+<li><code>symlink</code></li>
+<li><code>block</code></li>
+<li><code>character</code></li>
+<li><code>fifo</code></li>
+<li><code>socket</code></li>
+</ul></li>
+</ul>
+<h2 id="perms-枚举类">perms 枚举类</h2>
+<ul>
+<li>``` permissions <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">:</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br></pre></td></tr></table></figure> perms <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">  - &#96;none&#96;</span><br><span class="line">  - &#96;owner_read&#96;</span><br><span class="line">  - &#96;owner_write&#96;</span><br><span class="line">  - &#96;owner_exec&#96;</span><br><span class="line">  - &#96;owner_all&#96;</span><br><span class="line">  - &#96;group_read&#96;</span><br><span class="line">  - &#96;group_write&#96;</span><br><span class="line">  - &#96;group_exec&#96;</span><br><span class="line">  - &#96;group_all&#96;</span><br><span class="line">  - &#96;others_read&#96;</span><br><span class="line">  - &#96;others_write&#96;</span><br><span class="line">  - &#96;others_exec&#96;</span><br><span class="line">  - &#96;others_all&#96;</span><br><span class="line">  - &#96;all&#96;</span><br><span class="line">  - &#96;set_uid&#96;</span><br><span class="line">  - &#96;set_gid&#96;</span><br><span class="line">  - &#96;sticky_bit&#96;</span><br><span class="line">  - &#96;mask&#96;</span><br><span class="line"></span><br><span class="line">## perm_options 枚举类</span><br><span class="line"></span><br><span class="line">- &#96;&#96;&#96;</span><br><span class="line">  perm_options</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>replace</code></li>
+<li><code>add</code></li>
+<li><code>remove</code></li>
+<li><code>nofollow</code></li>
+</ul></li>
+</ul>
+<h2 id="copy_options-枚举类">copy_options 枚举类</h2>
+<ul>
+<li><code>none</code></li>
+<li><code>skip_existing</code> : Keep the existing file, without reporting an error.</li>
+<li><code>overwrite_existing</code> : Replace the existing file</li>
+<li><code>update_existing</code> : Replace the existing file only if it is older than the file being copied</li>
+<li><code>recursive</code> : Recursively copy subdirectories and their content</li>
+<li><code>copy_symlinks</code> : Copy symlinks as symlinks, not as the files they point to</li>
+<li><code>skip_symlinks</code> : Ignore symlinks</li>
+<li><code>directories_only</code> : Copy the directory structure, but do not copy any non-directory files</li>
+<li><code>create_symlinks</code> : Instead of creating copies of files, create symlinks pointing to the originals</li>
+<li><code>create_hard_links</code> : Instead of creating copies of files, create hardlinks that resolve to the same files as the originals</li>
+</ul>
+<h2 id="函数">函数</h2>
+<ul>
+<li><code>absolute</code> : 获取绝对路径</li>
+<li><code>canonical</code> : 获取典型路径格式，会去掉 <code>.</code> 和 <code>..</code></li>
+<li><code>relative</code> : 获取相对路径，默认为相对于当前路径的路径</li>
+<li><code>copy</code> : 拷贝文件或者目录</li>
+<li><code>copy_file</code> : 拷贝文件内容</li>
+<li><code>copy_symlinks</code> : 拷贝符号链接</li>
+<li><code>create_directory</code> : 创建目录</li>
+<li><code>create_hard_link</code> : 创建硬链接</li>
+<li><code>create_symlink</code> &amp; <code>create_directory_symlink</code> : 创建符号链接</li>
+<li><code>current_path</code> : 当前目录</li>
+<li><code>exists</code> : 检查路径是否存在</li>
+<li><code>equivalent</code> : 检查两个路径是否相等</li>
+<li><code>file_size</code> : 获取文件的大小</li>
+<li><code>hard_link_count</code> : 获取硬链接的数量</li>
+<li><code>last_write_time</code> : 获取或者设置数据修改的最后时间</li>
+<li><code>permissions</code> : 修改文件权限</li>
+<li><code>read_symlink</code> : 获取符号链接的目标</li>
+<li><code>remove</code> : 删除一个文件或者空目录</li>
+<li><code>remove_all</code> : 删除一个文件或者递归删除一个文件目录</li>
+<li><code>rename</code> : 移动或者重命名文件或者目录</li>
+<li><code>resize_file</code> : 通过截断或者补零的方式改变常规文件的大小</li>
+<li><code>space</code> : 确定文件系统上的可用空间</li>
+<li><code>status</code> : 获取文件属性</li>
+<li><code>symlink_status</code> : 获取文件属性，检查符号链接目标</li>
+<li><code>temp_directory_path</code> : 获取临时目录路径</li>
+</ul>
+<h2 id="相关">相关</h2>
+<p>文档</p>
+<p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/cpp/standard-library/directory-entry-class?view=msvc-160">directory_entry 类 | Microsoft Docs</a></p>
+<p>文章</p>
+<p><a target="_blank" rel="noopener" href="https://yangshun.win/blogs/273c3e15/#c-17-filesystem">C++ 17 filesystem | Busyboxs (yangshun.win)</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/v6543210/article/details/107868315">基于c++11 的filesystem库_v6543210的专栏-CSDN博客</a></p>
+<p>vs2019 问题：</p>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/62256738/visual-studio-2019-c-and-stdfilesystem">Visual Studio 2019 C++ and std::filesystem - Stack Overflow</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.bfilipek.com/2017/08/cpp17-details-filesystem.html">Bartek's coding blog: C++17 in details: Filesystem (bfilipek.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://developercommunity.visualstudio.com/t/filesystem-is-not-a-member-of-std-2/1029256">'filesystem': is not a member of std - Visual Studio Feedback</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.bfilipek.com/2017/08/cpp17-details-filesystem.html">Bartek's coding blog: C++17 in details: Filesystem (bfilipek.com)</a></p>
+<p>GitHub</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/gulrak/filesystem/">gulrak/filesystem: An implementation of C++17 std::filesystem for C++11 /C++14/C++17/C++20 on Windows, macOS, Linux and FreeBSD. (github.com)</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/03/22/C++/C++%2011%E7%B1%BB%E5%9E%8B%E6%8E%A8%E5%AF%BC/" rel="prev" title="C++ 11类型推导 auto和decltype">
+      <i class="fa fa-chevron-left"></i> C++ 11类型推导 auto和decltype
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/03/22/C++/C++%20%E6%A0%B8%E5%BF%83%E6%8C%87%E5%AF%BC%E6%96%B9%E9%92%88/" rel="next" title="C++ 核心指导方针">
+      C++ 核心指导方针 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#c-17-%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="nav-number">1.</span> <span class="nav-text">C++ 17 文件系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#path-%E7%B1%BB"><span class="nav-number">2.</span> <span class="nav-text">path 类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#perms-%E6%9E%9A%E4%B8%BE%E7%B1%BB"><span class="nav-number">3.</span> <span class="nav-text">perms 枚举类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#copy_options-%E6%9E%9A%E4%B8%BE%E7%B1%BB"><span class="nav-number">4.</span> <span class="nav-text">copy_options 枚举类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B0"><span class="nav-number">5.</span> <span class="nav-text">函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3"><span class="nav-number">6.</span> <span class="nav-text">相关</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">straywriter</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">124</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/straywriter" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;straywriter" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">straywriter</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

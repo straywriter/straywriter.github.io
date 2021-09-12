@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"straywriter.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="obscure（晦涩的）C++功能">
+<meta property="og:url" content="https://straywriter.github.io/2021/03/22/C++/obscure%E6%99%A6%E6%B6%A9%E7%9A%84C++%E5%8A%9F%E8%83%BD/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-03-22T13:59:11.000Z">
+<meta property="article:modified_time" content="2021-04-17T10:56:46.464Z">
+<meta property="article:author" content="straywriter">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://straywriter.github.io/2021/03/22/C++/obscure%E6%99%A6%E6%B6%A9%E7%9A%84C++%E5%8A%9F%E8%83%BD/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>obscure（晦涩的）C++功能 | Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://straywriter.github.io/2021/03/22/C++/obscure%E6%99%A6%E6%B6%A9%E7%9A%84C++%E5%8A%9F%E8%83%BD/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="straywriter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          obscure（晦涩的）C++功能
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-03-22 21:59:11" itemprop="dateCreated datePublished" datetime="2021-03-22T21:59:11+08:00">2021-03-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-04-17 18:56:46" itemprop="dateModified" datetime="2021-04-17T18:56:46+08:00">2021-04-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <hr>
+<h1 id="section"></h1>
+<p>方括号访问</p>
+<p>备用运算符</p>
+<p>预处理重定义关键字</p>
+<p>placement new</p>
+<p>变量声明分支</p>
+<h2 id="方括号访问">方括号访问</h2>
+<p>通过<code>ptr[3]</code>来访问数组的元素实际上只是的缩写<code>*(ptr + 3)</code>。可以等效地用<code>*(3 + ptr)</code>和编写<code>3[ptr]</code>，这证明是完全有效的代码。</p>
+<h2 id="最烦人的解析">最烦人的解析</h2>
+<p>“最令人烦恼的分析”是Scott Meyers创造的一个术语，表示C ++声明语法中的歧义会导致违反直觉的行为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; Is this:</span><br><span class="line">&#x2F;&#x2F; 1) A variable of type std::string initialized to a std::string()?</span><br><span class="line">&#x2F;&#x2F; 2) The declaration of a function that returns a std::string and has one argument,</span><br><span class="line">&#x2F;&#x2F;    which is a pointer to a function with no arguments that returns a std::string?</span><br><span class="line">std::string foo(std::string());</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; Is this:</span><br><span class="line">&#x2F;&#x2F; 1) A variable of type int initialized to int(x)?</span><br><span class="line">&#x2F;&#x2F; 2) The declaration of a function that returns an int and has one argument,</span><br><span class="line">&#x2F;&#x2F;    which is an int named x?</span><br><span class="line">int bar(int(x));</span><br></pre></td></tr></table></figure>
+<p>C ++标准在两种情况下都需要第二种解释，即使第一种解释是直观的。程序员可以通过将变量的初始值括在括号中来消除歧义：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; Parentheses resolve the ambiguity</span><br><span class="line">std::string foo((std::string()));</span><br><span class="line">int bar((int(x)));</span><br></pre></td></tr></table></figure>
+<p>在第二种情况下产生歧义的原因<code>int y = 3;</code>是<code>int(y) = 3;</code>。</p>
+<h3 id="备用运算符">备用运算符</h3>
+<p>令牌 <code>and</code>， <code>and_eq</code>， <code>bitand</code>， <code>bitor</code>， <code>compl</code>， <code>not</code>， <code>not_eq</code>， <code>or</code>， <code>or_eq</code>， <code>xor</code>， <code>xor_eq</code>， <code>&lt;%</code>， <code>%&gt;</code>， <code>&lt;:</code>，和 <code>:&gt;</code> 可以用来代替符号 <code>&amp;&amp;</code>， <code>&amp;=</code>， <code>&amp;</code>， <code>|</code>， <code>~</code>， <code>!</code>， <code>!=</code>， <code>||</code>， <code>|=</code>， <code>^</code>， <code>^=</code>， <code>&#123;</code>， <code>&#125;</code>， <code>[</code>，和 <code>]</code>。它们使您可以在缺少必要符号的键盘上键入操作符。</p>
+<h3 id="重新定义关键字">重新定义关键字</h3>
+<p>通过预处理器重新定义关键字在技术上应该会导致错误，但实际上工具允许这样做。这使您可以很有趣地引入诸如<code>#define true false</code>或<code>#define else</code>。但是，有时它是合法有用的。例如，如果您使用的是大型库，则需要绕过C ++访问保护机制，而不是修补库，您可以在添加库头之前关闭访问保护，而无需添加库头。请记住，之后再重新开启保护！</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#define  class  struct </span><br><span class="line">#define  private  public </span><br><span class="line">#define  protected  public </span><br><span class="line"></span><br><span class="line">#include  “ library.h” </span><br><span class="line"></span><br><span class="line">#undef  class </span><br><span class="line">#undef  private </span><br><span class="line">#undef  protected</span><br></pre></td></tr></table></figure>
+<p>请注意，这可能不一定有效，具体取决于您的编译器。C ++仅要求实例变量在未由访问说明符分隔的情况下顺序排列，因此编译器可以通过对访问说明符组重新排序来自由更改内存布局。例如，允许编译器移动所有私有成员，以便它们追随所有公共成员。另一个潜在的问题是名称处理。Microsoft的C ++编译器将访问说明符纳入其名称处理方案，因此更改访问说明符将破坏与现有已编译代码的兼容性。</p>
+<h3 id="placement-new">placement new</h3>
+<p>new放置是<code>new</code>操作员的另一种语法，该语法在已分配的对象上就位运行，假定该对象具有正确的大小并具有正确的对齐方式。这涉及设置vtable并调用构造函数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">struct Test &#123;</span><br><span class="line">  int data;</span><br><span class="line">  Test() &#123; cout &lt;&lt; &quot;Test::Test()&quot; &lt;&lt; endl; &#125;</span><br><span class="line">  ~Test() &#123; cout &lt;&lt; &quot;Test::~Test()&quot; &lt;&lt; endl; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">  &#x2F;&#x2F; Must allocate our own memory</span><br><span class="line">  Test *ptr &#x3D; (Test *)malloc(sizeof(Test));</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; Use placement new</span><br><span class="line">  new (ptr) Test;</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; Must call the destructor ourselves</span><br><span class="line">  ptr-&gt;~Test();</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; Must release the memory ourselves</span><br><span class="line">  free(ptr);</span><br><span class="line"></span><br><span class="line">  return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>为性能关键型方案编写自定义分配器时，将使用newplacement。例如，平板分配器从一个大的内存块开始，并使用new放置在块中顺序分配对象。这样可以避免内存碎片和malloc引起的堆遍历的开销。</p>
+<h3 id="变量声明分支">变量声明分支</h3>
+<p>C ++包含一个语法简写，用于同时声明一个变量并分支其值。它看起来像一个变量声明，并且可以在<code>if</code>or<code>while</code>语句的条件下进行。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">struct Event &#123; virtual ~Event() &#123;&#125; &#125;;</span><br><span class="line">struct MouseEvent : Event &#123; int x, y; &#125;;</span><br><span class="line">struct KeyboardEvent : Event &#123; int key; &#125;;</span><br><span class="line"></span><br><span class="line">void log(Event *event) &#123;</span><br><span class="line">  if (MouseEvent *mouse &#x3D; dynamic_cast&lt;MouseEvent *&gt;(event))</span><br><span class="line">    std::cout &lt;&lt; &quot;MouseEvent &quot; &lt;&lt; mouse-&gt;x &lt;&lt; &quot; &quot; &lt;&lt; mouse-&gt;y &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">  else if (KeyboardEvent *keyboard &#x3D; dynamic_cast&lt;KeyboardEvent *&gt;(event))</span><br><span class="line">    std::cout &lt;&lt; &quot;KeyboardEvent &quot; &lt;&lt; keyboard-&gt;key &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">  else</span><br><span class="line">    std::cout &lt;&lt; &quot;Event&quot; &lt;&lt; std::endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="成员函数上的引用限定符">成员函数上的引用限定符</h3>
+<p>C ++ 11允许成员函数在将用于<code>this</code>使用ref限定符的对象的值类型上重载。ref限定符与cv限定符位于相同的位置，并根据对象<code>this</code>是左值还是右值来影响重载分辨率：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line"></span><br><span class="line">struct Foo &#123;</span><br><span class="line">  void foo() &amp; &#123; std::cout &lt;&lt; &quot;lvalue&quot; &lt;&lt; std::endl; &#125;</span><br><span class="line">  void foo() &amp;&amp; &#123; std::cout &lt;&lt; &quot;rvalue&quot; &lt;&lt; std::endl; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">  Foo foo;</span><br><span class="line">  foo.foo(); &#x2F;&#x2F; Prints &quot;lvalue&quot;</span><br><span class="line">  Foo().foo(); &#x2F;&#x2F; Prints &quot;rvalue&quot;</span><br><span class="line">  return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="图灵完整模板元编程">图灵完整模板元编程</h3>
+<p>C ++模板用于编译时元编程，这意味着可以生成其他程序的程序。模板系统是为简单的类型替换而设计的，但是在C ++标准化过程中偶然发现，模板实际上足够强大，可以执行任意计算，尽管非常笨拙且效率低下。计算是通过模板专门化完成的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; Recursive template for general case</span><br><span class="line">template &lt;int N&gt;</span><br><span class="line">struct factorial &#123;</span><br><span class="line">  enum &#123; value &#x3D; N * factorial&lt;N - 1&gt;::value &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; Template specialization for base case</span><br><span class="line">template &lt;&gt;</span><br><span class="line">struct factorial&lt;0&gt; &#123;</span><br><span class="line">  enum &#123; value &#x3D; 1 &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">enum &#123; result &#x3D; factorial&lt;5&gt;::value &#125;; &#x2F;&#x2F; 5 * 4 * 3 * 2 * 1 &#x3D;&#x3D; 120</span><br></pre></td></tr></table></figure>
+<p>可以将C ++模板视为一种功能编程语言，因为它们使用递归而不是迭代，并且不包含任何可变状态。您可以创建一个包含类型via<code>typedef</code>的变量和一个包含<code>int</code>via的变量<code>enum</code>。数据结构本身嵌入在类型中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; Compile-time list of integers</span><br><span class="line">template &lt;int D, typename N&gt;</span><br><span class="line">struct node &#123;</span><br><span class="line">  enum &#123; data &#x3D; D &#125;;</span><br><span class="line">  typedef N next;</span><br><span class="line">&#125;;</span><br><span class="line">struct end &#123;&#125;;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; Compile-time sum function</span><br><span class="line">template &lt;typename L&gt;</span><br><span class="line">struct sum &#123;</span><br><span class="line">  enum &#123; value &#x3D; L::data + sum&lt;typename L::next&gt;::value &#125;;</span><br><span class="line">&#125;;</span><br><span class="line">template &lt;&gt;</span><br><span class="line">struct sum&lt;end&gt; &#123;</span><br><span class="line">  enum &#123; value &#x3D; 0 &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; Data structures are embedded in types</span><br><span class="line">typedef node&lt;1, node&lt;2, node&lt;3, end&gt; &gt; &gt; list123;</span><br><span class="line">enum &#123; total &#x3D; sum&lt;list123&gt;::value &#125;; &#x2F;&#x2F; 1 + 2 + 3 &#x3D;&#x3D; 6</span><br></pre></td></tr></table></figure>
+<p>尽管这些示例毫无用处，但是模板元编程可以实现一些有用的功能，例如能够操纵类型列表。但是，由C ++模板形成的编程语言具有可怕的可用性，因此请尽量少用。由于难以理解的冗长和隐秘的编译器错误消息，模板代码难以阅读，编译缓慢且非常难以调试。</p>
+<h3 id="指针成员运算符">指针成员运算符</h3>
+<p>指向成员的指针运算符使您可以在类的任何实例上描述指向特定成员的指针。有两个指向成员的指针运算符，分别<code>.*</code>用于值和<code>-&gt;*</code>指针：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">struct Test &#123;</span><br><span class="line">  int num;</span><br><span class="line">  void func() &#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; Notice the extra &quot;Test::&quot; in the pointer type</span><br><span class="line">int Test::*ptr_num &#x3D; &amp;Test::num;</span><br><span class="line">void (Test::*ptr_func)() &#x3D; &amp;Test::func;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">  Test t;</span><br><span class="line">  Test *pt &#x3D; new Test;</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; Call the stored member function</span><br><span class="line">  (t.*ptr_func)();</span><br><span class="line">  (pt-&gt;*ptr_func)();</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; Set the variable in the stored member slot</span><br><span class="line">  t.*ptr_num &#x3D; 1;</span><br><span class="line">  pt-&gt;*ptr_num &#x3D; 2;</span><br><span class="line"></span><br><span class="line">  delete pt;</span><br><span class="line">  return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>此功能实际上非常有用，特别是对于编写库。例如，<a target="_blank" rel="noopener" href="http://www.boost.org/libs/python/">Boost :: Python</a>（用于将C ++绑定到Python对象的库）在包装对象时使用成员指针轻松引用成员：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line">#include &lt;boost&#x2F;python.hpp&gt;</span><br><span class="line">using namespace boost::python;</span><br><span class="line"></span><br><span class="line">struct World &#123;</span><br><span class="line">  std::string msg;</span><br><span class="line">  void greet() &#123; std::cout &lt;&lt; msg &lt;&lt; std::endl; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">BOOST_PYTHON_MODULE(hello) &#123;</span><br><span class="line">  class_&lt;World&gt;(&quot;World&quot;)</span><br><span class="line">    .def_readwrite(&quot;msg&quot;, &amp;World::msg)</span><br><span class="line">    .def(&quot;greet&quot;, &amp;World::greet);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用成员函数指针时，请记住它们不同于常规函数指针。成员函数指针和常规函数指针之间的转换将不起作用。例如，Microsoft编译器中的成员函数使用称为thiscall的优化调用约定，该调用约定将<code>this</code>参数放入<code>ecx</code>寄存器中，而普通函数使用在堆栈上传递所有参数的调用约定。</p>
+<p>同样，成员函数指针的大小可能比常规指针大四倍。编译器可能需要存储函数体的地址，正确基数的偏移量（多重继承），vtable中另一个偏移量的索引（虚拟继承），甚至对象本身内部vtable的偏移量（对于向前声明的类型）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line"></span><br><span class="line">struct A &#123;&#125;;</span><br><span class="line">struct B : virtual A &#123;&#125;;</span><br><span class="line">struct C &#123;&#125;;</span><br><span class="line">struct D : A, C &#123;&#125;;</span><br><span class="line">struct E;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">  std::cout &lt;&lt; sizeof(void (A::*)()) &lt;&lt; std::endl;</span><br><span class="line">  std::cout &lt;&lt; sizeof(void (B::*)()) &lt;&lt; std::endl;</span><br><span class="line">  std::cout &lt;&lt; sizeof(void (D::*)()) &lt;&lt; std::endl;</span><br><span class="line">  std::cout &lt;&lt; sizeof(void (E::*)()) &lt;&lt; std::endl;</span><br><span class="line">  return ​0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 32-bit Visual C++ 2008:  A &#x3D; 4, B &#x3D; 8, D &#x3D; 12, E &#x3D; 16</span><br><span class="line">&#x2F;&#x2F; 32-bit GCC 4.2.1:        A &#x3D; 8, B &#x3D; 8, D &#x3D; 8,  E &#x3D; 8</span><br><span class="line">&#x2F;&#x2F; 32-bit Digital Mars C++: A &#x3D; 4, B &#x3D; 4, D &#x3D; 4,  E &#x3D; 4</span><br></pre></td></tr></table></figure>
+<p>Digital Mars编译器中的所有成员函数指针都具有相同的大小，这是由于其巧妙的设计会生成“ thunk”函数来应用正确的偏移量，而不是将偏移量存储在指针本身中。</p>
+<h3 id="实例上的静态方法">实例上的静态方法</h3>
+<p>除了从类型中调用静态方法外，C ++还允许您从实例调用静态方法。这使您可以将实例方法更改为静态方法，而无需更新任何调用站点。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">struct Foo &#123;</span><br><span class="line">  static void foo() &#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; These are equivalent</span><br><span class="line">Foo::foo();</span><br><span class="line">Foo().foo();</span><br></pre></td></tr></table></figure>
+<h3 id="overloading-and---">Overloading ++ and --</h3>
+<p>C ++的设计使自定义运算符的功能名称就是运算符本身，在大多数情况下都可以正常工作。例如，一元<code>-</code>和二元<code>-</code>运算符（取反和减法）可以通过参数计数来区分。这对于一元递增和递减运算符不起作用，因为它们似乎都需要完全相同的签名。C ++语言有一个丑陋的办法可以解决此问题：后缀<code>++</code>和<code>--</code>运算符必须将虚拟<code>int</code>参数作为标志，编译器才能知道要使用后缀运算符（是的，只有该类型<code>int</code>有效）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">struct Number &#123;</span><br><span class="line">  Number &amp;operator ++ (); &#x2F;&#x2F; Generate a prefix ++ operator</span><br><span class="line">  Number operator ++ (int); &#x2F;&#x2F; Generate a postfix ++ operator</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="运算符重载和评估顺序">运算符重载和评估顺序</h3>
+<p>重载<code>,</code>（逗号）<code>||</code>或<code>&amp;&amp;</code>操作符非常令人困惑，因为它破坏了正常的评估规则。通常，逗号运算符保证在左侧开始评估之前将对整个左侧进行评估，并且<code>||</code>和<code>&amp;&amp;</code>运算符具有短路行为，仅在必要时才评估右侧。但是，这些运算符的重载版本只是函数调用，函数调用以未指定的顺序评估其参数。</p>
+<p>重载这些运算符只是滥用C ++语法的一种方式。举例来说，我为您提供了不需要括号的Python样式的print语句的C ++实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line"></span><br><span class="line">namespace __hidden__ &#123;</span><br><span class="line">  struct print &#123;</span><br><span class="line">    bool space;</span><br><span class="line">    print() : space(false) &#123;&#125;</span><br><span class="line">    ~print() &#123; std::cout &lt;&lt; std::endl; &#125;</span><br><span class="line"></span><br><span class="line">    template &lt;typename T&gt;</span><br><span class="line">    print &amp;operator , (const T &amp;t) &#123;</span><br><span class="line">      if (space) std::cout &lt;&lt; &#39; &#39;;</span><br><span class="line">      else space &#x3D; true;</span><br><span class="line">      std::cout &lt;&lt; t;</span><br><span class="line">      return *this;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#define print __hidden__::print(),</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">  int a &#x3D; 1, b &#x3D; 2;</span><br><span class="line">  print &quot;this is a test&quot;;</span><br><span class="line">  print &quot;the sum of&quot;, a, &quot;and&quot;, b, &quot;is&quot;, a + b;</span><br><span class="line">  return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="用作模板参数">用作模板参数</h3>
+<p>众所周知，模板参数可以是特定的整数，但也可以是特定的函数。这使编译器可以在实例化的模板代码中内联调用该特定函数，以提高执行效率。在下面的示例中，该函数<code>memoize</code>将一个函数用作模板参数，并且仅针对新的参数值调用该函数（从高速缓存中记住旧的参数值）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;map&gt;</span><br><span class="line"></span><br><span class="line">template &lt;int (*f)(int)&gt;</span><br><span class="line">int memoize(int x) &#123;</span><br><span class="line">  static std::map&lt;int, int&gt; cache;</span><br><span class="line">  std::map&lt;int, int&gt;::iterator y &#x3D; cache.find(x);</span><br><span class="line">  if (y !&#x3D; cache.end()) return y-&gt;second;</span><br><span class="line">  return cache[x] &#x3D; f(x);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int fib(int n) &#123;</span><br><span class="line">  if (n &lt; 2) return n;</span><br><span class="line">  return memoize&lt;fib&gt;(n - 1) + memoize&lt;fib&gt;(n - 2);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="模板模板参数">模板模板参数</h3>
+<p>模板参数实际上可以本身具有模板参数。这样，您可以在实例化模板时传递没有模板参数的模板化类型。假设我们有以下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">template &lt;typename T&gt;</span><br><span class="line">struct Cache &#123; ... &#125;;</span><br><span class="line"></span><br><span class="line">template &lt;typename T&gt;</span><br><span class="line">struct NetworkStore &#123; ... &#125;;</span><br><span class="line"></span><br><span class="line">template &lt;typename T&gt;</span><br><span class="line">struct MemoryStore &#123; ... &#125;;</span><br><span class="line"></span><br><span class="line">template &lt;typename Store, typename T&gt;</span><br><span class="line">struct CachedStore &#123;</span><br><span class="line">  Store store;</span><br><span class="line">  Cache&lt;T&gt; cache;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">CachedStore&lt;NetworkStore&lt;int&gt;, int&gt; a;</span><br><span class="line">CachedStore&lt;MemoryStore&lt;int&gt;, int&gt; b;</span><br></pre></td></tr></table></figure>
+<p>CachedStore将保存某种数据类型的缓存放在存储相同数据类型的存储区的前面。但是，我们必须<code>int</code>在实例化CachedStore时重复数据类型（在上面的代码中），一次用于商店本身，一次用于CachedStore，并且不能保证数据类型是一致的。我们确实只想指定一次数据类型，以便我们可以强制执行此不变式，但是如果忽略类型参数列表，则会导致编译错误：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; These do not compile because NetworkStore and MemoryStore are missing type parameters</span><br><span class="line">CachedStore&lt;NetworkStore, int&gt; c;</span><br><span class="line">CachedStore&lt;MemoryStore, int&gt; d;</span><br></pre></td></tr></table></figure>
+<p>模板模板参数让我们获得所需的语法。请注意，您需要对<code>class</code>本身具有模板参数的模板参数使用关键字。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">template &lt;template &lt;typename&gt; class Store, typename T&gt;</span><br><span class="line">struct CachedStore2 &#123;</span><br><span class="line">  Store&lt;T&gt; store;</span><br><span class="line">  Cache&lt;T&gt; cache;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">CachedStore2&lt;NetworkStore, int&gt; e;</span><br><span class="line">CachedStore2&lt;MemoryStore, int&gt; f;</span><br></pre></td></tr></table></figure>
+<h3 id="function-try-blocks">Function try blocks</h3>
+<p>存在函数try块来捕获在评估构造函数的初始化器列表时抛出的错误。您不能在初始化列表周围包装普通的try-catch块，因为它存在于函数体之外。为了解决这个问题，C ++允许使用try-catch块作为函数的主体：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">int f() &#123; throw 0; &#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; Here there is no way to catch the error thrown by f()</span><br><span class="line">struct A &#123;</span><br><span class="line">  int a;</span><br><span class="line">  A::A() : a(f()) &#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; The value thrown from f() can be caught if a try-catch block is used as</span><br><span class="line">&#x2F;&#x2F; the function body and the initializer list is moved after the try keyword</span><br><span class="line">struct B &#123;</span><br><span class="line">  int b;</span><br><span class="line">  B::B() try : b(f()) &#123;</span><br><span class="line">  &#125; catch(int e) &#123;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>奇怪的是，这种语法不仅限于构造函数，而且可用于所有函数定义。</p>
+<h2 id="相关参考">相关参考</h2>
+<h3 id="obscure-c-features"><a target="_blank" rel="noopener" href="http://madebyevan.com/obscure-cpp-features/">Obscure C++ Features</a></h3>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/03/22/C++/%E6%A0%87%E5%87%86%E5%BA%93%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%20Vector/" rel="prev" title="C++ 标准库源码剖析 Vector">
+      <i class="fa fa-chevron-left"></i> C++ 标准库源码剖析 Vector
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/03/22/C++/C++%E9%9D%9E%E5%AE%8C%E7%BE%8E%E8%BD%AC%E5%8F%91%E7%A4%BA%E4%BE%8B/" rel="next" title="C++非完美转发示例">
+      C++非完美转发示例 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#section"><span class="nav-number">1.</span> <span class="nav-text"></span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%8B%AC%E5%8F%B7%E8%AE%BF%E9%97%AE"><span class="nav-number">1.1.</span> <span class="nav-text">方括号访问</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E7%83%A6%E4%BA%BA%E7%9A%84%E8%A7%A3%E6%9E%90"><span class="nav-number">1.2.</span> <span class="nav-text">最烦人的解析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%87%E7%94%A8%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">1.2.1.</span> <span class="nav-text">备用运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8D%E6%96%B0%E5%AE%9A%E4%B9%89%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-number">1.2.2.</span> <span class="nav-text">重新定义关键字</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#placement-new"><span class="nav-number">1.2.3.</span> <span class="nav-text">placement new</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%98%E9%87%8F%E5%A3%B0%E6%98%8E%E5%88%86%E6%94%AF"><span class="nav-number">1.2.4.</span> <span class="nav-text">变量声明分支</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%88%90%E5%91%98%E5%87%BD%E6%95%B0%E4%B8%8A%E7%9A%84%E5%BC%95%E7%94%A8%E9%99%90%E5%AE%9A%E7%AC%A6"><span class="nav-number">1.2.5.</span> <span class="nav-text">成员函数上的引用限定符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%BE%E7%81%B5%E5%AE%8C%E6%95%B4%E6%A8%A1%E6%9D%BF%E5%85%83%E7%BC%96%E7%A8%8B"><span class="nav-number">1.2.6.</span> <span class="nav-text">图灵完整模板元编程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E9%92%88%E6%88%90%E5%91%98%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">1.2.7.</span> <span class="nav-text">指针成员运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B%E4%B8%8A%E7%9A%84%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95"><span class="nav-number">1.2.8.</span> <span class="nav-text">实例上的静态方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#overloading-and---"><span class="nav-number">1.2.9.</span> <span class="nav-text">Overloading ++ and --</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD%E5%92%8C%E8%AF%84%E4%BC%B0%E9%A1%BA%E5%BA%8F"><span class="nav-number">1.2.10.</span> <span class="nav-text">运算符重载和评估顺序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E4%BD%9C%E6%A8%A1%E6%9D%BF%E5%8F%82%E6%95%B0"><span class="nav-number">1.2.11.</span> <span class="nav-text">用作模板参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E6%9D%BF%E6%A8%A1%E6%9D%BF%E5%8F%82%E6%95%B0"><span class="nav-number">1.2.12.</span> <span class="nav-text">模板模板参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#function-try-blocks"><span class="nav-number">1.2.13.</span> <span class="nav-text">Function try blocks</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E5%8F%82%E8%80%83"><span class="nav-number">1.3.</span> <span class="nav-text">相关参考</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#obscure-c-features"><span class="nav-number">1.3.1.</span> <span class="nav-text">Obscure C++ Features</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">straywriter</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">124</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/straywriter" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;straywriter" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">straywriter</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

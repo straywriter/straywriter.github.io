@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"straywriter.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="图形学数学-向量">
+<meta property="og:url" content="https://straywriter.github.io/2021/03/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/3D%E6%95%B0%E5%AD%A6-%E5%90%91%E9%87%8F/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-03-18T05:45:33.000Z">
+<meta property="article:modified_time" content="2021-04-17T11:02:35.680Z">
+<meta property="article:author" content="straywriter">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://straywriter.github.io/2021/03/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/3D%E6%95%B0%E5%AD%A6-%E5%90%91%E9%87%8F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>图形学数学-向量 | Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://straywriter.github.io/2021/03/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/3D%E6%95%B0%E5%AD%A6-%E5%90%91%E9%87%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="straywriter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          图形学数学-向量
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-03-18 13:45:33" itemprop="dateCreated datePublished" datetime="2021-03-18T13:45:33+08:00">2021-03-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-04-17 19:02:35" itemprop="dateModified" datetime="2021-04-17T19:02:35+08:00">2021-04-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">计算机图形学</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <hr>
+<p>定义</p>
+<p>向量基础</p>
+<p>向量的基础运算加减乘</p>
+<p>​ 加法 减法 点乘 叉乘</p>
+<p>向量投影</p>
+<p>混合积</p>
+<h2 id="定义">定义</h2>
+<p>向量 （英语：euclidean vector，物理、工程等也称作矢量 、欧几里得向量）是数学、物理学和工程科学等多个自然科学中的基本概念。</p>
+<p>指一个同时具有大小和方向，且满足平行四边形法则的几何对象。理论数学中向量的定义为任何在向量空间中的元素。一般地，同时满足具有大小和方向两个性质的几何对象即可认为是向量（特别地，电流属既有大小、又有正负方向的量，但由于其运算不满足平行四边形法则，公认为其不属于向量）。向量常常在以符号加箭头标示以区别于其它量。与向量相对的概念称标量或数量，即只有大小、绝大多数情况下没有方向（电流是特例）、不满足平行四边形法则的量。</p>
+<h3 id="通用符号定义">通用符号定义</h3>
+<p><strong>标量</strong>，用斜体的小写罗马或希腊字母表示，如<em>a,b,x,y,z。</em></p>
+<p><strong>向量</strong>，用小写黑粗体字母表示，如<strong>a,b,u,v,q,r。</strong></p>
+<p><strong>矩阵</strong>，用大写黑粗体字母表示，如<strong>A，B，M，R</strong>。</p>
+<h3 id="向量的几何意义">向量的几何意义</h3>
+<p><strong>位置与位移</strong></p>
+<ul>
+<li>向量描述事物间的位移和相对差距</li>
+<li>向量没有位置，表示方向和长度</li>
+<li>向量可以表示一个点到另外一个点的位移</li>
+</ul>
+<p><strong>将向量表示为位移序列</strong></p>
+<p>示例：向量场</p>
+<p><strong>向量与点</strong></p>
+<ul>
+<li>向量可以用来移动一个点</li>
+<li>对点进行相对位置移动和绝对位置移动</li>
+</ul>
+<h2 id="特殊向量">特殊向量</h2>
+<h3 id="单位向量-unit-vector">单位向量 Unit vector</h3>
+<h3 id="零向量-zero-vector">零向量 Zero vector</h3>
+<p>始点与终点重合，即大小为0的向量，被称为<strong>零向量</strong>（Zero vector）</p>
+<ul>
+<li>零向量依旧具有<strong>方向性</strong>，但方向不定。</li>
+<li>向量不等于数量0，它们是两种性质完全不同的对象</li>
+</ul>
+<h3 id="负向量-opposite-vector">负向量 Opposite vector</h3>
+<p>一个向量的<strong>反向量</strong>（Opposite vector）与它大小相等，但方向相反</p>
+<h3 id="方向向量">方向向量</h3>
+<p><strong>方向向量</strong>（Directional vector）的形式化定义如下：</p>
+<p>一般地，所有方向相同的向量之间互为方向向量。</p>
+<h2 id="向量基础">向量基础</h2>
+<h3 id="向量等价">向量等价</h3>
+<p>等价条件：具有相同的方向和长度</p>
+<h3 id="线性相关和线性无关">线性相关和线性无关</h3>
+<p>对于 <span class="math inline">\(m\)</span> 个向量 <span class="math inline">\(\vec{v}_{1}, \vec{v}_{2}, \ldots, \vec{v}_{m},\)</span> 如果存在一组不全为零的 <span class="math inline">\(m\)</span> 个数 <span class="math inline">\(a_{1}, a_{2}, \ldots, a_{m},\)</span> 使得 <span class="math inline">\(\sum_{i=1}^{m} a_{i} \vec{v}_{i}=\overrightarrow{0},\)</span> 那么, 称 <span class="math inline">\(m\)</span> 个向量 <span class="math inline">\(\vec{v}_{1}, \vec{v}_{2}, \ldots, \vec{v}_{m}\)</span> 线性相关或线性相关(Linearly dependentt)</p>
+<p>如果这样不全为零的 <span class="math inline">\(m\)</span> 个数不存在, 即上述向量等式仅当 <span class="math inline">\(a_{1}=a_{2}=\ldots=a_{m}=\)</span> 0时才能成立, 就称向量 <span class="math inline">\(\vec{v}_{1}, \vec{v}_{2}, \ldots, \vec{v}_{m}\)</span> 线性无关或线性独立 (Linearly independent)</p>
+<h3 id="向量的大小长度或模">向量的大小(长度或模)</h3>
+<p>向量的<strong>大小</strong>（Magnitude）也称<strong>模长</strong>、<strong>长度</strong>。</p>
+<p>在有限维<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/赋范线性空间">赋范线性空间</a>中，向量的模长也称为<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/范数">范数</a>（Norm），记作</p>
+<p>设向量其范数的计算表达式由<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/弗羅貝尼烏斯範數">弗罗贝尼乌斯范数</a>（一种同时适用于向量和矩阵的范数计算方法）给出:</p>
+<p>设向量<span class="math inline">\(\vec{v}=\left(v_{1}, v_{2}, \cdots, v_{n}\right)\)</span> ,其大小为： <span class="math display">\[
+\|\vec{v}\|=\sqrt{v_{1}^{2}+v_{2}^{2}+\cdots+v_{n}^{2}}
+\]</span> 对于三维笛卡尔坐标轴系下的向量<span class="math inline">\(\vec{a}=(x, y, z)\)</span>,其大小为： <span class="math display">\[
+\|\vec{a}\|=\sqrt{x^{2}+y^{2}+z^{2}}
+\]</span></p>
+<h3 id="向量夹角">向量夹角</h3>
+<p><strong>向量的夹角</strong>（Included angle）是对于两个向量而言的概念。</p>
+<p>对于任意两个给定的向量 <span class="math inline">\(a\)</span> 和 <span class="math inline">\(\vec{b},\)</span> 二者的夹角即将二者图示化后两箭头所夹之角 <span class="math inline">\(\theta_{0}\)</span> <span class="math display">\[
+\cos \theta=\frac{\vec{a} \cdot \vec{b}}{\|\vec{a}\|\|\vec{b}\|}
+\]</span></p>
+<h3 id="标量与向量的乘法">标量与向量的乘法</h3>
+<p>一个标量k和一个向量之间可以做乘法，得出的结果是另一个与方向相同或相反，大小为的大小的｜｜倍的向量，可以记成.该种运算被称为<strong>标量乘法</strong>或<strong>数乘</strong></p>
+<p>-1乘以任意向量会得到它的反向量，0乘以任何向量都会得到零向量.</p>
+<h3 id="向量的加法和减法">向量的加法和减法</h3>
+<p>向量的加法满足平行四边形法则和三角形法则。</p>
+<p><strong>向量加法和数乘的性质</strong></p>
+<p>交换性</p>
+<p>结合性</p>
+<h3 id="标准化向量">标准化向量</h3>
+<h3 id="距离公式">距离公式</h3>
+<h3 id="向量点乘数量积点积">向量点乘/数量积/点积</h3>
+<p><strong>数量积</strong>也叫点积，它是向量与向量的乘积，其结果为一个纯量（非向量）。</p>
+<p><span class="math inline">\(\vec{a}, \vec{b}\)</span> 为两个任意向量, 它们的夹角为 <span class="math inline">\(\theta,\)</span> 则他们的数量积为: 设 <span class="math display">\[
+\vec{a} \cdot \vec{b}=|\vec{a}||\vec{b}| \cos \theta
+\]</span> 即 <span class="math inline">\(\vec{b}\)</span> 向量在 <span class="math inline">\(\vec{a}\)</span> 向量方向上的投影长度 <span class="math inline">\((\)</span> 同方向为正反方向为负号 <span class="math inline">\(),\)</span> 与 <span class="math inline">\(\vec{a}\)</span> 向量长度的乘积。</p>
+<h3 id="向量积外积叉乘">向量积/外积/叉乘</h3>
+<p>向量积也叫叉积，外积，它也是向量与向量的乘积，不过需要注意的是，它的结果是个向量。</p>
+<p>它的几何意义是所得的向量与被乘向量所在平面垂直，方向由右手定则规定，大小是两个被乘向量张成的平行四边形的面积。所以向量积不满足交换律。</p>
+<p>设向量 <span class="math inline">\(\vec{a}=a_{x} \vec{i}+a_{y} \vec{j}+a_{z} \vec{k}, \vec{b}=b_{x} \vec{i}+b_{y} \vec{j}+b_{z} \vec{k}\)</span></p>
+<p>则其向量积的矩阵表达式可用下列符号表示: <span class="math display">\[
+\vec{a} \times \vec{b}=\left|\begin{array}{ccc}
+\vec{i} &amp; \vec{j} &amp; \vec{k} \\
+a_{x} &amp; a_{y} &amp; a_{z} \\
+b_{x} &amp; b_{y} &amp; b_{z}
+\end{array}\right|
+\]</span></p>
+<h3 id="混合积">混合积</h3>
+<p>三个向量 <span class="math inline">\(\vec{a}, \vec{b}\)</span> 和 <span class="math inline">\(\vec{c}\)</span> 的混合积定义为，物理意义为三向量始于同点时所构成的体积 <span class="math display">\[
+\vec{a} \cdot(\vec{b} \times \vec{c})=\vec{b} \cdot(\vec{c} \times \vec{a})=\vec{c} \cdot(\vec{a} \times \vec{b})
+\]</span></p>
+<h2 id="向量投影">向量投影</h2>
+<blockquote>
+<h2 id="进阶运算">进阶运算</h2>
+<h3 id="向量在面上的投影向量">向量在面上的投影向量</h3>
+<h2 id="点在平面上的投影点">点在平面上的投影点</h2>
+<p><strong>点在向量上的投影点</strong></p>
+<p><strong>点在直线上的投影点</strong></p>
+<p><strong>齐次坐标</strong></p>
+<p><strong>正交化处理</strong></p>
+<p><strong>利用向量投影进行正交</strong></p>
+</blockquote>
+<h2 id="相关链接">相关链接</h2>
+<p><strong>site</strong></p>
+<p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/zh-hans/向量">向量wiki</a></p>
+<p>书籍</p>
+<p>计算机图形学几何工具算法详解</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/03/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/Cook-Torrance%E5%85%89%E7%85%A7%E6%A8%A1%E5%9E%8B/" rel="prev" title="Cook-Torrance光照模型">
+      <i class="fa fa-chevron-left"></i> Cook-Torrance光照模型
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/03/18/C++/C++%E6%93%8D%E4%BD%9C%E7%AC%A6%E9%87%8D%E8%BD%BD/" rel="next" title="C++ 操作符重载">
+      C++ 操作符重载 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89"><span class="nav-number">1.</span> <span class="nav-text">定义</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E7%94%A8%E7%AC%A6%E5%8F%B7%E5%AE%9A%E4%B9%89"><span class="nav-number">1.1.</span> <span class="nav-text">通用符号定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%91%E9%87%8F%E7%9A%84%E5%87%A0%E4%BD%95%E6%84%8F%E4%B9%89"><span class="nav-number">1.2.</span> <span class="nav-text">向量的几何意义</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E6%AE%8A%E5%90%91%E9%87%8F"><span class="nav-number">2.</span> <span class="nav-text">特殊向量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95%E4%BD%8D%E5%90%91%E9%87%8F-unit-vector"><span class="nav-number">2.1.</span> <span class="nav-text">单位向量 Unit vector</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9B%B6%E5%90%91%E9%87%8F-zero-vector"><span class="nav-number">2.2.</span> <span class="nav-text">零向量 Zero vector</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%9F%E5%90%91%E9%87%8F-opposite-vector"><span class="nav-number">2.3.</span> <span class="nav-text">负向量 Opposite vector</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E5%90%91%E5%90%91%E9%87%8F"><span class="nav-number">2.4.</span> <span class="nav-text">方向向量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%91%E9%87%8F%E5%9F%BA%E7%A1%80"><span class="nav-number">3.</span> <span class="nav-text">向量基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%91%E9%87%8F%E7%AD%89%E4%BB%B7"><span class="nav-number">3.1.</span> <span class="nav-text">向量等价</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7%E7%9B%B8%E5%85%B3%E5%92%8C%E7%BA%BF%E6%80%A7%E6%97%A0%E5%85%B3"><span class="nav-number">3.2.</span> <span class="nav-text">线性相关和线性无关</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%91%E9%87%8F%E7%9A%84%E5%A4%A7%E5%B0%8F%E9%95%BF%E5%BA%A6%E6%88%96%E6%A8%A1"><span class="nav-number">3.3.</span> <span class="nav-text">向量的大小(长度或模)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%91%E9%87%8F%E5%A4%B9%E8%A7%92"><span class="nav-number">3.4.</span> <span class="nav-text">向量夹角</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%87%E9%87%8F%E4%B8%8E%E5%90%91%E9%87%8F%E7%9A%84%E4%B9%98%E6%B3%95"><span class="nav-number">3.5.</span> <span class="nav-text">标量与向量的乘法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%91%E9%87%8F%E7%9A%84%E5%8A%A0%E6%B3%95%E5%92%8C%E5%87%8F%E6%B3%95"><span class="nav-number">3.6.</span> <span class="nav-text">向量的加法和减法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%87%E5%87%86%E5%8C%96%E5%90%91%E9%87%8F"><span class="nav-number">3.7.</span> <span class="nav-text">标准化向量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%9D%E7%A6%BB%E5%85%AC%E5%BC%8F"><span class="nav-number">3.8.</span> <span class="nav-text">距离公式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%91%E9%87%8F%E7%82%B9%E4%B9%98%E6%95%B0%E9%87%8F%E7%A7%AF%E7%82%B9%E7%A7%AF"><span class="nav-number">3.9.</span> <span class="nav-text">向量点乘&#x2F;数量积&#x2F;点积</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%91%E9%87%8F%E7%A7%AF%E5%A4%96%E7%A7%AF%E5%8F%89%E4%B9%98"><span class="nav-number">3.10.</span> <span class="nav-text">向量积&#x2F;外积&#x2F;叉乘</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%B7%E5%90%88%E7%A7%AF"><span class="nav-number">3.11.</span> <span class="nav-text">混合积</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%91%E9%87%8F%E6%8A%95%E5%BD%B1"><span class="nav-number">4.</span> <span class="nav-text">向量投影</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E9%98%B6%E8%BF%90%E7%AE%97"><span class="nav-number">5.</span> <span class="nav-text">进阶运算</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%91%E9%87%8F%E5%9C%A8%E9%9D%A2%E4%B8%8A%E7%9A%84%E6%8A%95%E5%BD%B1%E5%90%91%E9%87%8F"><span class="nav-number">5.1.</span> <span class="nav-text">向量在面上的投影向量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%82%B9%E5%9C%A8%E5%B9%B3%E9%9D%A2%E4%B8%8A%E7%9A%84%E6%8A%95%E5%BD%B1%E7%82%B9"><span class="nav-number">6.</span> <span class="nav-text">点在平面上的投影点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E9%93%BE%E6%8E%A5"><span class="nav-number">7.</span> <span class="nav-text">相关链接</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">straywriter</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">124</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/straywriter" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;straywriter" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">straywriter</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

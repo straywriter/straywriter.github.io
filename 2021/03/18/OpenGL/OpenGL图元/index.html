@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"straywriter.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="OpenGL图元">
+<meta property="og:url" content="https://straywriter.github.io/2021/03/18/OpenGL/OpenGL%E5%9B%BE%E5%85%83/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://straywriter.github.io/2021/03/18/OpenGL/OpenGL%E5%9B%BE%E5%85%83/GL_GeometricPrimitives.png">
+<meta property="og:image" content="https://straywriter.github.io/2021/03/18/OpenGL/OpenGL%E5%9B%BE%E5%85%83/GL_GeometricPrimitives.png">
+<meta property="og:image" content="https://straywriter.github.io/2021/03/18/OpenGL/OpenGL%E5%9B%BE%E5%85%83/image-20200408174520165.png">
+<meta property="article:published_time" content="2021-03-18T05:45:33.000Z">
+<meta property="article:modified_time" content="2021-04-17T12:28:11.030Z">
+<meta property="article:author" content="straywriter">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://straywriter.github.io/2021/03/18/OpenGL/OpenGL%E5%9B%BE%E5%85%83/GL_GeometricPrimitives.png">
+
+<link rel="canonical" href="https://straywriter.github.io/2021/03/18/OpenGL/OpenGL%E5%9B%BE%E5%85%83/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>OpenGL图元 | Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://straywriter.github.io/2021/03/18/OpenGL/OpenGL%E5%9B%BE%E5%85%83/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="straywriter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          OpenGL图元
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-03-18 13:45:33" itemprop="dateCreated datePublished" datetime="2021-03-18T13:45:33+08:00">2021-03-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-04-17 20:28:11" itemprop="dateModified" datetime="2021-04-17T20:28:11+08:00">2021-04-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/OpenGL/" itemprop="url" rel="index"><span itemprop="name">OpenGL</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <hr>
+<h1 id="opengl-graphics-primitives">OpenGL Graphics Primitives</h1>
+<p><img src="/2021/03/18/OpenGL/OpenGL%E5%9B%BE%E5%85%83/GL_GeometricPrimitives.png"></p>
+<h1 id="点-the-vertex">点 The Vertex</h1>
+<p>所有的几何原语都是用顶点来描述的，顶点是定义点本身的坐标、线段的端点或多边形的角。</p>
+<p>为了在OpenGL中绘制一个顶点，我们使用OpenGL函数 <code>glVertex</code>。该功能有以下变化:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glVertex2d</span><span class="params">( GLdouble x, GLdouble y )</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glVertex2f</span><span class="params">( GLfloat x, GLfloat y )</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glVertex2i</span><span class="params">( GLint x, GLint y )</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glVertex2s</span><span class="params">( GLshort x, GLshort y )</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glVertex3d</span><span class="params">( GLdouble x, GLdouble y, GLdouble z )</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glVertex3f</span><span class="params">( GLfloat x, GLfloat y, GLfloat z )</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glVertex3i</span><span class="params">( GLint x, GLint y, GLint z )</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glVertex3s</span><span class="params">( GLshort x, GLshort y, GLshort z )</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glVertex4d</span><span class="params">( GLdouble x, GLdouble y, GLdouble z, GLdouble w )</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glVertex4f</span><span class="params">( GLfloat x, GLfloat y, GLfloat z, GLfloat w )</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glVertex4i</span><span class="params">( GLint x, GLint y, GLint z, GLint w )</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glVertex4s</span><span class="params">( GLshort x, GLshort y, GLshort z, GLshort w )</span></span></span><br></pre></td></tr></table></figure>
+<p><strong>绘制OpenGL图元 :</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">glBegin (mode);</span><br><span class="line">    glVertex* (...);</span><br><span class="line">    .....</span><br><span class="line">    glVertex* (...);</span><br><span class="line">glEnd ();</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>mode</code>是图元类型</p>
+</blockquote>
+<p><strong>glBegin()与glEnd()之间只能使用下列OpenGL函数：</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">函数</th>
+<th style="text-align: left;">函数的作用</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">glVertex*()</td>
+<td style="text-align: left;">设置顶点坐标</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">glColor*()</td>
+<td style="text-align: left;">设置RGBA颜色</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">glIndex*()</td>
+<td style="text-align: left;">设置颜色索引</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">glSecondaryColor*()</td>
+<td style="text-align: left;">设置纹理应用后的辅助颜色</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">glNormal*()</td>
+<td style="text-align: left;">设置法线向量坐标</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">glMaterial*()</td>
+<td style="text-align: left;">设置材料属性</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">glFogCoord*()</td>
+<td style="text-align: left;">设置雾坐标</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">glTexCoord*()</td>
+<td style="text-align: left;">设置纹理坐标</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">glMultiTexCoord*()</td>
+<td style="text-align: left;">为多重纹理设置纹理坐标</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">glVertexAttrib*()</td>
+<td style="text-align: left;">设置通用的顶点属性</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">glEdgeFlag*()</td>
+<td style="text-align: left;">控制边界的绘制</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">glArrayElement*()</td>
+<td style="text-align: left;">提取顶点数组数据</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">glEvalCoord<em>(), glEvalPoint</em>()</td>
+<td style="text-align: left;">生成坐标</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">glCallList<em>(), glCallLists</em>()</td>
+<td style="text-align: left;">执行显示列表</td>
+</tr>
+</tbody>
+</table>
+<h1 id="基础图元类型">基础图元类型</h1>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">类型</th>
+<th style="text-align: left;">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">GL_POINTS</td>
+<td style="text-align: left;">单个顶点集</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">GL_LINES</td>
+<td style="text-align: left;">多组双顶点线段</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">GL_POLYGON</td>
+<td style="text-align: left;">单个简单填充凸多边形</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">GL_TRAINGLES</td>
+<td style="text-align: left;">多组独立填充三角形</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">GL_QUADS</td>
+<td style="text-align: left;">多组独立填充四边形</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">GL_LINE_STRIP</td>
+<td style="text-align: left;">不闭合折线</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">GL_LINE_LOOP</td>
+<td style="text-align: left;">闭合折线</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">GL_TRAINGLE_STRIP</td>
+<td style="text-align: left;">线型连续填充三角形串</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">GL_TRAINGLE_FAN</td>
+<td style="text-align: left;">扇形连续填充三角形串</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">GL_QUAD_STRIP</td>
+<td style="text-align: left;">连续填充四边形串</td>
+</tr>
+</tbody>
+</table>
+<p><img src="/2021/03/18/OpenGL/OpenGL%E5%9B%BE%E5%85%83/GL_GeometricPrimitives.png"></p>
+<p><img src="/2021/03/18/OpenGL/OpenGL%E5%9B%BE%E5%85%83/image-20200408174520165.png"></p>
+<hr>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glPointSize</span><span class="params">(GLfloat size)</span></span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>参数size设置点的宽度（以象素为单位）,必须大于0.0，缺省时为1.0。</li>
+</ul>
+<hr>
+<h1 id="线-lines">线 Lines</h1>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glLineWidth</span><span class="params">(GLfloat width)</span></span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>设置线宽（以象素为单位）。参数width必须大于0.0，缺省时为1.0。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">void glEnable(GL_LINE_STIPPLE);</span><br><span class="line">void glLineStipple(factor, pattern);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在绘制虚点线之前必须先启动虚点模式，即调用函数glEnable(GL_LINE_STIPPLE);结束时，调用glDisable(GL_LINE_STIPPLE)关闭。</li>
+</ul>
+<hr>
+<h1 id="多边形-polygon">多边形 Polygon</h1>
+<ul>
+<li><p>将多边形渲染为点集、轮廓线或者实体</p></li>
+<li><p>多边形面的反转和裁减</p></li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glPolygonMode</span><span class="params">(GLenum face, GLenum mode)</span></span>;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>void glPolygonMode(GLenum face, GLenum mode);</strong></p>
+<p>Use this function in order to change how the polygon will be rendered. By default, the polygon is filled with the current color. However, we can disable filling the polygon and display its outline or the vertices forming it.</p>
+<table>
+<colgroup>
+<col style="width: 11%">
+<col style="width: 53%">
+<col style="width: 35%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><strong>Parameter</strong></th>
+<th style="text-align: left;"><strong>Description</strong></th>
+<th style="text-align: left;"><strong>Values</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">face</td>
+<td style="text-align: left;">Specifies which face of polygons is affected by the mode change.</td>
+<td style="text-align: left;"><code>GL_FRONT</code> <code>GL_BACK</code> <code>GL_FRONT_AND_BACK</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">mode</td>
+<td style="text-align: left;">Specifies the new drawing mode. <code>GL_FILL</code> is the default, producing filled polygons. <code>GL_LINE</code> produces polygon outlines, and <code>GL_POINT</code> only plots the points of the vertices.</td>
+<td style="text-align: left;"><code>GL_FILL</code> <code>GL_LINE</code> <code>GL_POINT</code></td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p>//</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glFrontFace</span><span class="params">(GLenum mode)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>//TODO</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glCullFace</span><span class="params">(GLenum mode)</span></span>;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>Program View</strong></p>
+<p>The program basically consists of 4 visible components: Vertices, Primitives, Grid, and Background. Here is the functionality supported by the program that allows you to manipulate the view of these components.</p>
+<ol type="1">
+<li>Vertices
+<ul>
+<li>IncreaseVertex Size. Click 'X' to increase size and 'x' to decrease size. You can also select the +- menu items under Vertexsize.</li>
+<li>Change the vertex Color. You can do this by selecting the VertexColor menu items.</li>
+<li>Showthe vertices. Click the 'p' key or select the Show/Hide Points menu item under the Vertex submenu.</li>
+<li>Showthe numbers associated with vertices. click the 'n' key or select the Show/Hide Numbers menu item under the Vertex submenu.</li>
+</ul></li>
+<li>Primitives
+<ul>
+<li>Change the primitive Color. You can do this by selecting the Primitivemenu items or by pressing the Up and Down keys.</li>
+<li>Change point size if the primitive is a point. Click 'S' to increase size and 's' to decrease size. You can also select the +- menu items under Primitivesize.</li>
+<li>Change line width in case the primitive is a line. Click 'L' to increase width and 'l' to decrease width. You can also select the +- menu items under Primitivewidth.</li>
+<li>Showthe primitive border and change the border color if the primitive is a polygon. You can change border color and showborder using the menu items under Primitive.</li>
+</ul></li>
+<li>Grid
+<ul>
+<li>IncreaseGrid Line Width. Click 'W' to increase width and 'w' to decrease width. You can also select the +- menu items under Gridwidth.</li>
+<li>Change the grid lines color. You can do this by selecting the Back Color menu items.</li>
+<li>Showthe grid. Click the 'g' key or select the Show/Hide Grid menu item under the Grid submenu.</li>
+</ul></li>
+<li>Background
+<ul>
+<li>Change the background color. You can do this by selecting the Back Color menu items.</li>
+</ul></li>
+</ol>
+</blockquote>
+<hr>
+<p><strong>顶点和颜色函数表:</strong></p>
+<h2 id="section"><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">glVertex2f( x, y );             glVertex2fv( xyArray );</span><br><span class="line">glVertex2d( x, y );             glVertex2dv( xyArray );</span><br><span class="line">glVertex2i( x, y );             glVertex2iv( xyArray );</span><br><span class="line">glVertex3f( x, y, z );          glVertex3fv( xyzArray );</span><br><span class="line">glVertex3d( x, y, z );          glVertex3dv( xyzArray );</span><br><span class="line">glVertex3i( x, y, z );          glVertex3iv( xyzArray );</span><br><span class="line"></span><br><span class="line">glColor3f( r, g, b );           glColor3f( rgbArray );</span><br><span class="line">glColor3d( r, g, b );           glColor3d( rgbArray );</span><br><span class="line">glColor3ub( r, g, b );          glColor3ub( rgbArray );</span><br><span class="line">glColor4f( r, g, b, a);         glColor4f( rgbaArray );</span><br><span class="line">glColor4d( r, g, b, a);         glColor4d( rgbaArray );</span><br><span class="line">glColor4ub( r, g, b, a);        glColor4ub( rgbaArray );</span><br></pre></td></tr></table></figure></h2>
+<p><strong>Demo</strong></p>
+<h2 id="section-1"><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;GL/gl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;GL/glut.h&gt;   // freeglut.h might be a better alternative, if available.</span></span></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">display</span><span class="params">()</span> </span>&#123;  <span class="comment">// Display function will draw the image.</span></span><br><span class="line"> </span><br><span class="line">    glClearColor( <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span> );  <span class="comment">// (In fact, this is the default.)</span></span><br><span class="line">    glClear( GL_COLOR_BUFFER_BIT );</span><br><span class="line">    </span><br><span class="line">    glBegin(GL_TRIANGLES);</span><br><span class="line">    glColor3f( <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span> ); <span class="comment">// red</span></span><br><span class="line">    glVertex2f( <span class="number">-0.8</span>, <span class="number">-0.8</span> );</span><br><span class="line">    glColor3f( <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span> ); <span class="comment">// green</span></span><br><span class="line">    glVertex2f( <span class="number">0.8</span>, <span class="number">-0.8</span> );</span><br><span class="line">    glColor3f( <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span> ); <span class="comment">// blue</span></span><br><span class="line">    glVertex2f( <span class="number">0</span>, <span class="number">0.9</span> );</span><br><span class="line">    glEnd(); </span><br><span class="line">    </span><br><span class="line">    glutSwapBuffers(); <span class="comment">// Required to copy color buffer onto the screen.</span></span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">( <span class="keyword">int</span> argc, <span class="keyword">char</span>** argv )</span> </span>&#123;  <span class="comment">// Initialize GLUT and </span></span><br><span class="line"></span><br><span class="line">    glutInit(&amp;argc, argv);</span><br><span class="line">    glutInitDisplayMode(GLUT_SINGLE);    <span class="comment">// Use single color buffer and no depth buffer.</span></span><br><span class="line">    glutInitWindowSize(<span class="number">500</span>,<span class="number">500</span>);         <span class="comment">// Size of display area, in pixels.</span></span><br><span class="line">    glutInitWindowPosition(<span class="number">100</span>,<span class="number">100</span>);     <span class="comment">// Location of window in screen coordinates.</span></span><br><span class="line">    glutCreateWindow(<span class="string">&quot;GL RGB Triangle&quot;</span>); <span class="comment">// Parameter is window title.</span></span><br><span class="line">    glutDisplayFunc(display);            <span class="comment">// Called when the window needs to be redrawn.</span></span><br><span class="line">    </span><br><span class="line">    glutMainLoop(); <span class="comment">// Run the event loop!  This function does not return.</span></span><br><span class="line">                    <span class="comment">// Program ends when user closes the window.</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></h2>
+<h1 id="demo">Demo</h1>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//点的大小，直线线型和线宽的示例</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;gl/glut.h&gt;</span></span></span><br><span class="line"><span class="comment">/*点的绘制</span></span><br><span class="line"><span class="comment">OpenGL中定义的点放在函数glBegin()和glEnd()之间，有函数glBegin()的参数指定绘制图元的类型。</span></span><br><span class="line"><span class="comment">在OpenGL中绘制一个点时，点大小的默认值是一个像素。可以用函数glPointSize(GLfloat size)修改这个值。这个函数采用一个参数来指定画点时以像素为单位的近似直径。但是不是任意大小点都支持，通常使用下面的代码来获取点大小的范围和他们的之间最小的中间值：</span></span><br><span class="line"><span class="comment">GLfloat sizes[2];//保存绘制点的尺寸范围</span></span><br><span class="line"><span class="comment">GLfloat step;//保存绘制点尺寸的步长</span></span><br><span class="line"><span class="comment">glGetFloatv(GL_POINT_SIZE_RANGE,sizes);</span></span><br><span class="line"><span class="comment">glGetFloatv(GL_POINT_SIZE_RANULARITY,&amp;step);</span></span><br><span class="line"><span class="comment">在OpenGL程序中，我们常可以利用离散的点来拟合一些常见的曲线，如圆，螺旋线等待。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">RenderScene</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    glClear(GL_COLOR_BUFFER_BIT);</span><br><span class="line">    glColor3f(<span class="number">0.0f</span>,<span class="number">0.0f</span>,<span class="number">0.0f</span>);</span><br><span class="line"> </span><br><span class="line">    GLfloat sizes[<span class="number">2</span>];<span class="comment">//保存绘制点的尺寸范围</span></span><br><span class="line">    GLfloat step;<span class="comment">//保存绘制点尺寸的步长</span></span><br><span class="line">    GLfloat curSize;<span class="comment">//当前绘制的点的大小</span></span><br><span class="line">    glGetFloatv(GL_POINT_SIZE_RANGE,sizes);<span class="comment">//获得点的尺寸范围</span></span><br><span class="line">    glGetFloatv(GL_POINT_SIZE_GRANULARITY,&amp;step);<span class="comment">//获得点尺寸的步长</span></span><br><span class="line"> </span><br><span class="line">    <span class="comment">//绘制不同大小的点</span></span><br><span class="line">    curSize = sizes[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i &lt; <span class="number">25</span>; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        glPointSize(curSize);<span class="comment">//设置点的大小</span></span><br><span class="line">        glBegin(GL_POINTS);</span><br><span class="line">        glVertex3f(<span class="number">25.0</span>+i*<span class="number">8</span>,<span class="number">200.0f</span>,<span class="number">0.0f</span>);</span><br><span class="line">        glEnd();</span><br><span class="line">        curSize += step * <span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//绘制一条宽度为5的直线</span></span><br><span class="line">    glLineWidth(<span class="number">5</span>);<span class="comment">//设置线宽</span></span><br><span class="line">    glBegin(GL_LINES);</span><br><span class="line">    glVertex3f(<span class="number">20.0f</span>,<span class="number">150.0f</span>,<span class="number">0.0f</span>);</span><br><span class="line">    glVertex3f(<span class="number">220.0f</span>,<span class="number">150.0f</span>,<span class="number">0.0f</span>);</span><br><span class="line">    glVertex3f(<span class="number">200.0f</span>,<span class="number">160.0f</span>,<span class="number">0.0f</span>);</span><br><span class="line">    glVertex3f(<span class="number">200.0f</span>,<span class="number">160.0f</span>,<span class="number">0.0f</span>);</span><br><span class="line">    glEnd();</span><br><span class="line"> </span><br><span class="line">    <span class="comment">//在xy平面内绘制了两条直线(0,0,0)到(10,0,0)和(0,10,0)到(20,5,0).</span></span><br><span class="line">    glBegin(GL_LINE_STRIP);</span><br><span class="line">    glVertex3f(<span class="number">0.0f</span>,<span class="number">0.0f</span>,<span class="number">0.0f</span>);</span><br><span class="line">    glVertex3f(<span class="number">10.0f</span>,<span class="number">10.0f</span>,<span class="number">0.0f</span>);</span><br><span class="line">    glVertex3f(<span class="number">20.0f</span>,<span class="number">5.0f</span>,<span class="number">0.0f</span>);</span><br><span class="line">    glEnd();</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//画了一个三角形</span></span><br><span class="line">    glBegin(GL_LINE_LOOP);</span><br><span class="line">    glVertex3f(<span class="number">100.0f</span>,<span class="number">100.0f</span>,<span class="number">0.0f</span>);</span><br><span class="line">    glVertex3f(<span class="number">150.0f</span>,<span class="number">150.0f</span>,<span class="number">0.0f</span>);</span><br><span class="line">    glVertex3f(<span class="number">200.0f</span>,<span class="number">50.0f</span>,<span class="number">0.0f</span>);</span><br><span class="line">    glEnd();</span><br><span class="line"> </span><br><span class="line">    <span class="comment">//绘制一条虚线 </span></span><br><span class="line">    glEnable(GL_LINE_STIPPLE);</span><br><span class="line">    glLineStipple(<span class="number">1</span>,<span class="number">0x00ff</span>);<span class="comment">//设置点划线模式</span></span><br><span class="line">    glBegin(GL_LINES);</span><br><span class="line">    glVertex3f(<span class="number">20.0f</span>,<span class="number">120.0f</span>,<span class="number">0.0f</span>);</span><br><span class="line">    glVertex3f(<span class="number">220.0f</span>,<span class="number">120.0f</span>,<span class="number">0.0f</span>);</span><br><span class="line">    glEnd();</span><br><span class="line"> </span><br><span class="line">    <span class="comment">//绘制一条宽度为3的点划线 </span></span><br><span class="line">    glLineWidth(<span class="number">3</span>); </span><br><span class="line">    glLineStipple(<span class="number">1</span>,<span class="number">0xff0c</span>);</span><br><span class="line">    glBegin(GL_LINES);</span><br><span class="line">    glVertex3f(<span class="number">20.0f</span>,<span class="number">80.0f</span>,<span class="number">0.0f</span>);</span><br><span class="line">    glVertex3f(<span class="number">220.0f</span>,<span class="number">80.0f</span>,<span class="number">0.0f</span>);</span><br><span class="line">    glEnd();</span><br><span class="line">    <span class="comment">//增加重复因子绘制的点划线 </span></span><br><span class="line">    glLineStipple(<span class="number">4</span>,<span class="number">0xFF0C</span>);</span><br><span class="line">    glBegin(GL_LINES);</span><br><span class="line">    glVertex3f(<span class="number">20.0f</span>,<span class="number">40.0f</span>,<span class="number">0.0f</span>);</span><br><span class="line">    glVertex3f(<span class="number">220.0f</span>,<span class="number">40.0f</span>,<span class="number">0.0f</span>);</span><br><span class="line">    glEnd();</span><br><span class="line">    glDisable(GL_LINE_STIPPLE);</span><br><span class="line"> </span><br><span class="line">    glFlush();</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*直线的绘制</span></span><br><span class="line"><span class="comment">使用模式GL_LINES可以在两点之间画线；</span></span><br><span class="line"><span class="comment">有时我们需要在一系列的顶点之间绘制连续直线，此时需要用到GL_LINE_STRIP或GL_LINE_LOOP模式。GL_LINE_STRIP模式可以根据指定的一系列顶点，从一个顶点到另一个顶点用连续的线段画线。特别的，当沿着某条曲线指定一系列靠的很近的点，使用GL_LINE_STRIP模式可以绘制一条曲线。</span></span><br><span class="line"><span class="comment">GL_LINE_LOOP模式与GL_LINE_STRIP模式类似，只是会在指定的最后一个顶点与第一个顶点之间画最后一条线。</span></span><br><span class="line"><span class="comment">直线的属性包括线宽和线型。在OpenGL中可用 void glLineWidth(GLfloat width)指定线宽。</span></span><br><span class="line"><span class="comment">可以用下面的代码来获取线宽范围和他们的之间的最小间隔：</span></span><br><span class="line"><span class="comment">GLfloat sizes[2];//保存线宽的尺寸范围</span></span><br><span class="line"><span class="comment">GLfloat step;//保存线宽尺寸的最小间隔</span></span><br><span class="line"><span class="comment">glGetFloarv(GL_LINE_WIDTH_RANGE,sizes);</span></span><br><span class="line"><span class="comment">glGetFloarv(GL_LINE_WIDTH_GRANULARITY,&amp;step);</span></span><br><span class="line"><span class="comment">数组sizes中保存了glLineWidth的最小有效值和最大有效值，而变量step将保存线宽之间允许的最小增量。</span></span><br><span class="line"><span class="comment">Microsoft的OpenGL实现允许线宽从0.5到10.0，最小增量为0.125.</span></span><br><span class="line"><span class="comment">除了修改线宽，可以用虚线或短划线么事创建直线，为此需要先调用glEnable(GL_LINE_STIPPLE);然后调用glLineStipple(GLint factor,GLushort pattern);来创建画线的模式。pattern是一个16位值，它指定了画线是所用的模式，每一位代表线段的一部分是开还是关。默认情况下，每一位对应一个像素，但factor参数充当倍数可以增加模式的宽度。另外在应用模式时，pattern是逆向使用的，即模式的最低有效位最先作用于指定线段。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ChangeSize</span><span class="params">(GLsizei w,GLsizei h)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(h == <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        h = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    glViewport(<span class="number">0</span>,<span class="number">0</span>,w,h);</span><br><span class="line"> </span><br><span class="line">    glMatrixMode(GL_PROJECTION);</span><br><span class="line">    glLoadIdentity();</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">if</span> (w &lt;= h)</span><br><span class="line">    &#123;</span><br><span class="line">        glOrtho(<span class="number">0.0f</span>,<span class="number">250.0f</span>,<span class="number">0.0f</span>,<span class="number">250.0f</span>*h/w,<span class="number">1.0f</span>,<span class="number">-1.0f</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        glOrtho(<span class="number">0.0f</span>,<span class="number">250.0f</span>*w/h,<span class="number">0.0f</span>,<span class="number">250.0f</span>,<span class="number">1.0f</span>,<span class="number">-1.0f</span>);</span><br><span class="line"> </span><br><span class="line">    &#125;</span><br><span class="line">    glMatrixMode(GL_MODELVIEW);</span><br><span class="line">    glLoadIdentity();</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">SetupRC</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    glClearColor(<span class="number">1.0f</span>,<span class="number">1.0f</span>,<span class="number">1.0f</span>,<span class="number">1.0f</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    glutInitDisplayMode(GLUT_RGB | GLUT_SINGLE);</span><br><span class="line">    glutCreateWindow(<span class="string">&quot;点与线&quot;</span>);</span><br><span class="line">    glutDisplayFunc(RenderScene);</span><br><span class="line">    glutReshapeFunc(ChangeSize);</span><br><span class="line">    SetupRC();</span><br><span class="line">    glutMainLoop();</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">在上面的程序中，由于OpenGL使用的是一种状态机制，故此我们在绘制第一条直线前设置线宽为5，不仅影响了第一条直线，还使绘制的虚线线宽也为5，直到在绘制第一条点划线前将线宽该为3为止，这样后面绘制的直线均为3，直到再次修改为止。故此在绘制图形的时候，尽可能将状态相同或部分状态相同的图形放在一起绘制，可以提高程序的执行效率。</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+<h1 id="相关链接">相关链接</h1>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/shimazhuge/article/details/17896791">OpenGL]图元的绘制——空间点/直线;图元整理</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.khronos.org/opengl/wiki/Primitive">https://www.khronos.org/opengl/wiki/Primitive</a></p>
+<p><a target="_blank" rel="noopener" href="https://www3.ntu.edu.sg/home/ehchua/programming/opengl/CG_Introduction.html">https://www3.ntu.edu.sg/home/ehchua/programming/opengl/CG_Introduction.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.codeproject.com/Articles/23991/OpenGL-Geometric-Primitives">https://www.codeproject.com/Articles/23991/OpenGL-Geometric-Primitives</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.3dgep.com/rendering-primitives-with-opengl/?cf_chl_jschl_tk=6fd9128e97e1e6bc52ccd3c24332d84275639580-1586337904-0-Acc0m2lzZxe7SyrxdBO28lMaII4gR292Blidm4X8UWbdFBUmOqjExLOcQPSnfBkpr37HD1BY7PILtmhyYXAZ9DnkGJA7EfkuDpf52Kpyk7RhTb4eamVrRc3Ambysjq8Wtd81SjjZeq0_w-RyElBKDaXCOQOb_BJWLaH_fporKKas-59LYZlpj2a-PvZCrWUt6DEdov6gZjTFCVwsFckQjwjL--O_3JwwylbdOLpPlAnl4ocdT_LIcoqOm-lYhynxEDDICKp8uEERFwTl-jRenOWG4f0DHwPUniN57Zs2Dne5DJSmjFGzTb6J-T-0V89TQg">Rendering Primitives with OpenGL</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.glprogramming.com/red/index.html">https://www.glprogramming.com/red/index.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/wzpan/orgwiki/blob/master/opengl_vertex.org">https://github.com/wzpan/orgwiki/blob/master/opengl_vertex.org</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/03/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/GPU%20Gem%20%E7%B3%BB%E5%88%97%E5%86%85%E5%AE%B9%E5%88%97%E8%A1%A8/" rel="prev" title="GPU Gem系列内容列表">
+      <i class="fa fa-chevron-left"></i> GPU Gem系列内容列表
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/03/18/OpenGL/OpenGL%E7%BC%93%E5%86%B2%E5%8C%BA%E5%AF%B9%E8%B1%A1/" rel="next" title="OpenGLOpenGL缓冲区对象">
+      OpenGLOpenGL缓冲区对象 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#opengl-graphics-primitives"><span class="nav-number">1.</span> <span class="nav-text">OpenGL Graphics Primitives</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%82%B9-the-vertex"><span class="nav-number">2.</span> <span class="nav-text">点 The Vertex</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E5%9B%BE%E5%85%83%E7%B1%BB%E5%9E%8B"><span class="nav-number">3.</span> <span class="nav-text">基础图元类型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BA%BF-lines"><span class="nav-number">4.</span> <span class="nav-text">线 Lines</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%9A%E8%BE%B9%E5%BD%A2-polygon"><span class="nav-number">5.</span> <span class="nav-text">多边形 Polygon</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#section"><span class="nav-number">5.1.</span> <span class="nav-text">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+glVertex2f( x, y );             glVertex2fv( xyArray );
+glVertex2d( x, y );             glVertex2dv( xyArray );
+glVertex2i( x, y );             glVertex2iv( xyArray );
+glVertex3f( x, y, z );          glVertex3fv( xyzArray );
+glVertex3d( x, y, z );          glVertex3dv( xyzArray );
+glVertex3i( x, y, z );          glVertex3iv( xyzArray );
+
+glColor3f( r, g, b );           glColor3f( rgbArray );
+glColor3d( r, g, b );           glColor3d( rgbArray );
+glColor3ub( r, g, b );          glColor3ub( rgbArray );
+glColor4f( r, g, b, a);         glColor4f( rgbaArray );
+glColor4d( r, g, b, a);         glColor4d( rgbaArray );
+glColor4ub( r, g, b, a);        glColor4ub( rgbaArray );
+</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#section-1"><span class="nav-number">5.2.</span> <span class="nav-text">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+#include &lt;GL&#x2F;gl.h&gt;
+#include &lt;GL&#x2F;glut.h&gt;   &#x2F;&#x2F; freeglut.h might be a better alternative, if available.
+ 
+
+void display() &amp;#123;  &#x2F;&#x2F; Display function will draw the image.
+ 
+    glClearColor( 0, 0, 0, 1 );  &#x2F;&#x2F; (In fact, this is the default.)
+    glClear( GL_COLOR_BUFFER_BIT );
+    
+    glBegin(GL_TRIANGLES);
+    glColor3f( 1, 0, 0 ); &#x2F;&#x2F; red
+    glVertex2f( -0.8, -0.8 );
+    glColor3f( 0, 1, 0 ); &#x2F;&#x2F; green
+    glVertex2f( 0.8, -0.8 );
+    glColor3f( 0, 0, 1 ); &#x2F;&#x2F; blue
+    glVertex2f( 0, 0.9 );
+    glEnd(); 
+    
+    glutSwapBuffers(); &#x2F;&#x2F; Required to copy color buffer onto the screen.
+ 
+&amp;#125;
+
+
+int main( int argc, char** argv ) &amp;#123;  &#x2F;&#x2F; Initialize GLUT and 
+
+    glutInit(&amp;argc, argv);
+    glutInitDisplayMode(GLUT_SINGLE);    &#x2F;&#x2F; Use single color buffer and no depth buffer.
+    glutInitWindowSize(500,500);         &#x2F;&#x2F; Size of display area, in pixels.
+    glutInitWindowPosition(100,100);     &#x2F;&#x2F; Location of window in screen coordinates.
+    glutCreateWindow(&quot;GL RGB Triangle&quot;); &#x2F;&#x2F; Parameter is window title.
+    glutDisplayFunc(display);            &#x2F;&#x2F; Called when the window needs to be redrawn.
+    
+    glutMainLoop(); &#x2F;&#x2F; Run the event loop!  This function does not return.
+                    &#x2F;&#x2F; Program ends when user closes the window.
+    return 0;
+
+&amp;#125;
+</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#demo"><span class="nav-number">6.</span> <span class="nav-text">Demo</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E9%93%BE%E6%8E%A5"><span class="nav-number">7.</span> <span class="nav-text">相关链接</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">straywriter</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">124</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/straywriter" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;straywriter" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">straywriter</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

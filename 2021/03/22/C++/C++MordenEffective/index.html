@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"straywriter.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="Effective Modern C++ 读书总结">
+<meta property="og:url" content="https://straywriter.github.io/2021/03/22/C++/C++MordenEffective/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-03-22T13:59:11.315Z">
+<meta property="article:modified_time" content="2021-04-17T10:58:39.792Z">
+<meta property="article:author" content="straywriter">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://straywriter.github.io/2021/03/22/C++/C++MordenEffective/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Effective Modern C++ 读书总结 | Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://straywriter.github.io/2021/03/22/C++/C++MordenEffective/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="straywriter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Effective Modern C++ 读书总结
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-03-22 21:59:11" itemprop="dateCreated datePublished" datetime="2021-03-22T21:59:11+08:00">2021-03-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-04-17 18:58:39" itemprop="dateModified" datetime="2021-04-17T18:58:39+08:00">2021-04-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <hr>
+<h2 id="item1-understand-template-type-deduction">Item1 Understand template type deduction</h2>
+<p>  C++的模板对于类型推导来说，在通常情况推导出的类型和我们期望的是一致的，然而事情并不是总是这样如此美妙。例如下面这个例子:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">template&lt;typename T&gt;</span><br><span class="line">void f(&#96;参数类型&#96; parm);</span><br></pre></td></tr></table></figure>
+<p>参数类型可以是下面几种情况:</p>
+<ol type="1">
+<li>T&amp;</li>
+<li>const T&amp;</li>
+<li>T&amp;&amp;</li>
+<li>T</li>
+</ol>
+<p>上面的几种情况可以分成三种类型，1和2可以归为引用类型，3是右值引用类型(也可以叫做通用引用类型)，4则是类型本身，没有额外的修饰。对于这三种类型来说模板类型推导有着不一样的规则。  </p>
+<p><strong>Case1: 引用类型</strong> <strong>类型推导规则如下:</strong></p>
+<ol type="1">
+<li>如果传入的类型是引用类型，那么会忽视掉引用部分，如果是指针类型，则会忽视指针部分</li>
+<li>如果传入的类型不是引用类型那么原来是什么类型就推导成什么类型</li>
+</ol>
+<p>当参数类型是T&amp;的时候，传入下列三个参数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">int x &#x3D; 27;</span><br><span class="line">const int cx &#x3D; x;</span><br><span class="line">const int&amp; rx&#x3D; x;</span><br></pre></td></tr></table></figure>
+<p>对于上面三个变量的类型传递给模板函数f的时候,参数parm的类型会推导成如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">x  被推导成 int&amp;        &#x2F;&#x2F;匹配规则2，x被推导成int，因为参数类型是T&amp;，所以就是int&amp;</span><br><span class="line">cx 被推导成 const int&amp;  &#x2F;&#x2F;匹配规则2</span><br><span class="line">rx 被推导成 const int&amp;  &#x2F;&#x2F;匹配规则1，被推导成const int&amp;，忽视引用部分，因为参数类型是T&amp;，所以最后就是const int&amp;</span><br></pre></td></tr></table></figure>
+<p>当参数类型是<code>const T&amp;</code>，传入上面三个参数，推导后的类型结果如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">x   被推导成 const int&amp;</span><br><span class="line">cx  被推导成 const int&amp; &#x2F;&#x2F;const 叠加了</span><br><span class="line">rx  被推导成 const int&amp; &#x2F;&#x2F;发生了引用折叠</span><br></pre></td></tr></table></figure>
+<p>当参数类型是<code>T*</code>或<code>const T*</code>的时候本质上和上面的是相同的。当传入一个指针类型，会导致指针折叠。</p>
+<blockquote>
+<p>总结一句话，当参数类型是引用类型，那么parm最终的类型就是引用类型。如果有CV限制符，那么parm也会带上CV限制符，如果传入的类型含有引用会发生引用折叠，不会变成<code>&amp;&amp;</code>，如果包含cv限制符，也会进行叠加，不会变成<code>const const</code>。</p>
+</blockquote>
+<p><strong>Case2: 右值引用类型</strong></p>
+<p>类型推导规则如下:</p>
+<ol type="1">
+<li>如果传入的是一个左值，那么会被推导成引用类型</li>
+<li>如果传入的是右值，就按照Case1的规则推导</li>
+</ol>
+<p>当参数类型是<code>T&amp;&amp;</code>，传入下列三个参数:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">int x &#x3D; 27;</span><br><span class="line">const int cx &#x3D; x;</span><br><span class="line">const int&amp; rx &#x3D; x;</span><br></pre></td></tr></table></figure>
+<p>对于上面三个变量的类型传递给模板函数f的时候,参数<code>param</code>的类型会推导成如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">x   被推导成  int&amp;      &#x2F;&#x2F;匹配规则1，x是左值被推导成引用类型</span><br><span class="line">cx  被推导成 const int&amp; &#x2F;&#x2F;匹配规则1,cx也是左值，cv限制符会带上。</span><br><span class="line">27  被推导成 int&amp;&amp;      &#x2F;&#x2F;匹配规则2, 27是个右值，T被推导成int，因为参数类型是T&amp;&amp;，所有被推导成int&amp;&amp;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>param</code>的类型，取决于传入的变量是否是右值，如果是右值，最终<code>param</code>的类型就是<code>&amp;&amp;</code>，有CV限制符就带上。如果是左值那么param的最终类型就是引用类型了。</p>
+</blockquote>
+<p><strong>Case3: 类型本身</strong></p>
+<p>类型推导规则如下:</p>
+<ol type="1">
+<li>如果传入的参数是引用类型，忽视引用部分。</li>
+<li>如果不是引用类型，但是带有const,volatile等同样也忽视。</li>
+<li>不是引用类型，也没有const volatile修饰符，按照正常规则推导</li>
+</ol>
+<p>当参数类型是<code>T</code>，传入下列三个参数:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">int x &#x3D; 27;</span><br><span class="line">const int cx &#x3D; x;</span><br><span class="line">const int&amp; rx &#x3D; x;</span><br></pre></td></tr></table></figure>
+<p>对于上面三个变量的类型传递给模板函数f的时候,参数parm的类型会推导成如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">x   被推导成 int  &#x2F;&#x2F;匹配规则3</span><br><span class="line">cx  被推导成 int &#x2F;&#x2F;匹配规则2</span><br><span class="line">rx  被推导成 int &#x2F;&#x2F;匹配规则1</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>parm的类型就是传入的类型去掉引用，指针和CV限制符等。</p>
+</blockquote>
+<p>上面的类型推导规则基本上包含了绝大多数模板推导规则，除此之外还有两个类型的推导需要关注。</p>
+<ul>
+<li><p>数组类型参数    </p>
+<p>数组类型和指针指向一个数组这是两个不同的类型，数组如果传递给函数会退化为指针，因此在模板参数类型的时候，如果参数类型是T，那么数组会被推导成指针类型，如果参数类型是T&amp;，那么数组就会被推导成数组类型，可以使用sizeof求数组的大小。</p></li>
+<li><p>函数作为参数    </p>
+<p>函数作为参数会被退化成函数指针，如果参数类型是T，函数会被推导成一个函数指针，指向这个函数，如果参数类型是T&amp;，那么函数会被推导成一个引用指向函数的引用。</p></li>
+</ul>
+<blockquote>
+<p>Tips:</p>
+<ol type="1">
+<li><p>在模版类型推到的时候，如果传递的参数是引用类型，那么可以看作是非引用类型的，也就是说类型的引用部分被忽略。</p></li>
+<li><p>当对通用引用类型的参数进行类型推导时，左值参数需要特殊对待。</p></li>
+<li><p>当推导正常的参数类型时，const和volatile类型的参数会被忽略掉const和volatile部分。</p></li>
+<li><p>在模版类型推导时，如果参数是数组或是函数名会退化为指针，除非这些参数是用来初始化 引用的。</p></li>
+</ol>
+</blockquote>
+<h2 id="item2-understand-auto-type-deduction">Item2 Understand auto type deduction</h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">template&lt;typename T&gt;</span><br><span class="line">void f(&#96;参数类型&#96; parm);</span><br></pre></td></tr></table></figure>
+<p>根据参数类型和传入的<strong>var</strong>的类型的不同，推导的规则也相应不同，那么auto是如何和模板推导规则关联呢?</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">f(var)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">auto x &#x3D; 27             &#x2F;&#x2F;对应Item1中的Case3，x的类型就是int</span><br><span class="line">int&amp; z &#x3D; x;</span><br><span class="line">const int y &#x3D; 19;</span><br><span class="line">auto cx &#x3D; x;            &#x2F;&#x2F;对应Item1中的Case3，cx的类型就是int，忽略了y的CV限制符和引用等</span><br><span class="line">const auto&amp; rx &#x3D; z;     &#x2F;&#x2F;对应Item1中的Case1，rx的类型是const引用类型，忽略z的引用</span><br><span class="line">auto&amp;&amp; rrx &#x3D; 27         &#x2F;&#x2F;对应Item1中的Case2，rrx的类型int&amp;&amp;</span><br><span class="line"></span><br><span class="line">参数类型 param &#x3D; var</span><br></pre></td></tr></table></figure>
+<p>auto可以总结为上面这种形式。根据赋值操作右边的var类型，和变量名左边的参数类型结合起来进行推导。在Item1中还提到了两个额外的类型推导，一个是数组类型，另外一个是函数类型。对应到<strong>auto</strong>则如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">const char name[] &#x3D; &quot;test&quot;;</span><br><span class="line">auto arr1 &#x3D; name;       &#x2F;&#x2F;arr1的类型是const char*类型</span><br><span class="line">auto&amp; arr2 &#x3D; name;      &#x2F;&#x2F;arr2的类型是const char(&amp;)[5]</span><br><span class="line"></span><br><span class="line">void someFunc(int,doubel);</span><br><span class="line">auto func1 &#x3D; someFunc;  &#x2F;&#x2F;void(*)(int,double)</span><br><span class="line">auto&amp; func2 &#x3D; someFunc; &#x2F;&#x2F;void(&amp;)(int,double)</span><br></pre></td></tr></table></figure>
+<p>除了上面提到的推导规则外，<strong>auto</strong>还有一个和模板类型推导不一样的地方。这也是本节Item需要关注的。在<strong>C++11</strong>中引入了统一初始化列表，相对应的则是<code>std::initializer_list&lt;T&gt;</code>模板类型。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">auto  x1 &#x3D; &#123;1,2,3&#125;; &#x2F;&#x2F;此时x1被推导为std::initializer_list&lt;T&gt;</span><br></pre></td></tr></table></figure>
+<p>因为初始化列表是模板类型，因此所有的元素必须是同一类型，否则会初始化失败。对应到模板类型推导如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">auto x &#x3D; &#123;11,23,9&#125;</span><br><span class="line">template&lt;typename T&gt;</span><br><span class="line">void f(T param);</span><br><span class="line"></span><br><span class="line">f(x);   &#x2F;&#x2F;编译错误，无法进行推导。</span><br></pre></td></tr></table></figure>
+<p>模板类型推导居然无法识别初始化列表，只能写成下面这种形式才可以进行推导。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">template&lt;typename T&gt;</span><br><span class="line">void f(std::initializer_list&lt;T&gt; param);</span><br></pre></td></tr></table></figure>
+<p> 至于为什们，其实我也不清楚，也没有找到相关的资料，就只能当做一个规则记着吧。但是auto也不是那么完美，如果<code>auto</code>用于推导函数的返回类型，auto是不能推导初始化列表的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">auto createInitList() &#123;     &#x2F;&#x2F;C++14支持这种写法，C++11中需要结合decltype</span><br><span class="line">    return &#123; 1,2 ,3 &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>除了不能作为函数返回值外，还不能作为lambda的参数，注意是lambda的参数，普通函数的参数是可以的，C++11中不支持lambda的参数使用auto，C++14开始支持。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">auto lda &#x3D; [](const auto&amp; v) &#123;&#125;;</span><br><span class="line">lda(&#123;1,2,3&#125;);   &#x2F;&#x2F;编译出错，无法推导初始化列表。</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Tips:<br>
+</p>
+<ol type="1">
+<li><p>auto类型推导通常和模版类型推导是一致的，但是auto类型推导对于{}会推导为std::initializer_list，但是模版类型无法对其进行推导</p></li>
+<li><p>auto对于函数返回值的类型推导和lambda参数类型推导时就是隐式的模版类型推导，并不是auto类型推导，对于{}无法进行推导</p></li>
+</ol>
+</blockquote>
+<h2 id="item3-understand-decltype">Item3 Understand decltype</h2>
+<p><code>decltype</code>是用来推导变量的类型，但是不像auto和模板类型推导那样存在很多类型推导规则，<code>decltype</code>推导出来的类型和变量原来的类型一模一样，没有做任何改动。在C++11中<code>decltype</code>结合<code>auto</code>还可以完成函数返回值的类型推导。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">template&lt;typename Container,typename Index&gt;</span><br><span class="line">auto AccessContainer(Container&amp; c,Index i) -&gt; decltype(c[i]) &#123;</span><br><span class="line">    return c[i];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>到了C++14的时候就可以省略掉后面的<code>-&gt; decltype(c[i])</code>了，变成下面的样子。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">template&lt;typename Container,typename Index&gt;</span><br><span class="line">auto AccessContainer(Container&amp; c,Index i) &#123;</span><br><span class="line">    return c[i];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的这个例子是用来访问容器中某个位置的元素,也就是容器的<code>operator[]</code>操作符返回的元素，按照容器的定义这个操作符应该返回的是一个引用，也就是说你可以像下面这样给某个位置赋值。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">std::vector&lt;int&gt; d;</span><br><span class="line">AccessContainer(d,5) &#x3D; 100;</span><br></pre></td></tr></table></figure>
+<p>但是很不幸，你会发现编译出错，原因则是罪魁祸首的<code>auto</code>，返回值遇到auto后，引用被忽略掉了，在Item1中的<code>Case3</code>中详细解释了这个规则，为了让上面的的例子可以正常运行，可以做如下改动。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">template&lt;typename Container,typename Index&gt;</span><br><span class="line">auto&amp; AccessContainer(Container&amp; c,Index i) &#123;</span><br><span class="line">    return c[i];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>返回的是一个<code>auto&amp;</code>，至于为什么可以参考Item1中的Case1，除此之外还可以用C++14的另外一种写法如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">template&lt;typename Container,typename Index&gt;</span><br><span class="line">decltype(auto) AccessContainer(Container&amp; c,Index i) &#123;</span><br><span class="line">    return c[i];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过<code>decltype</code>保证返回变量的本来类型这一特性，保证不丢失<code>CV</code>限制符，和引用等，因此在C++14中可以通过<code>decltype</code>和<code>auto</code>来声明变量，保证变量的类型和赋值的类型一模一样。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">int ia &#x3D; 10;</span><br><span class="line">const int&amp; iia &#x3D; ia;</span><br><span class="line">auto autoia &#x3D; cw;             &#x2F;&#x2F;推导出的类型是int，引用和CV限制符都会忽略</span><br><span class="line">decltype(auto) deautoia &#x3D; cw; &#x2F;&#x2F;const int&amp; 保证和cw的类型一模一样 </span><br></pre></td></tr></table></figure>
+<p>上面的方案通过<code>decltype</code>和<code>auto</code>让返回值的类型变的完美，但是如果用户传入一个const的容器，将会导致编译出错。因为<code>AccessContainer</code>的参数类型是非常量引用，为了让他可以接收常量和非常量，需要使用常量引用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">template&lt;typename Container,typename Index&gt;</span><br><span class="line">decltype(auto) AccessContainer(const Container&amp; c,Index i) &#123;</span><br><span class="line">    return c[i];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这带来的另外一个问题就是，<code>c[i]</code>，返回的是常量引用，无法修改。好在C++11中引入了右值引用，它还有另外一个名字叫做通用引用，通过名字就可以知道这个引用很通用，它可以接收左值，右值还有带const的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">template&lt;typename Container,typename Index&gt;</span><br><span class="line">decltype(auto) AccessContainer(Container&amp;&amp; c,Index i) &#123;</span><br><span class="line">    return c[i];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>到此为止看似已经很完美了，可以接收任何类型的容器，返回值也和传入的类型一致，但是上述方案仍然有不足之处如果用户传入的是一个右值，通过移动语义传递给了AccessContainer的参数c，但是c本身其实是一个左值，如果在AccessContainer中需要把c再次传递给其他的函数的话就不能再次利用右值的移动语义了，带来了不必要的拷贝开销。C++11中的完美转发使得上面的方案变得完美，它可以将参数原封不动的传递给其他的函数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">template&lt;typename Container,typename Index&gt;</span><br><span class="line">decltype(auto) AccessContainer(Container&amp;&amp; c,Index i) &#123;</span><br><span class="line">    return std::forward&lt;Container&gt;(c)[i];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>到此为止实现了一个完美的AccessContainer，关于完美转发可以参考这篇文章C++0x里的完美转发到底是神马？decltype如此完美，从文章的开篇我就一直强调decltype的好，它可以完美的得到目标变量的类型，但是在大多数人的眼中C++总是那么的不完美，decltype会打破这个定律吗? 当然没有，decltype也有例外的时候。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">int x &#x3D; 0;</span><br><span class="line">decltype(x)     &#x2F;&#x2F;得到的是int类型</span><br><span class="line">decltype((x))   &#x2F;&#x2F;得到的是int&amp;类型</span><br></pre></td></tr></table></figure>
+<p>上面的变量x加了一个括号后就变成了一个引用类型了，根据官方如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">decltype ( entity ) (1) (since C++11)</span><br><span class="line">decltype ( expression ) (2) (since C++11)</span><br><span class="line"></span><br><span class="line">1) If the argument is an unparenthesized id-expression or an unparenthesized class member access expression, then decltype yields the type of the entity named by this expression. If there is no such entity, or if the argument names a set of overloaded functions, the program is ill-formed.</span><br><span class="line">2) If the argument is any other expression of type T, and</span><br><span class="line">a) if the value category of expression is xvalue, then decltype yields T&amp;&amp;;</span><br><span class="line">b) if the value category of expression is lvalue, then decltype yields T&amp;;</span><br><span class="line">c) if the value category of expression is prvalue, then decltype yields T.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[ Example:</span><br><span class="line">const int&amp;&amp; foo();</span><br><span class="line">int i;</span><br><span class="line">struct A &#123; double x; &#125;;</span><br><span class="line">const A* a &#x3D; new A();</span><br><span class="line">decltype(foo()) x1 &#x3D; i;     &#x2F;&#x2F; type is const int&amp;&amp;</span><br><span class="line">decltype(i) x2;             &#x2F;&#x2F; type is int</span><br><span class="line">decltype(a-&gt;x) x3;          &#x2F;&#x2F; type is double</span><br><span class="line">decltype((a-&gt;x)) x4 &#x3D; x3;   &#x2F;&#x2F; type is const double&amp;</span><br><span class="line">—end example ]</span><br></pre></td></tr></table></figure>
+<p>对于x来说，没有括号括起来，只是一个带有名字的变量，这是id-expression，它的类型是就是这个表达式的entity类型，所以符号第一条规则，类型就是x本身，而(x)不符号第一条，也不符合第二条，因为他是lvalue expression所以符合第三条，就是int&amp;。</p>
+<h2 id="item4-know-how-to-view-deduced-types">Item4 Know how to view deduced types</h2>
+<p>在Item3中学习了C++11新特性decltype，decltype可以获取变量或者表达式的类型，但是获取到的类型只能用于定义其他的变量和类型，不能打印出来，也不能用来操作。毕竟是编译期实现，用来做类型反射就算了，那么至少也应该可以打印输出下吧，毕竟书中得来终觉醒。那么本文就介绍几种方法来得到decltype的返回类型的名字。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">template&lt;typename T&gt;</span><br><span class="line">class TD</span><br><span class="line"></span><br><span class="line">TD&lt;decltype(x)&gt; xType;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">错误：聚合‘TD&lt;int&gt; xType’类型不完全，无法被定义</span><br><span class="line">   TD&lt;decltype(x)&gt; xType;</span><br></pre></td></tr></table></figure>
+<p>得到decltype的返回类型的名字的方法：</p>
+<ul>
+<li><p>IDE Editors</p>
+<p>最简单的就是依靠C++的IDE帮你识别出<code>decltype</code>的返回类型，IDE毕竟不是万能的，所以你要识别的类型要尽可能的简单，不能过于复杂。</p></li>
+<li><p>Compiler Diagnostic 借助于编译器的诊断错误信息。</p>
+<p>通过错误使用<code>decltype</code>推导出来的类型让编译器报出编译错误，在编译错误的信息中可以发现<code>decltype</code>推导出来的类型名称。例如下面的这个例子:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">template&lt;typename T&gt;</span><br><span class="line">class TD</span><br><span class="line"></span><br><span class="line">TD&lt;decltype(x)&gt; xType;</span><br></pre></td></tr></table></figure>
+<p>使用g++编译后，会出现编译出错，诊断信息如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">错误：聚合‘TD&lt;int&gt; xType’类型不完全，无法被定义</span><br><span class="line">   TD&lt;decltype(x)&gt; xType;</span><br></pre></td></tr></table></figure>
+<p>从上面的诊断信息就可以得出<code>decltype(x)</code>的结果就是<code>int</code>。</p></li>
+<li><p>Runtime Output</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;typeinfo&gt;</span><br><span class="line">int x &#x3D; 0;</span><br><span class="line">std::cout &lt;&lt; typeid(decltype(x)).name() &lt;&lt; std::endl;</span><br></pre></td></tr></table></figure>
+<p>上面会输出x的类型的名称，这里应该会输出<code>int</code>，但也不尽然，<code>typeid</code>的输出结果取决于编译器，MSVC的输出是<code>int</code>，而<code>g++</code>的输出则是<code>i</code>，也就是c++对int的名称重写后的结果。g++其实也可以实现和MSVC的输出结果一样，</p></li>
+</ul>
+<p>到此为止typeinfo看似解决了问题，其实不然，通过typeinfo得到的类型会忽略cv限制符还有引用，真的是差强人意啊。但是对const的指针类型是不会忽略const限制符的。具体可以参考typeid获取完整类型幸好可以借助于boost的Boost.Type-Index库得到精确的类型。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">template&lt;typename T&gt;</span><br><span class="line">void f(const T&amp; param) &#123;</span><br><span class="line">  using std::cout;</span><br><span class="line">  using boost::typeindex::type_id_with_cvr;</span><br><span class="line"></span><br><span class="line">  cout &lt;&lt; &quot;param &#x3D; &quot;</span><br><span class="line">       &lt;&lt; type_id_with_cvr&lt;T&gt;().pretty_name()</span><br><span class="line">       &lt;&lt; &#39;\n&#39;;</span><br><span class="line"></span><br><span class="line">  cout &lt;&lt; &quot;param &#x3D; &quot;</span><br><span class="line">       &lt;&lt; type_id_with_cvr&lt;decltype(param)&gt;().pretty_name()</span><br><span class="line">       &lt;&lt; &#39;\n&#39;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="item5-prefer-auto-to-explicit-type-declarations">Item5 Prefer auto to explicit type declarations</h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vector&lt;int&gt;::iterator it &#x3D; xxx.begin();</span><br><span class="line">vector&lt;map&lt;int,int&gt; &gt;::iterator</span><br></pre></td></tr></table></figure>
+<p>到了C++11，算是对上面碰到的问题有了一个比较折中的解决方案了，如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">auto x1;    &#x2F;&#x2F;没有初始化会报错</span><br><span class="line">auto it &#x3D; xxx.begin();  &#x2F;&#x2F;没有冗长的类型名了</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>auto类型和闭包</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">auto f1 &#x3D; [](const std::unique_ptr&lt;int&gt;&amp; p1,const std::unique_ptr&lt;int&gt;&amp; p2) &#123;</span><br><span class="line">  return *p1 &lt; *p2;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">std::function&lt;bool(const std::unique_ptr&lt;int&gt;&amp;,std::unique_ptr&lt;int&gt;&amp;)&gt; f2 &#x3D; [](</span><br><span class="line">  const std::unique_ptr&lt;int&gt;&amp; p1,const std::unique_ptr&lt;int&gt;&amp; p2) &#123;</span><br><span class="line">  return *p1 &lt; *p2;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="item6-use-the-explicitly-typed-initializer-idiom-when-auto-deduces-undesied-types">Item6 Use the explicitly typed initializer idiom when auto deduces undesied types</h2>
+<p>auto 和std::vector<bool></bool></p>
+<h2 id="item7-distinguish-between-and-when-creating-objects">Item7 Distinguish between () and {} when creating objects</h2>
+<p>Tips \1. {}初始化是最广泛的初始化语法，它可以阻止窄化转换，并且避免了C++最复杂的语法解析 \2. 在构造函数做函数重载的时候，{}会优先匹配带有<code>std::initializer_list</code>参数的版本，即使其他构造函数看起来更匹配 \3. 对与std::vector两个参数的构造函数来说，其{}和()两种初始化方式有很大的不同 \4. 在模版中对于{}和()初始化如何进行选择是一个挑战</p>
+<h2 id="item8-prefer-nullptr-to-0-and-null">Item8 Prefer nullptr to 0 and NULL</h2>
+<p>Tips \1. 优先使用nullptr替换0和NULL \2. 避免同时重载带有整型参数和指针类型的参数</p>
+<h2 id="item9-prefer-alias-declarations-to-typedefs">Item9 Prefer alias declarations to typedefs</h2>
+<p>Tips \1. typedef 不支持模版化，但是using的别名声明可以 \2. 模版别名避免了传统的typedef带来的<code>::type</code>后缀，以及在类型引用的时候需要的typename前缀 \3. C++14给所有的C++11模版类型萃取提供了别名</p>
+<h2 id="item10-prefer-scoped-enums-to-unscoped-enums">Item10 Prefer scoped enums to unscoped enums</h2>
+<p>Tips \1. C++98种的枚举众所周知是无作用域限制的 \2. C++11中的枚举类是有作用域限制的，不能进行隐式的类型转换需要使用C++的类型cast进行转换 \3. 无论是枚举类还是传统的枚举类型都支持指定底层的存储，对于枚举类来说默认的底层存储类型是int，而传统的枚举类型其底层存储是未知的，需要在编译器进行选择 \4. 枚举类总是可以进行前向声明的，而枚举类型则不行，必须是在明确指定其底层存储的时候才能进行前向声明</p>
+<h2 id="item11-prefer-deleted-functions-to-private-undefined-ones">Item11 Prefer deleted functions to private undefined ones</h2>
+<p>Tips \1. 优先使用delete来删除函数替换放在私有作用域中未定义的 \2. 任何函数都可以被删除，包括非成员函数，模版实例化等</p>
+<h2 id="item12-declare-overriding-function-override">Item12 Declare overriding function override</h2>
+<p>Tips \1. 对于要重写的函数添加override关键字，让编译器负责检查 \2. 成员函数的引用标识符可以识别出(*this)的不同，是左值类型，还是右值类型</p>
+<h2 id="item13-prefer-const_iterators-to-iterators">Item13 Prefer const_iterators to iterators</h2>
+<h2 id="相关参考">相关参考</h2>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/oncealong/article/details/83344119"></a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/03/22/C++/C++Effective/" rel="prev" title="Effective C++ 读书总结">
+      <i class="fa fa-chevron-left"></i> Effective C++ 读书总结
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/03/22/Lua/Lua%E5%9F%BA%E7%A1%80/" rel="next" title="Lua基础">
+      Lua基础 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#item1-understand-template-type-deduction"><span class="nav-number">1.</span> <span class="nav-text">Item1 Understand template type deduction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#item2-understand-auto-type-deduction"><span class="nav-number">2.</span> <span class="nav-text">Item2 Understand auto type deduction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#item3-understand-decltype"><span class="nav-number">3.</span> <span class="nav-text">Item3 Understand decltype</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#item4-know-how-to-view-deduced-types"><span class="nav-number">4.</span> <span class="nav-text">Item4 Know how to view deduced types</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#item5-prefer-auto-to-explicit-type-declarations"><span class="nav-number">5.</span> <span class="nav-text">Item5 Prefer auto to explicit type declarations</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#item6-use-the-explicitly-typed-initializer-idiom-when-auto-deduces-undesied-types"><span class="nav-number">6.</span> <span class="nav-text">Item6 Use the explicitly typed initializer idiom when auto deduces undesied types</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#item7-distinguish-between-and-when-creating-objects"><span class="nav-number">7.</span> <span class="nav-text">Item7 Distinguish between () and {} when creating objects</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#item8-prefer-nullptr-to-0-and-null"><span class="nav-number">8.</span> <span class="nav-text">Item8 Prefer nullptr to 0 and NULL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#item9-prefer-alias-declarations-to-typedefs"><span class="nav-number">9.</span> <span class="nav-text">Item9 Prefer alias declarations to typedefs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#item10-prefer-scoped-enums-to-unscoped-enums"><span class="nav-number">10.</span> <span class="nav-text">Item10 Prefer scoped enums to unscoped enums</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#item11-prefer-deleted-functions-to-private-undefined-ones"><span class="nav-number">11.</span> <span class="nav-text">Item11 Prefer deleted functions to private undefined ones</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#item12-declare-overriding-function-override"><span class="nav-number">12.</span> <span class="nav-text">Item12 Declare overriding function override</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#item13-prefer-const_iterators-to-iterators"><span class="nav-number">13.</span> <span class="nav-text">Item13 Prefer const_iterators to iterators</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E5%8F%82%E8%80%83"><span class="nav-number">14.</span> <span class="nav-text">相关参考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">straywriter</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">124</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/straywriter" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;straywriter" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">straywriter</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

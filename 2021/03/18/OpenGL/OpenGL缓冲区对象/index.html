@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"straywriter.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="OpenGLOpenGL缓冲区对象">
+<meta property="og:url" content="https://straywriter.github.io/2021/03/18/OpenGL/OpenGL%E7%BC%93%E5%86%B2%E5%8C%BA%E5%AF%B9%E8%B1%A1/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://straywriter.github.io/2021/03/18/OpenGL/OpenGL%E7%BC%93%E5%86%B2%E5%8C%BA%E5%AF%B9%E8%B1%A1/20161117144050412">
+<meta property="og:image" content="https://straywriter.github.io/2021/03/18/OpenGL/OpenGL%E7%BC%93%E5%86%B2%E5%8C%BA%E5%AF%B9%E8%B1%A1/20161117150610860">
+<meta property="og:image" content="https://straywriter.github.io/2021/03/18/OpenGL/OpenGL%E7%BC%93%E5%86%B2%E5%8C%BA%E5%AF%B9%E8%B1%A1/gl_pbo02.png">
+<meta property="og:image" content="https://straywriter.github.io/2021/03/18/OpenGL/OpenGL%E7%BC%93%E5%86%B2%E5%8C%BA%E5%AF%B9%E8%B1%A1/gl_pbo03.png">
+<meta property="og:image" content="https://straywriter.github.io/2021/03/18/OpenGL/OpenGL%E7%BC%93%E5%86%B2%E5%8C%BA%E5%AF%B9%E8%B1%A1/gl_pbo04.png">
+<meta property="og:image" content="https://straywriter.github.io/2021/03/18/OpenGL/OpenGL%E7%BC%93%E5%86%B2%E5%8C%BA%E5%AF%B9%E8%B1%A1/gl_pbo07.png">
+<meta property="og:image" content="https://straywriter.github.io/2021/03/18/OpenGL/OpenGL%E7%BC%93%E5%86%B2%E5%8C%BA%E5%AF%B9%E8%B1%A1/5956443-556bb72aafcac187.png">
+<meta property="article:published_time" content="2021-03-18T05:45:33.000Z">
+<meta property="article:modified_time" content="2021-04-17T12:21:54.619Z">
+<meta property="article:author" content="straywriter">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://straywriter.github.io/2021/03/18/OpenGL/OpenGL%E7%BC%93%E5%86%B2%E5%8C%BA%E5%AF%B9%E8%B1%A1/20161117144050412">
+
+<link rel="canonical" href="https://straywriter.github.io/2021/03/18/OpenGL/OpenGL%E7%BC%93%E5%86%B2%E5%8C%BA%E5%AF%B9%E8%B1%A1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>OpenGLOpenGL缓冲区对象 | Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://straywriter.github.io/2021/03/18/OpenGL/OpenGL%E7%BC%93%E5%86%B2%E5%8C%BA%E5%AF%B9%E8%B1%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="straywriter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          OpenGLOpenGL缓冲区对象
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-03-18 13:45:33" itemprop="dateCreated datePublished" datetime="2021-03-18T13:45:33+08:00">2021-03-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-04-17 20:21:54" itemprop="dateModified" datetime="2021-04-17T20:21:54+08:00">2021-04-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/OpenGL/" itemprop="url" rel="index"><span itemprop="name">OpenGL</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <hr>
+<h1 id="opengl-缓冲区对象-buffer-object">OpenGL 缓冲区对象 buffer object</h1>
+<p>缓冲区对象(buffer object)，允许应用程序地指定把哪些数据存储在图形服务器中。</p>
+<p>VAO VBO EBO PBO 概述</p>
+<p>VBO</p>
+<blockquote>
+<p>顶点缓冲对象VBO是在显卡存储空间中开辟出的一块内存缓存区，用于存储顶点的各类属性信息，如顶点坐标，顶点法向量，顶点颜色数据等。在渲染时，可以直接从VBO中取出顶点的各类属性数据，由于VBO在显存而不是在内存中，不需要从CPU传输数据，处理效率更高。</p>
+<p>所以可以理解为VBO就是显存中的一个存储区域，可以保持大量的顶点属性信息。并且可以开辟很多个VBO，每个VBO在OpenGL中有它的唯一标识ID，这个ID对应着具体的VBO的显存地址，通过这个ID可以对特定的VBO内的数据进行存取操作。</p>
+</blockquote>
+<p>VAO</p>
+<blockquote>
+<p>VBO保存了一个模型的顶点属性信息，每次绘制模型之前需要绑定顶点的所有信息，当数据量很大时，重复这样的动作变得非常麻烦。VAO可以把这些所有的配置都存储在一个对象中，每次绘制模型时，只需要绑定这个VAO对象就可以了。</p>
+<p>VAO是一个保存了所有顶点数据属性的状态结合，它存储了顶点数据的格式以及顶点数据所需的VBO对象的引用。</p>
+<p>VAO本身并没有存储顶点的相关属性数据，这些信息是存储在VBO中的，VAO相当于是对很多个VBO的引用，把一些VBO组合在一起作为一个对象统一管理。</p>
+</blockquote>
+<p>EBO</p>
+<blockquote>
+<p>索引缓冲对象EBO相当于OpenGL中的顶点数组的概念，是为了解决同一个顶点多次重复调用的问题，可以减少内存空间浪费，提高执行效率。当需要使用重复的顶点时，通过顶点的位置索引来调用顶点，而不是对重复的顶点信息重复记录，重复调用。</p>
+<p>EBO中存储的内容就是顶点位置的索引indices，EBO跟VBO类似，也是在显存中的一块内存缓冲器，只不过EBO保存的是顶点的索引。</p>
+</blockquote>
+<p>PBO</p>
+<blockquote>
+<p>储存像素数据的缓冲区对象称为<strong>Pixel Buffer Object (PBO)</strong>。</p>
+</blockquote>
+<hr>
+<h1 id="vbo">VBO</h1>
+<ul>
+<li><p>VBO是OpenGL提供的一种特性，主要是用于在非立即模式下（使用glBegin/glEnd这种方式）用来保存顶点数据（包括位置、纹理、颜色等），同时提供了更新这些数据的方法。</p></li>
+<li><p>VBO相比较立即模式的渲染来说效率更高，这主要是因为VBO的数据一般会放在显存中而不是内存中。</p></li>
+<li><p>通俗点说VBO就好像是显卡中开辟的一块存储区域，用来把以前放在内存中的数据放在了显存中，便于更加方便的传输处理。</p></li>
+<li><p>VBO特性是在OpenGL1.5版本引入的。</p></li>
+</ul>
+<p>相关函数</p>
+<table>
+<colgroup>
+<col style="width: 20%">
+<col style="width: 80%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">函数</th>
+<th style="text-align: left;"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">glGenBuffers</td>
+<td style="text-align: left;">创建顶点缓冲区对象</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">glBindBuffer</td>
+<td style="text-align: left;">将顶点缓冲区对象设置为当前数组缓冲区对象(array buffer object)或当前元素(索引）缓冲区对象(element buffer object)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">glBufferData</td>
+<td style="text-align: left;">为顶点缓冲区对象申请内存空间，并进行初始化(视传入的参数而定)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">glBufferSubData</td>
+<td style="text-align: left;">初始化或更新顶点缓冲区对象</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">glDeleteBuffers</td>
+<td style="text-align: left;">删除顶点缓冲区对象</td>
+</tr>
+</tbody>
+</table>
+<h2 id="创建缓冲区对象-generate">创建缓冲区对象 Generate</h2>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glGenBuffers</span><span class="params">(GLsizei n,GLuint *buffers)</span></span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在buffers数组中返回n个当前未使用的缓冲区对象标识。注意在buffers数组中返回的标识名称并不需要是连续的整数。0是一个保留的缓冲区对象名称，从来不会被glGenBuffers()作为缓冲区对象标识返回。</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">GLboolean <span class="title">glIsBuffer</span><span class="params">(GLuint buffer)</span></span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>如果buffer是一个已经绑定的缓冲区对象的名称，而且还没有删除则返回GL_TRUE，否则返回GL_FALSE。</li>
+</ul>
+<hr>
+<h2 id="激活缓冲区对象-bind">激活缓冲区对象 Bind</h2>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glBindBuffer</span><span class="params">(GLenum target,GLuint buffer)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>１. 当buffer是一个首次使用的非零无符号整数时，它就创建一个新的缓冲区对象，并把buffer分配给这个缓冲区对象，作为它的名称</p>
+<p>２. 当绑定到一个以前创建的缓冲区对象时，这个缓冲区对象便成为活动的缓冲区对象</p>
+<p>３. 当绑定到一个值为零的buffer时，OpenGL就会停止使用缓冲区对象</p>
+<h2 id="用数据分配和初始化缓冲区对象-buffer-data">用数据分配和初始化缓冲区对象 Buffer Data</h2>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glBufferData</span><span class="params">(GLenum target,GLsizeiptr size,<span class="keyword">const</span> GLvoid *data,GLenum usage)</span></span>;</span><br></pre></td></tr></table></figure>
+<p><strong>数据的读写模式</strong></p>
+<ul>
+<li>流模式：缓冲区对象中的数据只被指定一次，并且使用这些数据的频率较低</li>
+<li>静态模式：缓冲区对象的数据只指定一次，但是使用这些数据的频率很高</li>
+<li>动态模式：缓冲区对象的数据不仅常常需要进行更新，而且使用频率也非常高</li>
+<li>注意，如果请求分配的内存数量超过了服务器能够分配的内存，glBufferData()将返回GL_OUT_OF_MEMORY错误。如果usage并不是允许使用的值之一，则返回GL_INVALID_VALUE。</li>
+</ul>
+<h2 id="更新缓冲区对象的数据">更新缓冲区对象的数据</h2>
+<p><strong>方法一、用提供的数据替换被绑定的缓冲区对象的一些数据子集</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glBufferSubData</span><span class="params">(GLenum target,GLintptr ofsset,GLsizeiptr size,<span class="keyword">const</span> GLvoid *data)</span></span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>用data指向的数据更新与target相关联的当前绑定缓冲区对象中从offset(以字节为单位)开始的size个字节数据。target参数与glBufferData的target参数一致。</p></li>
+<li><p>注意，如果size小于0或者size+offset大于缓冲区对象创建时所指定的大小，glBufferSubData()将产生一个GL_INVALID_VALUE错误。</p></li>
+</ul>
+<p><strong>方法二、选择绑定的缓冲区对象，然后根据需要来写入新值(或简单地读取数据，这取决于内存的访问权限)，就像对数组进行赋值一样</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">GLvoid * <span class="title">glMapBuffer</span><span class="params">(GLenum target,GLenum access)</span></span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>返回一个指针，指向与target相关联的当前绑定缓冲区对象的数据存储。target参数与glBufferData的target参数一致。参数access必须是GL_READ_ONLY、GL_WRITE_ONLY或GL_READ_WRITE之一，表示客户可以对数据进行的操作。</p></li>
+<li><p>注意，如果需要修改缓冲区中的大多数数据，这种方法很有用，但如果有一个很大的缓冲区并且只需要更新很小的一部分值，这种方法效率就很低。这时使用glMapBufferRange()效率更高。它允许只修改所需的范围内的数据值。</p></li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">GLvoid * <span class="title">glMapBufferRange</span><span class="params">(GLenum target,GLintptr offset,GLsizeiptr length,GLbitfield access)</span></span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>完成缓冲区对象的数据更新之后，可以调用glUnmapBuffer()取消对这个缓冲区的映射：</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">GLboolean <span class="title">glUnmapBuffer</span><span class="params">(GLenum target)</span></span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>表示对当前绑定缓冲区对象的更新已经完成，并且这个缓冲区可以释放。</li>
+</ul>
+<h2 id="在缓冲区对象之间复制数据">在缓冲区对象之间复制数据</h2>
+<p><strong>在OpenGL 3.1以前版本中，这个过程分两步：</strong></p>
+<p>１. 把数据从缓冲区对象复制到应用程序的内存中。</p>
+<p>２. 绑定到新的缓冲区对象，然后更新该缓冲区对象的数据。</p>
+<p><strong>在OpenGL 3.1中</strong></p>
+<ul>
+<li><code>glCopyBufferSubData()</code>用于复制数据，而不需要迫使数据在应用程序的内存中做短暂停留。</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glCopyBufferSubData</span><span class="params">(GLenum readbuffer,GLenum writebuffer,GLintptr readoffset,GLintptr writeoffset,GLsizeiptr size)</span></span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>把数据从与readbuffer相关联的缓冲区对象复制到绑定到writebuffer的缓冲区对象。</li>
+<li>参数readbuffer和writebuffer与glBufferData的target参数一致。</li>
+<li>readoffset、writeoffset为偏移量，size为复制到数据的数量。</li>
+</ul>
+<h2 id="清除缓冲区对象">清除缓冲区对象</h2>
+<p>完成了对缓冲区对象的操作之后，可以释放它的资源，并使它的标识可以其他缓冲区对象使用。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glDeleteBuffers</span><span class="params">(GLsizei n,<span class="keyword">const</span> GLuint *buffers)</span></span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>删除n个缓冲区对象，它们的标识名称就是buffers数组的元素。</p></li>
+<li><p>注意，如果试图删除不存在的缓冲区对象或标识为0的缓冲区对象，该操作将被忽略，并不会产生错误。</p></li>
+</ul>
+<hr>
+<p><strong>示例：使用缓冲区对象存储顶点数组数据，并绘制</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BUFFER_OFFSET(bytes) ((GLubyte *)NULL+(bytes))</span></span><br><span class="line"> </span><br><span class="line">GLuint buffers[<span class="number">2</span>];</span><br><span class="line">GLfloat vertices[][<span class="number">3</span>]=&#123; <span class="comment">//包含顶点数据</span></span><br><span class="line"></span><br><span class="line">&#123;<span class="number">-1.0</span>, <span class="number">-1.0</span>, <span class="number">-1.0</span>&#125;,</span><br><span class="line">&#123;<span class="number">1.0</span>, <span class="number">-1.0</span>, <span class="number">-1.0</span>&#125;,</span><br><span class="line">&#123;<span class="number">1.0</span>, <span class="number">1.0</span>, <span class="number">-1.0</span>&#125;,</span><br><span class="line">&#123;<span class="number">-1.0</span>, <span class="number">1.0</span>, <span class="number">-1.0</span>&#125;,</span><br><span class="line">&#123;<span class="number">-1.0</span>, <span class="number">-1.0</span>, <span class="number">1.0</span>&#125;, </span><br><span class="line">&#123;<span class="number">1.0</span>, <span class="number">-1.0</span>, <span class="number">1.0</span>&#125;,</span><br><span class="line">&#123;<span class="number">1.0</span>, <span class="number">1.0</span>, <span class="number">1.0</span>&#125;,</span><br><span class="line">&#123;<span class="number">-1.0</span>, <span class="number">1.0</span>, <span class="number">1.0</span>&#125;</span><br><span class="line">&#125;;</span><br><span class="line"> </span><br><span class="line">GLbyte indices[][<span class="number">4</span>]=&#123; <span class="comment">//包含索引数据</span></span><br><span class="line">&#123;<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;,</span><br><span class="line">&#123;<span class="number">4</span>,<span class="number">7</span>,<span class="number">6</span>,<span class="number">5</span>&#125;,</span><br><span class="line">&#123;<span class="number">0</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">1</span>&#125;,</span><br><span class="line">&#123;<span class="number">3</span>,<span class="number">2</span>,<span class="number">6</span>,<span class="number">7</span>&#125;,</span><br><span class="line">&#123;<span class="number">0</span>,<span class="number">3</span>,<span class="number">7</span>,<span class="number">4</span>&#125;,</span><br><span class="line">&#123;<span class="number">1</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">2</span>&#125;</span><br><span class="line">&#125;;</span><br><span class="line"> </span><br><span class="line">glGenBuffers(<span class="number">2</span>,buffers);                                                 <span class="comment">//生成缓冲区对象标识符</span></span><br><span class="line">glBindBuffer(GL_ARRAY_BUFFER,buffers[<span class="number">0</span>]);                                <span class="comment">//绑定顶点缓冲区对象</span></span><br><span class="line">glBufferData(GL_ARRAY_BUFFER,<span class="keyword">sizeof</span>(vertices), vertices,GL_STATIC_DRAW); <span class="comment">//请求数据的存储空间并用指定数据进行初始化</span></span><br><span class="line">glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,buffers[<span class="number">1</span>]);                        <span class="comment">//绑定索引缓冲区对象</span></span><br><span class="line">glBufferData(GL_ELEMENT_ARRAY_BUFFER,<span class="keyword">sizeof</span>(indices), indices,GL_STATIC_DRAW);</span><br><span class="line">glEnableClientState(GL_VERTEX_ARRAY);                                    <span class="comment">//启用顶点数组</span></span><br><span class="line">glVertexPointer(<span class="number">3</span>,GL_FLOAT,<span class="number">0</span>,BUFFER_OFFSET(<span class="number">0</span>));                          <span class="comment">//指定顶点数组数据</span></span><br><span class="line">glDrawElements(GL_QUADS,<span class="number">24</span>,GL_UNSIGNED_BYTE,BUFFER_OFFSET(<span class="number">0</span>));           <span class="comment">//根据索引绘图(注意：顶点数据和索引各自使用不同的缓冲区)</span></span><br></pre></td></tr></table></figure>
+<p>若没有使用缓冲区对象，则上面这段代码传进的偏移量</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">glVertexPointer(<span class="number">3</span>,GL_FLOAT,<span class="number">0</span>,BUFFER_OFFSET(<span class="number">0</span>)); </span><br><span class="line">glDrawElements(GL_QUADS,<span class="number">24</span>,GL_UNSIGNED_BYTE,BUFFER_OFFSET(<span class="number">0</span>)); </span><br></pre></td></tr></table></figure>
+<p>应该是这样改成实际的客户端数据指针</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">glVertexPointer(<span class="number">3</span>,GL_FLOAT,<span class="number">0</span>, vertices); </span><br><span class="line">glDrawElements(GL_QUADS,<span class="number">24</span>, indices);</span><br></pre></td></tr></table></figure>
+<p>使用缓冲区对象后，类似glVertexPointer()这种以指针为参数的OpenGL函数不再从指针所指位置取数据，函数会先把指针转化为整数，假设转化后的结果为k，则会从当前缓冲区的第k个字节开始取数据(NULL转化为整数后通常是0，即缓冲区最开始的位置)。</p>
+<h1 id="vao">VAO</h1>
+<p>VAO （ Vertex Array Object ）是OpenGL用来处理顶点数据的一个缓冲区对象，它不能单独使用，都是结合VBO来一起使用的。VAO是<strong>OpenGL CoreProfile</strong> 引入的一个特性。<strong>事实上在CoreProfile中做顶点数据传入时，必须使用VAO方式。</strong></p>
+<p>VAO对象中存储的内容包括：</p>
+<ol type="1">
+<li>VAO开启或者关闭的状态（<code>glEnableVertexAttribArray</code>和<code>glDisableVertexAttribArray</code>)</li>
+<li>使用<code>glVertexAttribPointer</code>对顶点属性进行的设置</li>
+<li>存储顶点数据的VBO对象</li>
+</ol>
+<p><img src="/2021/03/18/OpenGL/OpenGL%E7%BC%93%E5%86%B2%E5%8C%BA%E5%AF%B9%E8%B1%A1/20161117144050412"></p>
+<p><strong>1.创建VAO</strong></p>
+<p>创建VAO使用<code>glGenVertexArrays</code>参数与创建其他缓冲区对象的glGenBuffers类似</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glGenVertexArrays</span><span class="params">( GLsizei n, GLuint *arrays)</span></span>;</span><br></pre></td></tr></table></figure>
+<p><strong>2.绑定并设置VAO</strong></p>
+<p>在创建VAO之后，需要使用<code>glBindVertexArray</code>设置它为当前操作的VAO，之后我们所有关于顶点数据的设置（包括数据使用的VBO对象，顶点的属性设置的信息都会被存储在VAO之中），在设置完成之后一般会解绑VAO，然后在需要绘制的时候启用相应的VAO对象。具体的代码如下所示：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//创建VAO</span></span><br><span class="line">GLuint VAO;</span><br><span class="line">glGenVertexArrays(<span class="number">1</span>, &amp;VAO);</span><br><span class="line"><span class="comment">//设置当前VAO，之后所有操作(注意：这些操作必须是上文VAO中包含的内容所注明的调用，其他非VAO中存储的内容即使调用了也不会影响VAO）存储在该VAO中</span></span><br><span class="line">glBindVertexArray(VAO);</span><br><span class="line">   glBindBuffer(GL_ARRAY_BUFFER, VBO); <span class="comment">//设置了VBO</span></span><br><span class="line">   glBufferData(GL_ARRAY_BUFFER, <span class="keyword">sizeof</span>(vertices), vertices, GL_STATIC_DRAW);<span class="comment">//设置VBO中的数据</span></span><br><span class="line">    glVertexAttribPointer(<span class="number">0</span>, <span class="number">3</span>, GL_FLOAT, GL_FALSE, <span class="number">3</span> * <span class="keyword">sizeof</span>(GLfloat), (GLvoid*)<span class="number">0</span>); <span class="comment">//设置顶点属性（索引为0的属性，与shader中的内容有交互）</span></span><br><span class="line">    glEnableVertexAttribArray(<span class="number">0</span>); <span class="comment">//设置开启顶点属性（索引为0的属性,与shader中的内容有交互）</span></span><br><span class="line">glBindVertexArray(<span class="number">0</span>); <span class="comment">//解绑VAO（解绑主要是为了不影响后续VAO的设置，有点类似于C++中指针delete后置空，是个好习惯）12345678910</span></span><br></pre></td></tr></table></figure>
+<p>通过上面的代码就完成了对VAO的设置，当我们需要绘制的时候，使用的代码类似于：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">glUseProgram(shaderProgram);</span><br><span class="line">glBindVertexArray(VAO); <span class="comment">//绑定我们需要的VAO，会导致上面所有VAO保存的设置自动设置完成</span></span><br><span class="line">someOpenGLFunctionThatDrawsOurTriangle();   </span><br><span class="line">glBindVertexArray(<span class="number">0</span>);   <span class="comment">//解绑VAO1234</span></span><br></pre></td></tr></table></figure>
+<p>另外需要注意的是，当我们使用EBO的时候，VAO中也会记录索引信息，因此完整的VAO所包含的内容图如下所示（添加了EBO）：</p>
+<p><img src="/2021/03/18/OpenGL/OpenGL%E7%BC%93%E5%86%B2%E5%8C%BA%E5%AF%B9%E8%B1%A1/20161117150610860"></p>
+<h1 id="ebo">EBO</h1>
+<blockquote>
+<p>索引缓冲对象（Element Buffer Object，EBO）</p>
+</blockquote>
+<ul>
+<li><p>索引缓冲对象EBO相当于OpenGL中的<strong>顶点数组</strong>的概念，是为了解决同一个顶点多次重复调用的问题，可以减少内存空间浪费，提高执行效率。<strong>当需要使用重复的顶点时，通过顶点的位置索引来调用顶点，而不是对重复的顶点信息重复记录，重复调用。</strong></p></li>
+<li><p>EBO中存储的内容就是<strong>顶点位置的索引indices</strong>，EBO跟VBO类似，也是在显存中的一块内存缓冲器，只不过EBO保存的是顶点的索引。</p></li>
+</ul>
+<p>创建EBO并绑定，用glBufferData（以GL_ELEMENT_ARRAY_BUFFER为参数）把索引存储到EBO中：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">GLuint EBO;  </span><br><span class="line">glGenBuffers(<span class="number">1</span>, &amp;EBO);  </span><br><span class="line">glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);  </span><br><span class="line">glBufferData(GL_ELEMENT_ARRAY_BUFFER, <span class="keyword">sizeof</span>(indices), indices, GL_STATIC_DRAW);</span><br></pre></td></tr></table></figure>
+<p>当用EBO绑定顶点索引的方式绘制模型时，需要使用glDrawElements而不是glDrawArrays：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">glDrawElements(GL_TRIANGLES, <span class="number">6</span>, GL_UNSIGNED_INT, <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>第一个参数指定了要绘制的<strong>模式</strong>；</li>
+<li>第二个参数指定要绘制的<strong>顶点个数</strong>；</li>
+<li>第三个参数是<strong>索引的数据类型</strong>；</li>
+<li>第四个参数是<strong>可选的EBO中偏移量设定</strong>。</li>
+</ul>
+<hr>
+<h1 id="pbo">PBO</h1>
+<blockquote>
+<p>像素缓冲区对象 （PBO）</p>
+</blockquote>
+<ul>
+<li><p>OpenGL ARB_pixel_buffer_object 扩展与ARB_vertex_buffer_object.很相似。为了缓冲区对象不仅能存储顶点数据，还能存储像素数据，它简单地扩展了 ARB_vertex_buffer_object extension。</p></li>
+<li><p>储存像素数据的缓冲区对象称为<strong>Pixel Buffer Object (PBO)</strong>。</p></li>
+<li><p>ARB_pixel_buffer_object extension借鉴了VBO所有的框架和API，而且还多了两个<strong>"Target" 标签</strong>。</p>
+<p>这俩<strong>Target</strong>协助PBO储存管理器(OpenGL驱动)决定缓冲区对象的最佳位置：<strong>系统内存、共享内存、显卡内存。</strong></p>
+<p>Target标志指明其上绑定的PBO的两种不同的用途：</p>
+<p><strong>GL_PIXEL_PACK_BUFFER_ARB ——传递像素数据到PBO中</strong></p>
+<p><strong>GL_PIXEL_UNPACK_BUFFER_ARB ——从PBO中传回数据。</strong></p></li>
+</ul>
+<blockquote>
+<p>例如，glReadPixels()和glGetTexImage()是"pack"像素操作， glDrawPixels(), glTexImage2D() ，glTexSubImage2D() 是"unpack" 操作。</p>
+<p>当一个PBO绑定的Target为GL_PIXEL_PACK_BUFFER_ARB时, glReadPixels()是从OpenGL的帧缓冲区（FBO）读取像素数据，并将数据写(pack)入PBO中。当一个PBO绑定的Target为GL_PIXEL_UNPACK_BUFFER_ARB时,glDrawPixels()是从PBO读取(unpack)像素数据并复制到OpenGL帧缓冲区（FBO）中。</p>
+</blockquote>
+<ul>
+<li><strong>PBO的主要优点</strong>是可以通过DMA (Direct Memory Access) 快速地在显卡上传递像素数据，而不影响CPU的时钟周期（中断）。另一个优势是它还具备异步DMA传输。</li>
+</ul>
+<p><strong>让我们对比使用PBO前后的纹理传送方法：</strong></p>
+<p>从图像文件或视频中加载纹理：</p>
+<ul>
+<li>首先，资源被加载到系统内存（Client）中，然后使用<code>glTexImage2D()</code>函数从系统内存复制到OpenGL纹理对象中(Client-&gt;Server)。</li>
+<li>这两次数据传输(加载和复制)完全由CPU执行。</li>
+<li>不使用PBO的纹理加载</li>
+</ul>
+<p><img src="/2021/03/18/OpenGL/OpenGL%E7%BC%93%E5%86%B2%E5%8C%BA%E5%AF%B9%E8%B1%A1/gl_pbo02.png"></p>
+<hr>
+<p>使用PBO的纹理加载：</p>
+<ul>
+<li>原图像可以直接加载到PBO中，而PBO是由OpenGL控制的。</li>
+<li>虽然CPU有参与加载纹理到PBO，但不涉及将像素数据从PBO传输到纹理对象的工作，而是由GPU(OpenGL驱动)来负责PBO到纹理对象的数据传输的，这也就意味着OpenGL执行DMA传输操作不会占用CPU的时钟周期。</li>
+<li>此外，OpenGL还可以安排稍后执行的异步DMA传输。所以glTexImage2D()可以立即返回，CPU也无需等待像素数据的传输了，可以继续其他工作。</li>
+</ul>
+<figure>
+<img src="/2021/03/18/OpenGL/OpenGL%E7%BC%93%E5%86%B2%E5%8C%BA%E5%AF%B9%E8%B1%A1/gl_pbo03.png" alt="Texture loading with PBO"><figcaption aria-hidden="true">Texture loading with PBO</figcaption>
+</figure>
+<blockquote>
+<p>主要有两种优化像素数据传输性能的PBO方法：</p>
+<p><a target="_blank" rel="noopener" href="http://www.songho.ca/opengl/gl_pbo.html#unpack">1.streaming texture update</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.songho.ca/opengl/gl_pbo.html#pack">2.asynchronous read-back from the framebuffer.</a></p>
+</blockquote>
+<h2 id="创建pbo">创建PBO</h2>
+<ul>
+<li>Pixel Buffer Object使用VBO的所有API。</li>
+<li>不同的是多了两个针对PBO的额外标志：GL_PIXEL_PACK_BUFFER_ARB和GL_PIXEL_UNPACK_BUFFER_ARB. GL_PIXEL_PACK_BUFFER_ARB 从OpenGL传送像素数据到你的程序中， GL_PIXEL_UNPACK_BUFFER_ARB 将像素数据从程序传送到OpenGL中。OpenGL使用这些标志来决定PBO最佳的内存位置。</li>
+<li>例如，上传纹理数据到FBO(unpack)时，使用显卡内存。读帧缓冲区（FBO）时，使用系统内存。OpenGL 驱动会参照target标志来决定PBO所在的内存位置。</li>
+</ul>
+<h3 id="创建一个pbo需要三个步骤">创建一个PBO需要三个步骤:</h3>
+<p>1、使用<code>glGenBuffersARB()</code>新建一个缓冲区对象</p>
+<p>2、使用<code>glBindBufferARB()</code>绑定一个缓冲区对象</p>
+<p>3、使用<code>glBufferDataARB()</code>复制像素信息到缓冲区对象</p>
+<p><strong>注：</strong></p>
+<ul>
+<li>如果让<code>glBufferDataARB()</code>的数据源数组接收的指针为空指针，那么PBO仅分配数据的大小的内存空间。</li>
+<li><code>glBufferDataARB()</code>方法最后一个参数对PBO具有指导作用，它告诉PBO如何使用些缓冲区对象。</li>
+<li>GL_STREAM_DRAW_ARB (unpack)是 streaming texture upload 。<code>GL_STREAM_READ_ARB (pack)</code>是异步的帧缓冲区read-back。</li>
+</ul>
+<h2 id="pbo映射">PBO映射</h2>
+<ul>
+<li><p>PBO提供了一种内存映射机制，可以映射OpenGL控制的缓冲区对象到客户端的内存地址空间中。</p></li>
+<li><p>客户端可以使用<code>glMapBufferARB()</code>, <code>glUnmapBufferARB()</code>函数修改全部或部分缓冲区对象。</p></li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span>* <span class="title">glMapBufferARB</span><span class="params">(GLenum target, GLenum access)</span></span></span><br><span class="line"><span class="function">GLboolean <span class="title">glUnmapBufferARB</span><span class="params">(GLenum target)</span></span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>glMapBufferARB()返回一个指向缓冲区对象的指针，如果成功返回此指针，否则返回NULL。</p></li>
+<li><p>Target参数是GL_PIXEL_PACK_BUFFER_ARB 或GL_PIXEL_UNPACK_BUFFER_ARB。</p></li>
+<li><p>第二个参数，指定映射的缓冲区的访问方式：从PBO中读数据(GL_READ_ONLY_ARB)，写数据到PBO中(GL_WRITE_ONLY_ARB) 或读写PBO(GL_READ_WRITE_ARB)。</p></li>
+<li><p>注意如果GPU仍使用此缓冲区对象，glMapBufferARB()不会返回，直到GPU完成了对相应缓冲区对象的操作。为了避免等待，在使用glMapBufferARB之前，使用glBufferDataARB，并传入参数NULL。然后，OpenGL将废弃旧的缓冲区，为缓冲区分配新的内存。</p></li>
+<li><p>缓冲区对象必须取消映射,可使用glUnmapBufferARB()。如果成功，glUnmapBufferARB()返回GL_TRUE 否则返回GL_FALSE。</p></li>
+</ul>
+<h2 id="例子两个pbo的streaming-texture上传">例子：两个PBO的Streaming texture上传</h2>
+<p><strong>源码下载:</strong><a target="_blank" rel="noopener" href="http://www.songho.ca/opengl/files/pboUnpack.zip">pboUnpack.zip</a>.</p>
+<ul>
+<li>这个例子使用PBO，上传(uppack)streaming textures到OpenGL texture object.你可以通过空格键切换不同的传送模式：单个PBO，两个PBOs ，无PBO)，并对比它们之间效率的差异。</li>
+</ul>
+<p>在PBO模式下，每一帧都直接将源纹理写入映射的像素缓冲区（PBO）。然后，这些纹理数据使用glTexSubImage2D()函数，从PBO传送到纹理对象中。使用PBO，OpenGL可以在PBO和纹理对象之间执行异步DMA传输。这显著提高了纹理上传的性能。如果显卡支持异步的DMA操作，glTexSubImage2D()会立即返回。CPU无需等待纹理拷贝，便可以做其它事情</p>
+<p><img src="/2021/03/18/OpenGL/OpenGL%E7%BC%93%E5%86%B2%E5%8C%BA%E5%AF%B9%E8%B1%A1/gl_pbo04.png"></p>
+<p>可以使用多个PBO来尽可能提升streaming传输性能。 图中表示同时使用两个PBO：glTexSubImage2D()从一个PBO中读取数据，同时将源纹理写入到另一个PBO当中。</p>
+<p>第n帧，PBO1正被glTexSubImage2D()函数使用。而PBO2用于读取新的纹理。在第n+1帧时，2个PBO交换角色，并继续更新纹理。因为DMA传输的异步性，更新和复制可被同时执行。CPU将新纹理更新到一个PBO中，同时GPU从另一个PBO中复制纹理。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// &quot;index&quot; 用于从PBO中拷贝像素数据至texture object</span></span><br><span class="line"><span class="comment">// &quot;nextIndex&quot; 用于更新另一个PBO中的像素数据</span></span><br><span class="line">index = (index + <span class="number">1</span>) % <span class="number">2</span>;</span><br><span class="line">nextIndex = (index + <span class="number">1</span>) % <span class="number">2</span>;</span><br><span class="line"> </span><br><span class="line"><span class="comment">// 绑定纹理</span></span><br><span class="line">glBindTexture(GL_TEXTURE_2D, textureId);</span><br><span class="line"><span class="comment">// 绑定PBO</span></span><br><span class="line">glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, pboIds[index]);</span><br><span class="line"><span class="comment">// 从PBO中拷贝像素数据至texture object</span></span><br><span class="line"><span class="comment">// 使用offset替代ponter.glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, WIDTH, HEIGHT,GL_BGRA, GL_UNSIGNED_BYTE, 0);</span></span><br><span class="line"><span class="comment">// 绑定另一个PBO，用texture source对它进行更新glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, pboIds[nextIndex]);</span></span><br><span class="line"><span class="comment">// 注意：glMapBufferARB()会引起同步问题// 如果GPU正在使用这块buffer, glMapBufferARB()将会等待</span></span><br><span class="line"><span class="comment">// 直到GPU完成操作. 为了避免等待，你可以先调用</span></span><br><span class="line"><span class="comment">// glBufferDataARB() ，并传入NULL指针， 然后再调用glMapBufferARB()。</span></span><br><span class="line"><span class="comment">// 如果按照上面的方法调用的话, PBO之前存储的数据将会被丢弃，并且</span></span><br><span class="line"><span class="comment">// glMapBufferARB() 将会立即返回一个新分配的指针，</span></span><br><span class="line"><span class="comment">// 即使GPU仍然在使用之前的数据</span></span><br><span class="line">glBufferDataARB(GL_PIXEL_UNPACK_BUFFER_ARB, DATA_SIZE, <span class="number">0</span>, GL_STREAM_DRAW_ARB);</span><br><span class="line"><span class="comment">// 映射buffer object（PBO）到客户端内存</span></span><br><span class="line">GLubyte* ptr = (GLubyte*)glMapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB,GL_WRITE_ONLY_ARB);</span><br><span class="line"><span class="keyword">if</span>(ptr)&#123; </span><br><span class="line">  <span class="comment">// 直接更新映射的buffer </span></span><br><span class="line">  updatePixels(ptr, DATA_SIZE); </span><br><span class="line">  glUnmapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB); </span><br><span class="line">  <span class="comment">// release the mapped buffer</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 在使用完PBO以后，通过ID 0 来释放PBO</span></span><br><span class="line"><span class="comment">// 一旦绑定到0，所有的像素操作都将被重置</span></span><br><span class="line">glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+<h2 id="例子异步read-back">例子：异步Read-back</h2>
+<ul>
+<li>这个例子从帧缓冲区(左侧图)读取像素数据到PBO中，之后在右侧窗体中画出来，并修改图像的亮度。你可以按空格键打开或关闭PBO，来测试glReadPixels()函数的性能差异。传统的glReadPixels()阻塞渲染管线，直到所有的像素传输完毕。然后，它把控制权交给程序。使用PBO的glReadPixels()可使用异步DMA传输，立即返回，无需等待。因此程序(CPU)可执行其它操作，当GPU传输数据时。</li>
+</ul>
+<p><img src="/2021/03/18/OpenGL/OpenGL%E7%BC%93%E5%86%B2%E5%8C%BA%E5%AF%B9%E8%B1%A1/gl_pbo07.png"></p>
+<p>此例子使用2个PBO。在第n帧时，程序使用glReadPixels()从OpenGL读取像素信息到PBO1中，在PBO2 中处理像素数据。读数据和处理数据是同时进行的。因为glReadPixels()在PBO1上立即返回，CPU可以在PBO2中处理数据而没有延迟。我们可以在每一帧中交换PBO1和PBO2。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// &quot;index&quot; 用于从FBO中读取像素到PBO</span></span><br><span class="line"><span class="comment">// &quot;nextIndex&quot; 用于更新另一个PBO中的像素</span></span><br><span class="line">index = (index + <span class="number">1</span>) % <span class="number">2</span>;</span><br><span class="line">nextIndex = (index + <span class="number">1</span>) % <span class="number">2</span>;</span><br><span class="line"> </span><br><span class="line"><span class="comment">// 设置读取的目标framebuffer</span></span><br><span class="line">glReadBuffer(GL_FRONT);</span><br><span class="line"> </span><br><span class="line"><span class="comment">// 从FBO中读取像素至PBO</span></span><br><span class="line"><span class="comment">// glReadPixels()将会立刻返回</span></span><br><span class="line">glBindBufferARB(GL_PIXEL_PACK_BUFFER_ARB, pboIds[index]);</span><br><span class="line">glReadPixels(<span class="number">0</span>, <span class="number">0</span>, WIDTH, HEIGHT, GL_BGRA, GL_UNSIGNED_BYTE, <span class="number">0</span>);</span><br><span class="line"> </span><br><span class="line"><span class="comment">// 映射PBO到客户端，并通过CPU处理其数据</span></span><br><span class="line">glBindBufferARB(GL_PIXEL_PACK_BUFFER_ARB, pboIds[nextIndex]);</span><br><span class="line">GLubyte* ptr = (GLubyte*)glMapBufferARB(GL_PIXEL_PACK_BUFFER_ARB,</span><br><span class="line">GL_READ_ONLY_ARB);</span><br><span class="line"><span class="keyword">if</span>(ptr)</span><br><span class="line">&#123;</span><br><span class="line">  processPixels(ptr, ...);</span><br><span class="line">  glUnmapBufferARB(GL_PIXEL_PACK_BUFFER_ARB);</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="comment">// 重置PBO的像素操作</span></span><br><span class="line">glBindBufferARB(GL_PIXEL_PACK_BUFFER_ARB, <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+<h1 id="fbo">FBO</h1>
+<p>OpenGL 默认把 framebuffer 当作渲染的目的地。它由窗口系统创建并管理。framebuffer Object 是个二维数组的集合，它包括 color buffers, depth buffer, stencil buffer。</p>
+<p>OpenGL扩展，GL_ARB_framebuffer_object 提供了创建额外非可显示的 framebuffer object(FBO)的接口。FBO 称作应用程序可创建的 framebuffer 以区别默认的窗口系统提供的framebuffer。通过使用FBO，OpenGL 应用可以重定向渲染输出，让它输出到FBO而不是传统的窗口系统提供的 framebuffer.</p>
+<p>与窗口系统提供的帧缓冲区类似，FBO包含一系列渲染目的地的集合；包括颜色，深度和模板缓冲区。 FBO中的这些逻辑缓冲区称为可附着的 frame buffer。</p>
+<p>有两种类型的可附着的 framebuffer;纹理(Texture)和renderbuffer。如果纹理被附加到FBO，OpenGL将执行“渲染到纹理”。如果renderbuffer被附加到FBO，则OpenGL会执行“离屏渲染”。</p>
+<p>顺便说一下，renderbuffer是在GL_ARB_framebuffer_object扩展中定义的一种新类型的存储对象。它在渲染过程中用作单个2D图像的渲染目的地。</p>
+<p>下图显示了FBO，纹理和renderbuffer之间的连接。多个纹理对象或renderbuffer对象可以通过附着点附加到FBO上。</p>
+<p><img src="/2021/03/18/OpenGL/OpenGL%E7%BC%93%E5%86%B2%E5%8C%BA%E5%AF%B9%E8%B1%A1/5956443-556bb72aafcac187.png"></p>
+<p>FBO中，</p>
+<ul>
+<li>有多个颜色附加点（GL_COLOR_ATTACHMENT0，...，GL_COLOR_ATTACHMENTn），</li>
+<li>一个深度附加点（GL_DEPTH_ATTACHMENT）</li>
+<li>一个模板附加点（GL_STENCIL_ATTACHMENT）。</li>
+</ul>
+<p>颜色附着点的数量取决于实现，但每个FBO必须至少具有一个颜色附加点。您可以使用GL_MAX_COLOR_ATTACHMENTS查询最大数量的颜色附加点，这些数据由显卡支持。</p>
+<p>FBO具有多个颜色附加点的原因是允许在同一时间将颜色缓冲区渲染到多个目的地。这个“多个渲染目标”（MRT）可以由GL_ARB_draw_buffers扩展完成。请注意，FBO本身不存放数据，它只有多个附着点。这有点像数据结构中的指针，它只存放指针，而不存放数据。</p>
+<p>FBO提供了一种高效的切换机制;从FBO中分离先前的帧缓冲区，并将一个新的可附着的帧缓冲图像附加到FBO中。切换可附着的帧缓冲图像比在FBO之间切换要快得多。 FBO提供g<code>lFramebufferTexture2D()</code>来切换2D纹理对象，并将<code>glFramebufferRenderbuffer()</code>切换到renderbuffer对象。</p>
+<h2 id="创建fbo">创建FBO</h2>
+<p><strong>glGenFramebuffers()</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glGenFramebuffers</span><span class="params">(GLsizei n, GLuint* ids)</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glDeleteFramebuffers</span><span class="params">(GLsizei n, <span class="keyword">const</span> GLuint* ids)</span></span></span><br></pre></td></tr></table></figure>
+<p>glGenFramebuffers() 需要2个参数：</p>
+<ul>
+<li>第一个是要创建的帧缓冲区的数量；</li>
+<li>第二个参数是指向GLuint变量或数组以存储单个ID或多个ID的指针。</li>
+<li>它返回未使用的framebuffer对象的ID。 ID 0表示默认的帧缓冲区，它是由窗口系统提供的帧缓冲区。</li>
+<li>而，当FBO不再使用时，可以通过调用glDeleteFramebuffers()来删除。</li>
+</ul>
+<p><strong>glBindFramebuffer()</strong></p>
+<p>创建FBO之后，必须先绑定FBO。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glBindFramebuffer</span><span class="params">(GLenum target, GLuint id)</span></span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>第一个参数target为GL_FRAMEBUFFER;</li>
+<li>第二个参数为framebuffer对象的ID。 FBO绑定后，所有的OpenGL操作都会影响到当前绑定的FBO。</li>
+<li>对象ID，0保留给默认的窗口系统提供的帧缓冲区。因此，为了取消绑定当前帧缓冲区（FBO），请在glBindFramebuffer() 中使用ID 0。</li>
+</ul>
+<h2 id="renderbuffer">Renderbuffer</h2>
+<ul>
+<li><p>另外，renderBuffer对象是新引入的用于离屏渲染。它允许将场景直接渲染到renderbuffer对象，而不是渲染到纹理对象。</p></li>
+<li><p>Renderbuffer只是一个包含可渲染内部格式的单个映像的数据存储对象。它用于存储没有相应纹理格式的OpenGL逻辑缓冲区，如模板或深度缓冲区。</p></li>
+</ul>
+<p><code>glGenRenderbuffers()</code></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glGenRenderbuffers</span><span class="params">(GLsizei n, GLuint* ids)</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glDeleteRenderbuffers</span><span class="params">(GLsizei n, <span class="keyword">const</span> Gluint* ids)</span></span></span><br></pre></td></tr></table></figure>
+<p>一旦创建了一个renderbuffer，它返回非零正整数。 ID 0为OpenGL保留。</p>
+<p><code>glBindRenderbuffer()</code></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glBindRenderbuffer</span><span class="params">(GLenum target, GLuint id)</span></span></span><br></pre></td></tr></table></figure>
+<p>与其他OpenGL对象相同，您必须在引用之前绑定当前的renderbuffer对象。 renderbuffer对象的目标参数应为GL_RENDERBUFFER。</p>
+<p><code>glRenderbufferStorage()</code></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glRenderbufferStorage</span><span class="params">(GLenum  target,</span></span></span><br><span class="line"><span class="function"><span class="params">                           GLenum  internalFormat,</span></span></span><br><span class="line"><span class="function"><span class="params">                           GLsizei width,</span></span></span><br><span class="line"><span class="function"><span class="params">                           GLsizei height)</span></span></span><br></pre></td></tr></table></figure>
+<p>当创建一个renderbuffer对象时，它没有任何数据存储，所以我们必须为它分配一个内存空间。这可以通过使用<code>glRenderbufferStorage()</code>来完成。</p>
+<ul>
+<li>第一个参数必须是GL_RENDERBUFFER;</li>
+<li>第二个参数是可渲染颜色（GL_RGB，GL_RGBA等），可渲染深度（GL_DEPTH_COMPONENT）或可渲染模板（GL_STENCIL_INDEX）;</li>
+<li>width和height是以像素为单位的renderbuffer图像的尺寸。</li>
+</ul>
+<p>宽度和高度应小于GL_MAX_RENDERBUFFER_SIZE，否则会生成GL_INVALID_VALUE错误。</p>
+<p><code>glGetRenderbufferParameteriv()</code></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glGetRenderbufferParameteriv</span><span class="params">(GLenum target,</span></span></span><br><span class="line"><span class="function"><span class="params">                                  GLenum param,</span></span></span><br><span class="line"><span class="function"><span class="params">                                  GLint* value)</span></span></span><br></pre></td></tr></table></figure>
+<p>您还可以获取当前绑定的renderbuffer对象的各种参数。</p>
+<ul>
+<li>目标应该是GL_RENDERBUFFER;</li>
+<li>第二个参数是参数的名称;</li>
+<li>最后一个是指向整数变量的指针，用于存储返回的值。</li>
+</ul>
+<p>renderbuffer参数的可用名称为：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">GL_RENDERBUFFER_WIDTH</span><br><span class="line">GL_RENDERBUFFER_HEIGHT</span><br><span class="line">GL_RENDERBUFFER_INTERNAL_FORMAT</span><br><span class="line">GL_RENDERBUFFER_RED_SIZE</span><br><span class="line">GL_RENDERBUFFER_GREEN_SIZE</span><br><span class="line">GL_RENDERBUFFER_BLUE_SIZE</span><br><span class="line">GL_RENDERBUFFER_ALPHA_SIZE</span><br><span class="line">GL_RENDERBUFFER_DEPTH_SIZE</span><br><span class="line">GL_RENDERBUFFER_STENCIL_SIZE</span><br></pre></td></tr></table></figure>
+<h2 id="将图像附加到fbo">将图像附加到FBO</h2>
+<p>FBO本身不存放作何数据。相反，我们必须在FBO上附加可附加的framebuffer图像（纹理或renderbuffer对象）。该机制允许FBO快速切换（拆除和附加）FBO中的可附着的帧缓冲图像。切换可附加的帧缓冲区比在FBO之间切换要快得多。并且，它可以节省不必要的数据副本和内存消耗。例如，纹理可以附加到多个FBO，并且其图像可以由多个FBO共享。</p>
+<p><strong>将2D纹理图像附加到FBO</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">glFramebufferTexture2D(GLenum target,</span><br><span class="line">                       GLenum attachmentPoint,</span><br><span class="line">                       GLenum textureTarget,</span><br><span class="line">                       GLuint textureId,</span><br><span class="line">                       GLint  level)</span><br></pre></td></tr></table></figure>
+<p>glFramebufferTexture2D()是将2D纹理图像附加到FBO。</p>
+<ul>
+<li>第一个参数必须是GL_FRAMEBUFFER;</li>
+<li>第二个参数是连接纹理图像的连接点。 FBO具有多个颜色附加点（GL_COLOR_ATTACHMENT0，...，GL_COLOR_ATTACHMENTn），GL_DEPTH_ATTACHMENT和GL_STENCIL_ATTACHMENT;</li>
+<li>第三个参数“textureTarget”在大多数情况下是GL_TEXTURE_2D;</li>
+<li>第四个参数是纹理对象的标识符;</li>
+<li>最后一个参数是要附加的纹理的mipmap级别。</li>
+</ul>
+<p>如果textureId参数设置为0，则纹理图像将从FBO中分离。如果纹理对象被删除时仍然附着在FBO上，则纹理图像将自动从当前绑定的FBO中分离。但是，如果它附加到多个FBO并被删除，那么它将仅从绑定的FBO分离，但不会与任何其他无约束的FBO分离。</p>
+<p><strong>附加到Renderbuffer图像到FBO</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glFramebufferRenderbuffer</span><span class="params">(GLenum target,</span></span></span><br><span class="line"><span class="function"><span class="params">                               GLenum attachmentPoint,</span></span></span><br><span class="line"><span class="function"><span class="params">                               GLenum renderbufferTarget,</span></span></span><br><span class="line"><span class="function"><span class="params">                               GLuint renderbufferId)</span></span></span><br></pre></td></tr></table></figure>
+<p>可以通过调用glFramebufferRenderbuffer()来附加renderbuffer。</p>
+<ul>
+<li>第一和第二个参数与glFramebufferTexture2D()相同;</li>
+<li>第三个参数必须是GL_RENDERBUFFER;</li>
+<li>最后一个参数是renderbuffer对象的ID。</li>
+</ul>
+<p>如果renderbufferId参数设置为0，则renderbuffer图像将从FBO中的附加点分离。如果renderbuffer对象被删除时，仍然附着在FBO上，那么它将自动从绑定的FBO中分离出来。但是，它不会与任何其他无约束的FBO分离。</p>
+<h2 id="检查fbo状态">检查FBO状态</h2>
+<p>一旦可连接的图像（纹理和renderbuffer）附加到FBO，并且在执行FBO操作之前，必须使用glCheckFramebufferStatus()验证FBO状态是否完整。如果FBO未完成，则任何绘图和读取命令（glBegin（），glCopyTexImage2D（）等）将失败。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">GLenum <span class="title">glCheckFramebufferStatus</span><span class="params">(GLenum target)</span></span></span><br></pre></td></tr></table></figure>
+<p>glCheckFramebufferStatus()验证当前绑定的FBO上的所有附加图像和帧缓冲区参数。而且，这个函数不能在glBegin（）/ glEnd（）对中调用。目标参数应为GL_FRAMEBUFFER。在检查FBO后返回非零值。如果满足所有要求和规则，则返回GL_FRAMEBUFFER_COMPLETE。否则，它返回一个相关的错误值，它告诉什么规则被违反。</p>
+<p>FBO完整性规则为：</p>
+<ul>
+<li>framebuffer可附加图像的宽度和高度必须不为零。</li>
+<li>如果图像附加到颜色附着点，则图像必须具有可呈现颜色的内部格式。 （GL_RGBA，GL_DEPTH_COMPONENT，GL_LUMINANCE等）</li>
+<li>如果图像附加到GL_DEPTH_ATTACHMENT，则图像必须具有深度可渲染内部格式。 （GL_DEPTH_COMPONENT，GL_DEPTH_COMPONENT24等）</li>
+<li>如果图像附加到GL_STENCIL_ATTACHMENT，则图像必须具有模板可渲染内部格式。 （GL_STENCIL_INDEX，GL_STENCIL_INDEX8等）</li>
+<li>FBO必须至少安装一张图片。</li>
+<li>附加FBO的所有图像必须具有相同的宽度和高度。</li>
+<li>附加颜色附件点的所有图像必须具有相同的内部格式。</li>
+</ul>
+<p>请注意，即使满足上述所有条件，OpenGL驱动程序也可能不支持某些内部格式和参数的组合。如果OpenGL驱动程序不支持特定的实现，那么glCheckFramebufferStatus()返回GL_FRAMEBUFFER_UNSUPPORTED。</p>
+<h2 id="例子">例子</h2>
+<p>有时，需要动态生成动态纹理。最常见的示例是生成镜像/反射效果，动态多维数据集/环境映射和阴影贴图。动态纹理可以通过将场景渲染到纹理来实现。渲染到纹理的一种传统方法是像一般的draw缓冲区，然后使用glCopyTexSubImage2D（）将framebuffer图像复制到纹理。</p>
+<p>使用FBO，我们可以将场景直接渲染到纹理，所以我们不必使用窗口系统提供的帧缓存。更进一步，我们可以消除额外的数据拷贝（从帧缓存到纹理）。</p>
+<p>使用FBO还有另一个优势。在传统情况下，如果纹理分辨率大于渲染窗口的大小，则窗口区域中的区域将被剪切。然而，FBO并不受这类问题的影响。您可以创建一个大于显示窗口的framebuffer-renderable图像。</p>
+<p>以下代码是在渲染循环开始之前设置FBO和可附加的可帧缓冲图像。请注意，不仅纹理图像附加到FBO，而且renderBuffer图像也附加到FBO的深度附着点上。我们实际上并没有使用这种深度缓冲区，但是FBO本身需要深度测试。如果我们不将此可渲染深度图像附加到FBO，则由于缺少深度测试，渲染输出将被损坏。如果在FBO渲染期间也需要模板测试，则附加的渲染缓存图像应附加到GL_STENCIL_ATTACHMENT。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="comment">// create a texture object</span></span><br><span class="line">GLuint textureId;</span><br><span class="line">glGenTextures(<span class="number">1</span>, &amp;textureId);</span><br><span class="line">glBindTexture(GL_TEXTURE_2D, textureId);</span><br><span class="line">glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);</span><br><span class="line">glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);</span><br><span class="line">glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);</span><br><span class="line">glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);</span><br><span class="line">glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE); <span class="comment">// automatic mipmap</span></span><br><span class="line">glTexImage2D(GL_TEXTURE_2D, <span class="number">0</span>, GL_RGBA8, TEXTURE_WIDTH, TEXTURE_HEIGHT, <span class="number">0</span>,</span><br><span class="line">             GL_RGBA, GL_UNSIGNED_BYTE, <span class="number">0</span>);</span><br><span class="line">glBindTexture(GL_TEXTURE_2D, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// create a renderbuffer object to store depth info</span></span><br><span class="line">GLuint rboId;</span><br><span class="line">glGenRenderbuffers(<span class="number">1</span>, &amp;rboId);</span><br><span class="line">glBindRenderbuffer(GL_RENDERBUFFER, rboId);</span><br><span class="line">glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT,</span><br><span class="line">                      TEXTURE_WIDTH, TEXTURE_HEIGHT);</span><br><span class="line">glBindRenderbuffer(GL_RENDERBUFFER, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// create a framebuffer object</span></span><br><span class="line">GLuint fboId;</span><br><span class="line">glGenFramebuffers(<span class="number">1</span>, &amp;fboId);</span><br><span class="line">glBindFramebuffer(GL_FRAMEBUFFER, fboId);</span><br><span class="line"></span><br><span class="line"><span class="comment">// attach the texture to FBO color attachment point</span></span><br><span class="line">glFramebufferTexture2D(GL_FRAMEBUFFER,        <span class="comment">// 1. fbo target: GL_FRAMEBUFFER </span></span><br><span class="line">                       GL_COLOR_ATTACHMENT0,  <span class="comment">// 2. attachment point</span></span><br><span class="line">                       GL_TEXTURE_2D,         <span class="comment">// 3. tex target: GL_TEXTURE_2D</span></span><br><span class="line">                       textureId,             <span class="comment">// 4. tex ID</span></span><br><span class="line">                       <span class="number">0</span>);                    <span class="comment">// 5. mipmap level: 0(base)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// attach the renderbuffer to depth attachment point</span></span><br><span class="line">glFramebufferRenderbuffer(GL_FRAMEBUFFER,      <span class="comment">// 1. fbo target: GL_FRAMEBUFFER</span></span><br><span class="line">                          GL_DEPTH_ATTACHMENT, <span class="comment">// 2. attachment point</span></span><br><span class="line">                          GL_RENDERBUFFER,     <span class="comment">// 3. rbo target: GL_RENDERBUFFER</span></span><br><span class="line">                          rboId);              <span class="comment">// 4. rbo ID</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// check FBO status</span></span><br><span class="line">GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);</span><br><span class="line"><span class="keyword">if</span>(status != GL_FRAMEBUFFER_COMPLETE)</span><br><span class="line">    fboUsed = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// switch back to window-system-provided framebuffer</span></span><br><span class="line">glBindFramebuffer(GL_FRAMEBUFFER, <span class="number">0</span>);</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>渲染到纹理的渲染过程与普通绘图几乎相同。我们只需要将渲染目的地从窗口系统提供的framebuffer切换到FBO即可。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="comment">// set rendering destination to FBO</span></span><br><span class="line">glBindFramebuffer(GL_FRAMEBUFFER, fboId);</span><br><span class="line"></span><br><span class="line"><span class="comment">// clear buffers</span></span><br><span class="line">glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);</span><br><span class="line"></span><br><span class="line"><span class="comment">// draw a scene to a texture directly</span></span><br><span class="line">draw();</span><br><span class="line"></span><br><span class="line"><span class="comment">// unbind FBO</span></span><br><span class="line">glBindFramebuffer(GL_FRAMEBUFFER, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// trigger mipmaps generation explicitly</span></span><br><span class="line"><span class="comment">// <span class="doctag">NOTE:</span> If GL_GENERATE_MIPMAP is set to GL_TRUE, then glCopyTexSubImage2D()</span></span><br><span class="line"><span class="comment">// triggers mipmap generation automatically. However, the texture attached</span></span><br><span class="line"><span class="comment">// onto a FBO should generate mipmaps manually via glGenerateMipmap().</span></span><br><span class="line">glBindTexture(GL_TEXTURE_2D, textureId);</span><br><span class="line">glGenerateMipmap(GL_TEXTURE_2D);</span><br><span class="line">glBindTexture(GL_TEXTURE_2D, <span class="number">0</span>);</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>请注意，glGenerateMipmap()也作为FBO扩展的一部分包含，以便在修改基本级别的纹理图像之后显式生成mipmap。如果GL_GENERATE_MIPMAP设置为GL_TRUE，则glTex {Sub} Image2D()和glCopyTex {Sub} Image2D()触发自动mipmap生成（在OpenGL 1.4或更高版本中）。但是，由于FBO不调用glCopyTex {Sub} Image2D（）来修改纹理，因此FBO操作不会自动生成基本层次的纹理。因此，必须显式地调用glGenerateMipmap（）来生成mipmap。</p>
+<p>另外，如果您需要对纹理进行后处理，则可以与像素缓冲区对象（PBO）组合，以有效地修改纹理。</p>
+<h2 id="相关链接">相关链接</h2>
+<p><a target="_blank" rel="noopener" href="https://juejin.im/post/5d27056351882562e16010ee#heading-5">OpenGL 缓冲区对象（*BO）</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/30095978">如何正确理解 opengl 的 vao ？</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.photoneray.com/opengl-vao-vbo/">VAO 与 VBO 的前世今生</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/you_lan_hai/article/details/50994121">OpenGL顶点数据传输速度优化</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/dcrmg/article/details/53556664">OpenGL图形渲染管线、VBO、VAO、EBO概念及用例</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.songho.ca/opengl/gl_pbo.html">pbo</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.songho.ca/opengl/gl_fbo.html">fbo</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/c16c7e7cdf91">OpenGL 之 FBO--视频美颜的基础</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/xiajun07061225/article/details/7283929">https://www.jianshu.com/p/c16c7e7cdf91</a></p>
+<p><a target="_blank" rel="noopener" href="https://learnopengl-cn.readthedocs.io/zh/latest/04%20Advanced%20OpenGL/05%20Framebuffers/">帧缓冲</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.khronos.org/opengl/wiki/Framebuffer_Object">Framebuffer Object</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/03/18/OpenGL/OpenGL%E5%9B%BE%E5%85%83/" rel="prev" title="OpenGL图元">
+      <i class="fa fa-chevron-left"></i> OpenGL图元
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/03/18/OpenGL/OpenGL/" rel="next" title="OpenGL">
+      OpenGL <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#opengl-%E7%BC%93%E5%86%B2%E5%8C%BA%E5%AF%B9%E8%B1%A1-buffer-object"><span class="nav-number">1.</span> <span class="nav-text">OpenGL 缓冲区对象 buffer object</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#vbo"><span class="nav-number">2.</span> <span class="nav-text">VBO</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E7%BC%93%E5%86%B2%E5%8C%BA%E5%AF%B9%E8%B1%A1-generate"><span class="nav-number">2.1.</span> <span class="nav-text">创建缓冲区对象 Generate</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BF%80%E6%B4%BB%E7%BC%93%E5%86%B2%E5%8C%BA%E5%AF%B9%E8%B1%A1-bind"><span class="nav-number">2.2.</span> <span class="nav-text">激活缓冲区对象 Bind</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8%E6%95%B0%E6%8D%AE%E5%88%86%E9%85%8D%E5%92%8C%E5%88%9D%E5%A7%8B%E5%8C%96%E7%BC%93%E5%86%B2%E5%8C%BA%E5%AF%B9%E8%B1%A1-buffer-data"><span class="nav-number">2.3.</span> <span class="nav-text">用数据分配和初始化缓冲区对象 Buffer Data</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9B%B4%E6%96%B0%E7%BC%93%E5%86%B2%E5%8C%BA%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%95%B0%E6%8D%AE"><span class="nav-number">2.4.</span> <span class="nav-text">更新缓冲区对象的数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E7%BC%93%E5%86%B2%E5%8C%BA%E5%AF%B9%E8%B1%A1%E4%B9%8B%E9%97%B4%E5%A4%8D%E5%88%B6%E6%95%B0%E6%8D%AE"><span class="nav-number">2.5.</span> <span class="nav-text">在缓冲区对象之间复制数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B8%85%E9%99%A4%E7%BC%93%E5%86%B2%E5%8C%BA%E5%AF%B9%E8%B1%A1"><span class="nav-number">2.6.</span> <span class="nav-text">清除缓冲区对象</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#vao"><span class="nav-number">3.</span> <span class="nav-text">VAO</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ebo"><span class="nav-number">4.</span> <span class="nav-text">EBO</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#pbo"><span class="nav-number">5.</span> <span class="nav-text">PBO</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BApbo"><span class="nav-number">5.1.</span> <span class="nav-text">创建PBO</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AApbo%E9%9C%80%E8%A6%81%E4%B8%89%E4%B8%AA%E6%AD%A5%E9%AA%A4"><span class="nav-number">5.1.1.</span> <span class="nav-text">创建一个PBO需要三个步骤:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pbo%E6%98%A0%E5%B0%84"><span class="nav-number">5.2.</span> <span class="nav-text">PBO映射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BE%8B%E5%AD%90%E4%B8%A4%E4%B8%AApbo%E7%9A%84streaming-texture%E4%B8%8A%E4%BC%A0"><span class="nav-number">5.3.</span> <span class="nav-text">例子：两个PBO的Streaming texture上传</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BE%8B%E5%AD%90%E5%BC%82%E6%AD%A5read-back"><span class="nav-number">5.4.</span> <span class="nav-text">例子：异步Read-back</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#fbo"><span class="nav-number">6.</span> <span class="nav-text">FBO</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAfbo"><span class="nav-number">6.1.</span> <span class="nav-text">创建FBO</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#renderbuffer"><span class="nav-number">6.2.</span> <span class="nav-text">Renderbuffer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%86%E5%9B%BE%E5%83%8F%E9%99%84%E5%8A%A0%E5%88%B0fbo"><span class="nav-number">6.3.</span> <span class="nav-text">将图像附加到FBO</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A3%80%E6%9F%A5fbo%E7%8A%B6%E6%80%81"><span class="nav-number">6.4.</span> <span class="nav-text">检查FBO状态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BE%8B%E5%AD%90"><span class="nav-number">6.5.</span> <span class="nav-text">例子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E9%93%BE%E6%8E%A5"><span class="nav-number">6.6.</span> <span class="nav-text">相关链接</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">straywriter</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">124</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/straywriter" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;straywriter" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">straywriter</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

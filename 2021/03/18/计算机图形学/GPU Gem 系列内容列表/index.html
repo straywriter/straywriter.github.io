@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"straywriter.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="GPU Gem系列内容列表">
+<meta property="og:url" content="https://straywriter.github.io/2021/03/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/GPU%20Gem%20%E7%B3%BB%E5%88%97%E5%86%85%E5%AE%B9%E5%88%97%E8%A1%A8/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-03-18T05:45:33.000Z">
+<meta property="article:modified_time" content="2021-04-17T14:20:34.280Z">
+<meta property="article:author" content="straywriter">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://straywriter.github.io/2021/03/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/GPU%20Gem%20%E7%B3%BB%E5%88%97%E5%86%85%E5%AE%B9%E5%88%97%E8%A1%A8/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>GPU Gem系列内容列表 | Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://straywriter.github.io/2021/03/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/GPU%20Gem%20%E7%B3%BB%E5%88%97%E5%86%85%E5%AE%B9%E5%88%97%E8%A1%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="straywriter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          GPU Gem系列内容列表
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-03-18 13:45:33" itemprop="dateCreated datePublished" datetime="2021-03-18T13:45:33+08:00">2021-03-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-04-17 22:20:34" itemprop="dateModified" datetime="2021-04-17T22:20:34+08:00">2021-04-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">计算机图形学</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <hr>
+<h1 id="gpu-gems-系列">GPU Gems 系列</h1>
+<ul>
+<li><p>GPU Gems 1 [2004]</p></li>
+<li><p>GPU Gems 2 [2005]</p></li>
+<li><p>GPU Gems 3 [2006]</p></li>
+<li><p>Addison-Wesley出版社的《GPU Gems 1~3》</p></li>
+<li><p>《GPU Gem》1~3 的英文原文web版，已经由NVIDIA开源，链接在这里：<a href="https://link.zhihu.com/?target=https%3A//developer.nvidia.com/gpugems/GPUGems/gpugems_pref01.html">https://developer.nvidia.com/gpugems/GPUGems/gpugems_pref01.html</a></p></li>
+</ul>
+<h1 id="gpu-gems-1">GPU Gems 1</h1>
+<h2 id="第一部分-自然效果的渲染natural-effects">1.1 第一部分 自然效果的渲染（Natural Effects）</h2>
+<p>第1章 用物理模型进行高效的水模拟（Effective Water Simulation from Physical Models）</p>
+<p>第2章 水焦散的渲染（Rendering Water Caustics）</p>
+<p>第3章 Dawn Demo中的皮肤（Skin in the "Dawn" Demo）</p>
+<p>第4章 Dawn Demo中的动画（Animation in the "Dawn" Demo）</p>
+<p>第5章 改良的Perlin噪声实现（Implementing Improved Perlin Noise）</p>
+<p>第6章 Vulcan Demo中的火焰渲染（Fire in the "Vulcan" Demo）</p>
+<p>第7章 无尽波动草叶的渲染（Rendering Countless Blades of Waving Grass）</p>
+<p>第8章 衍射的模拟（Simulating Diffraction）</p>
+<h2 id="第二部分-光照和阴影lighting-and-shadows">1.2 第二部分 光照和阴影（Lighting and Shadows）</h2>
+<p>第9章 有效的阴影体渲染（Efficient Shadow Volume Rendering）</p>
+<p>第10章 电影级光照（Cinematic Lighting）</p>
+<p>第11章 阴影贴图抗锯齿（Shadow Map Antialiasing）</p>
+<p>第12章 全方位阴影映射（Omnidirectional Shadow Mapping）</p>
+<p>第13章 使用遮挡区间映射产生模糊的阴影（Generating Soft Shadows Using Occlusion Interval Maps）</p>
+<p>第14章 透视阴影贴图（Perspective Shadow Maps: Care and Feeding）</p>
+<p>第15章 逐像素光照的可见性管理（Managing Visibility for Per-Pixel Lighting）</p>
+<h2 id="第三部分-材质materials">1.3 第三部分 材质（Materials）</h2>
+<p>第16章 次表面散射的实时近似（Real-Time Approximations to Subsurface Scattering）</p>
+<p>第17章 环境光遮蔽（Ambient Occlusion）</p>
+<p>第18章 空间BRDF（Spatial BRDFs）</p>
+<p>第19章 基于图像的光照（Image-Based Lighting）</p>
+<p>第20章 纹理爆炸（Texture Bombing）</p>
+<h2 id="第四部分-图像处理image-processing">1.4 第四部分 图像处理（Image Processing）</h2>
+<p>第21章 实时辉光（Real-Time Glow）</p>
+<p>第22章 颜色控制（Color Controls）</p>
+<p>第23章 景深 （Depth of Field）</p>
+<p>第24章 高品质的图像滤波（High-Quality Filtering）</p>
+<p>第25章 用纹理贴图进行快速滤波宽度的计算（Fast Filter-Width Estimates with Texture Maps）</p>
+<p>第26章 OpenEXR图像文件格式（The OpenEXR Image File Format）</p>
+<p>第27章 图像处理的框架（A Framework for Image Processing）****</p>
+<h1 id="gpu-gems-2">GPU Gems 2</h1>
+<h2 id="第一部分-几何复杂性geometric-complexity">2.1 第一部分 几何复杂性（Geometric Complexity）</h2>
+<p>第1章　实现照片级真实感的虚拟植物（Toward Photorealism in Virtual Botany）</p>
+<p>第2章　使用基于GPU几何体剪切图的地形渲染（Terrain Rendering Using GPU-Based Geometry Clipmaps）</p>
+<p>第3章　几何体实例化的内幕（Inside Geometry Instancing）</p>
+<p>第4章 分段缓冲（Segment Buffering）</p>
+<p>第5章　用多流优化资源管理（Optimizing Resource Management with Multistreaming）</p>
+<p>第6章　让硬件遮挡查询发挥作用（Hardware Occlusion Queries Made Useful）</p>
+<p>第7章　带有位移映射的细分表面自适应镶嵌（Adaptive Tessellation of Subdivision Surfaces with Displacement Mapping）</p>
+<p>第8章　使用距离函数的逐像素位移（Per-Pixel Displacement Mapping with Distance Functions）</p>
+<h2 id="第二部分-着色光照和阴影shading-lighting-and-shadows">2.2 第二部分 着色、光照和阴影（Shading, Lighting, and Shadows）</h2>
+<p>第9章　S.T.A.L.K.E.R.中的延迟着色（Deferred Shading in S.T.A.L.K.E.R.）</p>
+<p>第10章　动态辐照度环境映射实时计算（Real-Time Computation of Dynamic Irradiance Environment Maps）</p>
+<p>第11章　近似的双向纹理函数（Approximate Bidirectional Texture Functions）</p>
+<p>第12章　基于贴面的纹理映射（Tile-Based Texture Mapping）</p>
+<p>第13章　在GPU上实现mental images的phenomena渲染器（Implementing the mental images Phenomena Renderer on the GPU）</p>
+<p>第14章　动态环境光遮蔽与间接光照（Dynamic Ambient Occlusion and Indirect Lighting）</p>
+<p>第15章　蓝图渲染和草图绘制（Blueprint Rendering and "Sketchy Drawings"）</p>
+<p>第16章　精确的大气散射（Accurate Atmospheric Scattering）</p>
+<p>第17章　利用像素着色器分支的高效模糊边缘阴影（Efficient Soft-Edged Shadows Using Pixel Shader Branching）</p>
+<p>第18章 将顶点纹理位移用于水的真实感渲染（Using Vertex Texture Displacement for Realistic Water Rendering）</p>
+<p>第19章 通用的折射模拟（Generic Refraction）</p>
+<h2 id="第三部分-高质量渲染high-quality-rendering">3.3 第三部分 高质量渲染（High-Quality Rendering）</h2>
+<p>第20章 快速三阶纹理过滤（Fast Third-Order Texture Filtering）</p>
+<p>第21章 高质量反走样的光栅化（High-Quality Antialiased Rasterization）</p>
+<p>第22章 快速预过滤线条（Fast Prefiltered Lines）</p>
+<p>第23章 Nalu Demo中的头发动画和渲染（Hair Animation and Rendering in the Nalu Demo）</p>
+<p>第24章 使用查找表加速颜色变换（Using Lookup Tables to Accelerate Color Transformations）</p>
+<p>第25章 Apple Motion中的GPU图像处理（GPU Image Processing in Apple's Motion）</p>
+<p>第26章 改进的Perlin噪声（Implementing Improved Perlin Noise）</p>
+<p>第27章　高级的高质量过滤（Advanced High-Quality Filtering）</p>
+<p>第28章 Mipmap级的测量（Mipmap-Level Measurement）</p>
+<h2 id="第四部分-gpu的通用计算初级读本general-purpose-computation-on-gpus-a-primer">3.4 第四部分 GPU的通用计算：初级读本（General-Purpose Computation on GPUS: A Primer）</h2>
+<p>第29章　流式体系结构和技术趋势（Streaming Architectures and Technology Trends）</p>
+<p>第30章　Geforce 6系列GPU的体系结构（The GeForce 6 Series GPU Architecture）</p>
+<p>第31章　把计算概念映射到GPU（Mapping Computational Concepts to GPUs）</p>
+<p>第32章　尝试GPU计算（Taking the Plunge into GPU Computing）</p>
+<p>第33章　在GPU上实现高效的并行数据结构（Implementing Efficient Parallel Data Structures on GPUs）</p>
+<p>第34章　GPU流程控制习惯用法（GPU Flow-Control Idioms）</p>
+<p>第35章　GPU程序优化（GPU Program Optimization）</p>
+<p>第36章　用于GPGPU应用程序的流式缩减操作（Stream Reduction Operations for GPGPU Applications）</p>
+<h2 id="第五部分-面向图像的计算image-oriented-computing">3.5 第五部分 面向图像的计算（Image-Oriented Computing）</h2>
+<p>第37章　GPU上的八叉树纹理（Octree Textures on the GPU）</p>
+<p>第38章　使用光栅化的高质量全局照明渲染（High-Quality Global Illumination Rendering Using Rasterization）</p>
+<p>第39章　使用逐步求精辐射度方法的全局照明（Global Illumination Using Progressive Refinement Radiosity）</p>
+<p>第40章　GPU上的计算机视觉（Computer Vision on the GPU）</p>
+<p>第41章　延迟过滤：困难数据格式的渲染（Deferred Filtering: Rendering from Difficult Data Formats）</p>
+<p>第42章　保守光栅化（Conservative Rasterization）</p>
+<h1 id="gpu-gems-3">GPU Gems 3</h1>
+<h2 id="第一部分-几何体geometry">3.1 第一部分 几何体（Geometry）</h2>
+<p>第1章 使用GPU 生成复杂的程序化地形（Generating Complex Procedural Terrains Using the GPU）</p>
+<p>第2章 群体动画渲染（Animated Crowd Rendering）</p>
+<p>第3章 DirectX 10 混合形状：打破限制（DirectX 10 Blend Shapes: Breaking the Limits）</p>
+<p>第4章 下一代SpeedTree 渲染（Next-Generation SpeedTree Rendering）</p>
+<p>第5章 普遍自适应的网格优化（Generic Adaptive Mesh Refinement）</p>
+<p>第6章 GPU 生成的树的程序式风动画（GPU-Generated Procedural Wind Animations for Trees）</p>
+<p>第7章 GPU 上基于点的变形球可视化（Point-Based Visualization of Metaballs on a GPU）</p>
+<p>第8章 区域求和的差值阴影贴图（Summed-Area Variance Shadow Maps）</p>
+<h2 id="第二部分-光照和阴影light-and-shadows">3.2 第二部分 光照和阴影（Light and Shadows）</h2>
+<p>第9章 使用全局照明实现互动的电影级重光照（Interactive Cinematic Relighting with Global Illumination）</p>
+<p>第10章 在可编程GPU 中实现并行分割的阴影贴图（Parallel-Split Shadow Maps on Programmable GPUs）</p>
+<p>第11章 使用层次化的遮挡剔除和几何着色器得到高效鲁棒的阴影体（Efficient and Robust Shadow Volumes Using Hierarchical Occlusion Culling and Geometry Shaders）</p>
+<p>第12章 高质量的环境光遮蔽（High-Quality Ambient Occlusion）</p>
+<p>第13章 作为后处理的体积光照散射（Volumetric Light Scattering as a Post-Process）</p>
+<h2 id="第三部分-渲染rendering">3.3 第三部分 渲染（Rendering）</h2>
+<p>第14章 用于真实感实时皮肤渲染的高级技术（Advanced Techniques for Realistic Real-Time Skin Rendering）</p>
+<p>第15章 可播放的全方位捕捉（Playable Universal Capture）</p>
+<p>第16章 Crysis 中植被的程序化动画和着色（Vegetation Procedural Animation and Shading in Crysis）</p>
+<p>第17章 鲁棒的多镜面反射和折射（Robust Multiple Specular Reflections and Refractions）</p>
+<p>第18章 用于浮雕映射的松散式锥形步进（Relaxed Cone Stepping for Relief Mapping）</p>
+<p>第19章 Tabula Rasa 中的延迟着色（Deferred Shading in Tabula Rasa）</p>
+<p>第20章 基于GPU的重要性采样（GPU-Based Importance Sampling）</p>
+<h2 id="第四部分-图像效果image-effects">3.4 第四部分 图像效果（Image Effects）</h2>
+<p>第21章 真正的Impostor（True Impostors）</p>
+<p>第22章 在GPU上烘焙法线贴图（Baking Normal Maps on the GPU）</p>
+<p>第23章 高速的离屏粒子（High-Speed, Off-Screen Particles）</p>
+<p>第24章 保持线性的重要性（The Importance of Being Linear）</p>
+<p>第25章 在GPU 上渲染矢量图（Rendering Vector Art on the GPU）</p>
+<p>第26章 通过颜色进行对象探测：使用GPU 进行实时视频图像处理（Object Detection by Color: Using the GPU for Real-Time Video Image Processing）</p>
+<p>第27章 作为后处理效果的运动模糊（Motion Blur as a Post-Processing Effect）</p>
+<p>第28章 实用景深后期处理（Practical Post-Process Depth of Field）</p>
+<h2 id="相关参考">相关参考</h2>
+<p><a target="_blank" rel="noopener" href="https://qianmo.blog.csdn.net/article/details/79689041">【GPU精粹与Shader编程】(一) 开篇 &amp; 全系列11本书核心知识点总览</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/03/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/%E5%80%BC%E5%BE%97%E5%AD%A6%E4%B9%A0%E7%9A%84%E5%BC%80%E6%BA%903D%E5%BC%95%E6%93%8E/" rel="prev" title="值得学习的开源3D引擎">
+      <i class="fa fa-chevron-left"></i> 值得学习的开源3D引擎
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/03/18/OpenGL/OpenGL%E5%9B%BE%E5%85%83/" rel="next" title="OpenGL图元">
+      OpenGL图元 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#gpu-gems-%E7%B3%BB%E5%88%97"><span class="nav-number">1.</span> <span class="nav-text">GPU Gems 系列</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#gpu-gems-1"><span class="nav-number">2.</span> <span class="nav-text">GPU Gems 1</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86-%E8%87%AA%E7%84%B6%E6%95%88%E6%9E%9C%E7%9A%84%E6%B8%B2%E6%9F%93natural-effects"><span class="nav-number">2.1.</span> <span class="nav-text">1.1 第一部分 自然效果的渲染（Natural Effects）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86-%E5%85%89%E7%85%A7%E5%92%8C%E9%98%B4%E5%BD%B1lighting-and-shadows"><span class="nav-number">2.2.</span> <span class="nav-text">1.2 第二部分 光照和阴影（Lighting and Shadows）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E9%83%A8%E5%88%86-%E6%9D%90%E8%B4%A8materials"><span class="nav-number">2.3.</span> <span class="nav-text">1.3 第三部分 材质（Materials）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E5%9B%9B%E9%83%A8%E5%88%86-%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86image-processing"><span class="nav-number">2.4.</span> <span class="nav-text">1.4 第四部分 图像处理（Image Processing）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#gpu-gems-2"><span class="nav-number">3.</span> <span class="nav-text">GPU Gems 2</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86-%E5%87%A0%E4%BD%95%E5%A4%8D%E6%9D%82%E6%80%A7geometric-complexity"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 第一部分 几何复杂性（Geometric Complexity）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86-%E7%9D%80%E8%89%B2%E5%85%89%E7%85%A7%E5%92%8C%E9%98%B4%E5%BD%B1shading-lighting-and-shadows"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 第二部分 着色、光照和阴影（Shading, Lighting, and Shadows）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E9%83%A8%E5%88%86-%E9%AB%98%E8%B4%A8%E9%87%8F%E6%B8%B2%E6%9F%93high-quality-rendering"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 第三部分 高质量渲染（High-Quality Rendering）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E5%9B%9B%E9%83%A8%E5%88%86-gpu%E7%9A%84%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97%E5%88%9D%E7%BA%A7%E8%AF%BB%E6%9C%ACgeneral-purpose-computation-on-gpus-a-primer"><span class="nav-number">3.4.</span> <span class="nav-text">3.4 第四部分 GPU的通用计算：初级读本（General-Purpose Computation on GPUS: A Primer）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%BA%94%E9%83%A8%E5%88%86-%E9%9D%A2%E5%90%91%E5%9B%BE%E5%83%8F%E7%9A%84%E8%AE%A1%E7%AE%97image-oriented-computing"><span class="nav-number">3.5.</span> <span class="nav-text">3.5 第五部分 面向图像的计算（Image-Oriented Computing）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#gpu-gems-3"><span class="nav-number">4.</span> <span class="nav-text">GPU Gems 3</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86-%E5%87%A0%E4%BD%95%E4%BD%93geometry"><span class="nav-number">4.1.</span> <span class="nav-text">3.1 第一部分 几何体（Geometry）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86-%E5%85%89%E7%85%A7%E5%92%8C%E9%98%B4%E5%BD%B1light-and-shadows"><span class="nav-number">4.2.</span> <span class="nav-text">3.2 第二部分 光照和阴影（Light and Shadows）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E9%83%A8%E5%88%86-%E6%B8%B2%E6%9F%93rendering"><span class="nav-number">4.3.</span> <span class="nav-text">3.3 第三部分 渲染（Rendering）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E5%9B%9B%E9%83%A8%E5%88%86-%E5%9B%BE%E5%83%8F%E6%95%88%E6%9E%9Cimage-effects"><span class="nav-number">4.4.</span> <span class="nav-text">3.4 第四部分 图像效果（Image Effects）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E5%8F%82%E8%80%83"><span class="nav-number">4.5.</span> <span class="nav-text">相关参考</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">straywriter</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">124</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/straywriter" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;straywriter" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">straywriter</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

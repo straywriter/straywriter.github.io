@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"straywriter.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="C++ std::forward完美转发">
+<meta property="og:url" content="https://straywriter.github.io/2021/03/22/C++/C++stdforward/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-03-22T13:59:11.000Z">
+<meta property="article:modified_time" content="2021-04-17T10:58:30.351Z">
+<meta property="article:author" content="straywriter">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://straywriter.github.io/2021/03/22/C++/C++stdforward/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>C++ std::forward完美转发 | Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://straywriter.github.io/2021/03/22/C++/C++stdforward/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="straywriter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C++ std::forward完美转发
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-03-22 21:59:11" itemprop="dateCreated datePublished" datetime="2021-03-22T21:59:11+08:00">2021-03-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-04-17 18:58:30" itemprop="dateModified" datetime="2021-04-17T18:58:30+08:00">2021-04-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <hr>
+<h3 id="a">a</h3>
+<p>完美转发</p>
+<p>源码剖析</p>
+<p>完美转发失败情形</p>
+<p>示例</p>
+<h2 id="简介">简介</h2>
+<ul>
+<li>C++所谓的完美转发，是指std::forward会将输入的参数原封不动地传递到下一个函数中，这个“原封不动”指的是，如果输入的参数是左值，那么传递给下一个函数的参数的也是左值；如果输入的参数是右值，那么传递给下一个函数的参数的也是右值。</li>
+</ul>
+<h2 id="完美转发失败情形">完美转发失败情形</h2>
+<p>五种完美转发失败的情形</p>
+<p>　　1. #### 使用大括号初始化列表时</p>
+<p>　　（1）失败原因分析：由于转发函数是个模板函数，而在模板类型推导中，大括号初始不能自动被推导为std::initializer_list<T>。</T></p>
+<p>　　（2）解决方案：先用auto声明一个局部变量，再将该局部变量传递给转发函数。</p>
+<p>　　2. #### 0和NULL用作空指针时</p>
+<p>　　（1）失败原因分析：0或NULL以空指针之名传递给模板时，类型推导的结果是整型，而不是所希望的指针类型。</p>
+<p>　　（2）解决方案：传递nullptr，而非0或NULL。</p>
+<p>　　3. #### 仅声明static const 整型成员变量，而无其定义时。</p>
+<p>　　（1）失败原因分析：C++中常量一般是进入符号表的，只有对其取地址时才会实际分配内存。调用f函数时，其实参是直接从符号表中取值，此时不会发生问题。但当调用fwd时由于其形参是万能引用，而引用本质上是一个可解引用的指针。因此当传入fwd时会要求准备某块内存以供解引用出该变量出来。但因其未定义，也就没有实际的内存空间， 编译时可能失败（取决于编译器和链接器的实现）。</p>
+<p>　　（2）解决方案：在类外定义该成员变量。注意这声变量在声明时一般会先给初始值。因此定义时无需也不能再重复指定初始值。</p>
+<p>　　4. #### 使用重载函数名或模板函数名时</p>
+<p>　　（1）失败原因分析：由于fwd是个模板函数，其形参没有任何关于类型的信息。当传入重载函数名或模板函数（代表许许多多的函数）时，就会导致fwd的形参不知绑定到哪个函数上。</p>
+<p>　　（2）解决方案：在调用fwd调用时手动为形参指定类型信息。</p>
+<p>　　5. #### 转发位域时</p>
+<p>　　（1）失败原因分析：位域是由机器字的若干任意部分组成的（如32位int的第3至5个比特），但这样的实体是无法直接取地址的。而fwd的形参是个引用，本质上就是指针，所以也没有办法创建指向任意比特的指针。</p>
+<p>　　（2）解决方案：制作位域值的副本，并以该副本来调用转发函数。</p>
+<h2 id="示例">示例</h2>
+<h3 id="make_shared-源码实现">make_shared 源码实现</h3>
+<p><strong>make_shared 用来创建一个对象的智能指针，并且可以通过使用不同的参数来构造所创建对象的指针，这个函数实现如下：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">template&lt;class _Ty,</span><br><span class="line">	class... _Types&gt;</span><br><span class="line">_NODISCARD inline shared_ptr&lt;_Ty&gt; make_shared(_Types&amp;&amp;... _Args)</span><br><span class="line">&#123;	&#x2F;&#x2F; make a shared_ptr</span><br><span class="line">	const auto _Rx &#x3D; new _Ref_count_obj&lt;_Ty&gt;(_STD forward&lt;_Types&gt;(_Args)...);  &#x2F;&#x2F;参数完美转发</span><br><span class="line"></span><br><span class="line">	shared_ptr&lt;_Ty&gt; _Ret;</span><br><span class="line">	_Ret._Set_ptr_rep_and_enable_shared(_Rx-&gt;_Getptr(), _Rx);</span><br><span class="line">	return (_Ret);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="引用折叠-示例">引用折叠 示例</h3>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Widget</span>&#123;</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">(T&amp;&amp; param)</span></span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Widget工厂函数</span></span><br><span class="line"><span class="function">Widget <span class="title">widgetFactory</span><span class="params">()</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> Widget();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//类型别名</span></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">typedef</span> T&amp;&amp; RvalueRefToT;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> x = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span>&amp; rx = x;</span><br><span class="line">    <span class="comment">//auto&amp; &amp; r = x; //error，声明“引用的引用”是非法的！</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//1. 引用折叠发生的语境1——模板实例化</span></span><br><span class="line">    Widget w1;</span><br><span class="line">    func(w1); <span class="comment">//w1为左值，T被推导为Widget&amp;。代入得void func(Widget&amp; &amp;&amp; param);</span></span><br><span class="line">              <span class="comment">//引用折叠后得void func(Widget&amp; param)</span></span><br><span class="line"></span><br><span class="line">    func(widgetFactory()); <span class="comment">//传入右值，T被推导为Widget，代入得void func(Widget&amp;&amp; param)</span></span><br><span class="line">                           <span class="comment">//注意这里没有发生引用的折叠。</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//2. 引用折叠发生的语境2——auto类型推导</span></span><br><span class="line">    <span class="keyword">auto</span>&amp;&amp; w2 = w1; <span class="comment">//w1为左值auto被推导为Widget&amp;，代入得Widget&amp; &amp;&amp; w2，折叠后为Widget&amp; w2</span></span><br><span class="line">    <span class="keyword">auto</span>&amp;&amp; w3 = widgetFactory(); <span class="comment">//函数返回Widget，为右值，auto被推导为Widget，代入得Widget w3</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//3. 引用折叠发生的语境3——tyedef和using</span></span><br><span class="line">    Foo&lt;<span class="keyword">int</span>&amp;&gt; f1;  <span class="comment">//T被推导为int&amp;，代入得typedef int&amp; &amp;&amp; RvalueRefToT;折叠后为typedef int&amp; RvalueRefToT</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//4. 引用折叠发生的语境3——decltype</span></span><br><span class="line">    <span class="keyword">decltype</span>(x)&amp;&amp; var1 = <span class="number">10</span>;  <span class="comment">//由于x为int类型，代入得int&amp;&amp; rx。</span></span><br><span class="line">    <span class="keyword">decltype</span>(rx) &amp;&amp; var2 = x; <span class="comment">//由于rx为int&amp;类型，代入得int&amp; &amp;&amp; var2，折叠后得int&amp; var2</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="不完美转发示例">不完美转发示例</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">void print(const int&amp; t)  &#x2F;&#x2F;左值版本</span><br><span class="line">&#123;</span><br><span class="line">    cout &lt;&lt;&quot;void print(const int&amp; t)&quot; &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void print(int&amp;&amp; t)     &#x2F;&#x2F;右值版本</span><br><span class="line">&#123;</span><br><span class="line">    cout &lt;&lt; &quot;void print(int&amp;&amp; t)&quot; &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">template&lt;typename T&gt;</span><br><span class="line">void testForward(T&amp;&amp; param)</span><br><span class="line">&#123;</span><br><span class="line">    &#x2F;&#x2F;不完美转发</span><br><span class="line">    print(param);            &#x2F;&#x2F;param为形参，是左值。调用void print(const int&amp; t)</span><br><span class="line">    print(std::move(param)); &#x2F;&#x2F;转为右值。调用void print(int&amp;&amp; t)</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;完美转发</span><br><span class="line">    print(std::forward&lt;T&gt;(param)); &#x2F;&#x2F;只有这里才会根据传入param的实参类型的左右值进转发</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    cout &lt;&lt;&quot;-------------testForward(1)-------------&quot; &lt;&lt;endl;</span><br><span class="line">    testForward(1);    &#x2F;&#x2F;传入右值</span><br><span class="line"></span><br><span class="line">    cout &lt;&lt;&quot;-------------testForward(x)-------------&quot; &lt;&lt; endl;</span><br><span class="line">    int x &#x3D; 0;</span><br><span class="line">    testForward(x);    &#x2F;&#x2F;传入左值</span><br><span class="line"></span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;*输出结果</span><br><span class="line">-------------testForward(1)-------------</span><br><span class="line">void print(const int&amp; t)</span><br><span class="line">void print(int&amp;&amp; t)</span><br><span class="line">void print(int&amp;&amp; t)       &#x2F;&#x2F;完美转发，这里转入的1为右值，调用右值版本的print</span><br><span class="line">-------------testForward(x)-------------</span><br><span class="line">void print(const int&amp; t)</span><br><span class="line">void print(int&amp;&amp; t)</span><br><span class="line">void print(const int&amp; t) &#x2F;&#x2F;完美转发，这里转入的x为左值，调用左值版本的print</span><br><span class="line">*&#x2F;</span><br></pre></td></tr></table></figure>
+<h3 id="使用-stdmovestdforward-优化">使用 std::move、std::forward 优化</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line">#include &lt;memory&gt;</span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;1. 针对右值引用实施std::move，针对万能引用实施std::forward</span><br><span class="line">class Data&#123;&#125;;</span><br><span class="line"></span><br><span class="line">class Widget</span><br><span class="line">&#123;</span><br><span class="line">    std::string name;</span><br><span class="line">    std::shared_ptr&lt;Data&gt; ptr;</span><br><span class="line">public:</span><br><span class="line">    Widget() &#123; cout &lt;&lt;&quot;Widget()&quot;&lt;&lt;endl; &#125;;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;复制构造函数</span><br><span class="line">    Widget(const Widget&amp; w):name(w.name), ptr(w.ptr)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt;&quot;Widget(const Widget&amp; w)&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F;针对右值引用使用std::move</span><br><span class="line">    Widget(Widget&amp;&amp; rhs) noexcept: name(std::move(rhs.name)), ptr(std::move(rhs.ptr))</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;Widget(Widget&amp;&amp; rhs)&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;针对万能引用使用std::forward。</span><br><span class="line">    &#x2F;&#x2F;注意，这里使用万能引用来替代两个重载版本：void setName(const string&amp;)和void setName(string&amp;&amp;)</span><br><span class="line">    &#x2F;&#x2F;好处就是当使用字符串字面量时，万能引用版本的效率更高。如w.setName(&quot;SantaClaus&quot;)，此时字符串会被</span><br><span class="line">    &#x2F;&#x2F;推导为const char(&amp;)[11]类型，然后直接转给setName函数（可以避免先通过字量面构造临时string对象）。</span><br><span class="line">    &#x2F;&#x2F;并将该类型直接转给name的构造函数，节省了一个构造和释放临时对象的开销，效率更高。</span><br><span class="line">    template&lt;typename T&gt;</span><br><span class="line">    void setName(T&amp;&amp; newName)</span><br><span class="line">    &#123;</span><br><span class="line">        if (newName !&#x3D; name) &#123; &#x2F;&#x2F;第1次使用newName</span><br><span class="line">            name &#x3D; std::forward&lt;T&gt;(newName); &#x2F;&#x2F;针对万能引用的最后一次使用实施forward</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;2. 按值返回函数</span><br><span class="line">&#x2F;&#x2F;2.1 按值返回的是一个绑定到右值引用的对象</span><br><span class="line">class Complex </span><br><span class="line">&#123;</span><br><span class="line">    double x;</span><br><span class="line">    double y;</span><br><span class="line">public:</span><br><span class="line">    Complex(double x &#x3D;0, double y&#x3D;0):x(x),y(y)&#123;&#125;</span><br><span class="line">    Complex&amp; operator+&#x3D;(const Complex&amp; rhs) </span><br><span class="line">    &#123;</span><br><span class="line">        x +&#x3D; rhs.x;</span><br><span class="line">        y +&#x3D; rhs.y;</span><br><span class="line">        return *this;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Complex operator+(Complex&amp;&amp; lhs, const Complex&amp; rhs) &#x2F;&#x2F;重载全局operator+</span><br><span class="line">&#123;</span><br><span class="line">    lhs +&#x3D; rhs;</span><br><span class="line">    return std::move(lhs); &#x2F;&#x2F;由于lhs绑定到一个右值引用，这里可以移动到返回值上。</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;2.2 按值返回一个绑定到万能引用的对象</span><br><span class="line">template&lt;typename T&gt;</span><br><span class="line">auto test(T&amp;&amp; t)</span><br><span class="line">&#123;</span><br><span class="line">    return std::forward&lt;T&gt;(t); &#x2F;&#x2F;由于t是一个万能引用对象。按值返回时实施std::forward</span><br><span class="line">                               &#x2F;&#x2F;如果原对象一是个右值，则被移动到返回值上。如果原对象</span><br><span class="line">                               &#x2F;&#x2F;是个左值，则会被拷贝到返回值上。</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;3. RVO优化</span><br><span class="line">&#x2F;&#x2F;3.1 返回局部对象</span><br><span class="line">Widget makeWidget()</span><br><span class="line">&#123;</span><br><span class="line">    Widget w;</span><br><span class="line"></span><br><span class="line">    return w;  &#x2F;&#x2F;返回局部对象，满足RVO优化两个条件。为避免复制，会直接在返回值内存上创建w对象。</span><br><span class="line">               &#x2F;&#x2F;但如果改成return std::move(w)时，由于返回值类型不同（Widget右值引用，另一个是Widget）</span><br><span class="line">               &#x2F;&#x2F;会剥夺RVO优化的机会，就会先创建w局部对象，再移动给返回值，无形中增加一个移动操作。</span><br><span class="line">               &#x2F;&#x2F;对于这种满足RVO条件的，当某些情况下无法避免复制的（如多路返回），编译器仍会默认地对</span><br><span class="line">               &#x2F;&#x2F;将w转为右值，即return std::move(w)，而无须用户显式std::move!!!</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;3.2 按值形参作为返回值</span><br><span class="line">Widget makeWidget(Widget w) &#x2F;&#x2F;注意，形参w是按值传参的。</span><br><span class="line">&#123;</span><br><span class="line">    &#x2F;&#x2F;...</span><br><span class="line"></span><br><span class="line">    return w; &#x2F;&#x2F;这里虽然不满足RVO条件（w是形参，不是函数内的局部对象），但仍然会被编译器优化。</span><br><span class="line">              &#x2F;&#x2F;这里会默认地转换为右值，即return std::move(w)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    cout &lt;&lt;&quot;1. 针对右值引用实施std::move，针对万能引用实施std::forward&quot; &lt;&lt; endl;</span><br><span class="line">    Widget w;</span><br><span class="line">    w.setName(&quot;SantaClaus&quot;);</span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; &quot;2. 按值返回时&quot; &lt;&lt; endl;</span><br><span class="line">    auto t1 &#x3D; test(w); </span><br><span class="line">    auto t2 &#x3D; test(std::move(w));</span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; &quot;3. RVO优化&quot; &lt;&lt; endl;</span><br><span class="line">    Widget w1 &#x3D; makeWidget();   &#x2F;&#x2F;按值返回局部对象（RVO）</span><br><span class="line">    Widget w2 &#x3D; makeWidget(w1); &#x2F;&#x2F;按值返回按值形参对象</span><br><span class="line"></span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;*输出结果</span><br><span class="line">1. 针对右值引用实施std::move，针对万能引用实施std::forward</span><br><span class="line">Widget()</span><br><span class="line">2. 按值返回时</span><br><span class="line">Widget(const Widget&amp; w)</span><br><span class="line">Widget(Widget&amp;&amp; rhs)</span><br><span class="line">3. RVO优化</span><br><span class="line">Widget()</span><br><span class="line">Widget(Widget&amp;&amp; rhs)</span><br><span class="line">Widget(const Widget&amp; w)</span><br><span class="line">Widget(Widget&amp;&amp; rhs)</span><br><span class="line">*&#x2F;</span><br></pre></td></tr></table></figure>
+<h3 id="完美转发失败">完美转发失败</h3>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//1. 大括号初始化列表</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">(<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; v)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;void f(const std::vector&lt;int&gt; &amp; v)&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//2. 0或NULL用作空指针时</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">(<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;void f(int x)&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//3. 仅声明static const的整型成员变量而无定义</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Widget</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">const</span>  <span class="built_in">std</span>::<span class="keyword">size_t</span> MinVals = <span class="number">28</span>; <span class="comment">//仅声明，无定义（因为静态变量需在类外定义！）</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//const std::size_t Widget::MinVals; //在类外定义，无须也不能重复指定初始值。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//4. 使用重载函数名或模板函数名</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">f</span><span class="params">(<span class="keyword">int</span>(*pf)(<span class="keyword">int</span>))</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt;<span class="string">&quot;int f(int(*pf)(int))&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">processVal</span><span class="params">(<span class="keyword">int</span> value)</span> </span>&#123; <span class="keyword">return</span> <span class="number">0</span>; &#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">processVal</span><span class="params">(<span class="keyword">int</span> value, <span class="keyword">int</span> priority)</span> </span>&#123; <span class="keyword">return</span> <span class="number">0</span>; &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//5.位域</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">IPv4Header</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="built_in">std</span>::<span class="keyword">uint32_t</span> version : <span class="number">4</span>,</span><br><span class="line">                  IHL : <span class="number">4</span>,</span><br><span class="line">                  DSCP : <span class="number">6</span>,</span><br><span class="line">                  ECN : <span class="number">2</span>,</span><br><span class="line">                  totalLength : <span class="number">16</span>;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function">T <span class="title">workOnVal</span><span class="params">(T param)</span>  <span class="comment">//函数模板，代表许许多多的函数。</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> param;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//用于测试的转发函数</span></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> ...Ts&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fwd</span><span class="params">(Ts&amp;&amp; ... param)</span>  <span class="comment">//转发函数</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    f(<span class="built_in">std</span>::forward&lt;Ts&gt;(param)...);  <span class="comment">//目标函数</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt;<span class="string">&quot;-------------------1. 大括号初始化列表---------------------&quot;</span> &lt;&lt; <span class="built_in">endl</span>;    </span><br><span class="line">    <span class="comment">//1.1 用同一实参分别调用f和fwd函数</span></span><br><span class="line">    f(&#123; <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span> &#125;);  <span class="comment">//&#123;1, 2, 3&#125;会被隐式转换为std::vector&lt;int&gt;</span></span><br><span class="line">    <span class="comment">//fwd(&#123; 1, 2, 3 &#125;); //编译失败。由于fwd是个函数模板，而模板推导时&#123;&#125;不能自动被推导为std:;initializer_list&lt;T&gt;</span></span><br><span class="line">    <span class="comment">//1.2 解决方案</span></span><br><span class="line">    <span class="keyword">auto</span> il = &#123; <span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span> &#125;;</span><br><span class="line">    fwd(il);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;-------------------2. 0或NULL用作空指针-------------------&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="comment">//2.1 用同一实参分别调用f和fwd函数</span></span><br><span class="line">    f(<span class="literal">NULL</span>);   <span class="comment">//调用void f(int)函数，</span></span><br><span class="line">    fwd(<span class="literal">NULL</span>); <span class="comment">//NULL被推导为int，仍调用void f(int)函数</span></span><br><span class="line">    <span class="comment">//2.2 解决方案：使用nullptr</span></span><br><span class="line">    f(<span class="literal">nullptr</span>);  <span class="comment">//匹配int f(int(*pf)(int))</span></span><br><span class="line">    fwd(<span class="literal">nullptr</span>);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;-------3. 仅声明static const的整型成员变量而无定义--------&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="comment">//3.1 用同一实参分别调用f和fwd函数</span></span><br><span class="line">    f(Widget::MinVals);   <span class="comment">//调用void f(int)函数。实参从符号表中取得，编译成功！</span></span><br><span class="line">    fwd(Widget::MinVals); <span class="comment">//fwd的形参是引用，而引用的本质是指针，但fwd使用到该实参时需要解引用</span></span><br><span class="line">                          <span class="comment">//这里会因没有为MinVals分配内存而出现编译失败（取决于编译器和链接器）</span></span><br><span class="line">    <span class="comment">//3.2 解决方案：在类外定义该变量</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;-------------4. 使用重载函数名或模板函数名---------------&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="comment">//4.1 用同一实参分别调用f和fwd函数</span></span><br><span class="line">    f(processVal);   <span class="comment">//ok，由于f形参为int(*pf)(int)，带有类型信息，会匹配int processVal(int value)</span></span><br><span class="line">    <span class="comment">//fwd(processVal); //error,fwd的形参不带任何类型信息，不知该匹配哪个processVals重载函数。</span></span><br><span class="line">    <span class="comment">//fwd(workOnVal);  //error,workOnVal是个函数模板，代表许许多多的函数。这里不知绑定到哪个函数</span></span><br><span class="line">    <span class="comment">//4.2 解决方案：手动指定类型信息</span></span><br><span class="line">    <span class="keyword">using</span> ProcessFuncType = <span class="keyword">int</span>(*)(<span class="keyword">int</span>);</span><br><span class="line">    ProcessFuncType processValPtr = processVal;</span><br><span class="line">    fwd(processValPtr);</span><br><span class="line">    fwd(<span class="keyword">static_cast</span>&lt;ProcessFuncType&gt;(workOnVal));   <span class="comment">//调用int f(int(*pf)(int))</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;----------------------5. 转发位域时---------------------&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="comment">//5.1 用同一实参分别调用f和fwd函数</span></span><br><span class="line">    IPv4Header ip = &#123;&#125;;</span><br><span class="line">    f(ip.totalLength);  <span class="comment">//调用void f(int)</span></span><br><span class="line">    <span class="comment">//fwd(ip.totalLength); //error，fwd形参是引用，由于位域是比特位组成。无法创建比特位的引用！</span></span><br><span class="line">    <span class="comment">//解决方案：创建位域的副本，并传给fwd</span></span><br><span class="line">    <span class="keyword">auto</span> length = <span class="keyword">static_cast</span>&lt;<span class="built_in">std</span>::<span class="keyword">uint16_t</span>&gt;(ip.totalLength);</span><br><span class="line">    fwd(length);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*输出结果</span></span><br><span class="line"><span class="comment">-------------------1. 大括号初始化列表---------------------</span></span><br><span class="line"><span class="comment">void f(const std::vector&lt;int&gt; &amp; v)</span></span><br><span class="line"><span class="comment">void f(const std::vector&lt;int&gt; &amp; v)</span></span><br><span class="line"><span class="comment">-------------------2. 0或NULL用作空指针-------------------</span></span><br><span class="line"><span class="comment">void f(int x)</span></span><br><span class="line"><span class="comment">void f(int x)</span></span><br><span class="line"><span class="comment">int f(int(*pf)(int))</span></span><br><span class="line"><span class="comment">int f(int(*pf)(int))</span></span><br><span class="line"><span class="comment">-------3. 仅声明static const的整型成员变量而无定义--------</span></span><br><span class="line"><span class="comment">void f(int x)</span></span><br><span class="line"><span class="comment">void f(int x)</span></span><br><span class="line"><span class="comment">-------------4. 使用重载函数名或模板函数名---------------</span></span><br><span class="line"><span class="comment">int f(int(*pf)(int))</span></span><br><span class="line"><span class="comment">int f(int(*pf)(int))</span></span><br><span class="line"><span class="comment">int f(int(*pf)(int))</span></span><br><span class="line"><span class="comment">----------------------5. 转发位域时---------------------</span></span><br><span class="line"><span class="comment">void f(int x)</span></span><br><span class="line"><span class="comment">void f(int x)</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+<h2 id="相关参考">相关参考</h2>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/5iedu/p/11324772.html">完美转发(std::forward)</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.artima.com/articles/a-brief-introduction-to-rvalue-references"></a></p>
+<p><a target="_blank" rel="noopener" href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1861.html"></a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/03/22/C++/C++%E5%87%BD%E6%95%B0%E5%AF%B9%E8%B1%A1/" rel="prev" title="C++ 函数对象">
+      <i class="fa fa-chevron-left"></i> C++ 函数对象
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/03/22/C++/C++11%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%97%E8%A1%A8/" rel="next" title="C++ 初始化列表">
+      C++ 初始化列表 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#a"><span class="nav-number">1.</span> <span class="nav-text">a</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-number"></span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%8C%E7%BE%8E%E8%BD%AC%E5%8F%91%E5%A4%B1%E8%B4%A5%E6%83%85%E5%BD%A2"><span class="nav-number"></span> <span class="nav-text">完美转发失败情形</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B"><span class="nav-number"></span> <span class="nav-text">示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#make_shared-%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.</span> <span class="nav-text">make_shared 源码实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%95%E7%94%A8%E6%8A%98%E5%8F%A0-%E7%A4%BA%E4%BE%8B"><span class="nav-number">2.</span> <span class="nav-text">引用折叠 示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E5%AE%8C%E7%BE%8E%E8%BD%AC%E5%8F%91%E7%A4%BA%E4%BE%8B"><span class="nav-number">3.</span> <span class="nav-text">不完美转发示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-stdmovestdforward-%E4%BC%98%E5%8C%96"><span class="nav-number">4.</span> <span class="nav-text">使用 std::move、std::forward 优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%8C%E7%BE%8E%E8%BD%AC%E5%8F%91%E5%A4%B1%E8%B4%A5"><span class="nav-number">5.</span> <span class="nav-text">完美转发失败</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E5%8F%82%E8%80%83"><span class="nav-number"></span> <span class="nav-text">相关参考</span></a></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">straywriter</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">124</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/straywriter" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;straywriter" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">straywriter</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"straywriter.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="Phong和Blinn-Phong光照模型">
+<meta property="og:url" content="https://straywriter.github.io/2021/03/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/Phong%E5%85%89%E7%85%A7%E6%A8%A1%E5%9E%8B/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://straywriter.github.io/2021/03/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/Phong%E5%85%89%E7%85%A7%E6%A8%A1%E5%9E%8B/image-20210318194905161.png">
+<meta property="og:image" content="https://straywriter.github.io/2021/03/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/Phong%E5%85%89%E7%85%A7%E6%A8%A1%E5%9E%8B/image-20210318161522914.png">
+<meta property="og:image" content="https://straywriter.github.io/2021/03/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/Phong%E5%85%89%E7%85%A7%E6%A8%A1%E5%9E%8B/image-20210318161651139.png">
+<meta property="og:image" content="https://straywriter.github.io/2021/03/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/Phong%E5%85%89%E7%85%A7%E6%A8%A1%E5%9E%8B/advanced_lighting_halfway_vector.png">
+<meta property="og:image" content="https://straywriter.github.io/2021/03/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/Phong%E5%85%89%E7%85%A7%E6%A8%A1%E5%9E%8B/image-20210318160838858.png">
+<meta property="og:image" content="https://straywriter.github.io/2021/03/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/Phong%E5%85%89%E7%85%A7%E6%A8%A1%E5%9E%8B/image-20210318163049171.png">
+<meta property="og:image" content="https://straywriter.github.io/2021/03/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/Phong%E5%85%89%E7%85%A7%E6%A8%A1%E5%9E%8B/binnphong3.jpg">
+<meta property="og:image" content="https://straywriter.github.io/2021/03/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/Phong%E5%85%89%E7%85%A7%E6%A8%A1%E5%9E%8B/220px-Blinn_Vectors.svg.png">
+<meta property="article:published_time" content="2021-03-18T05:45:33.000Z">
+<meta property="article:modified_time" content="2021-03-18T11:51:42.003Z">
+<meta property="article:author" content="straywriter">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://straywriter.github.io/2021/03/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/Phong%E5%85%89%E7%85%A7%E6%A8%A1%E5%9E%8B/image-20210318194905161.png">
+
+<link rel="canonical" href="https://straywriter.github.io/2021/03/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/Phong%E5%85%89%E7%85%A7%E6%A8%A1%E5%9E%8B/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Phong和Blinn-Phong光照模型 | Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://straywriter.github.io/2021/03/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/Phong%E5%85%89%E7%85%A7%E6%A8%A1%E5%9E%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="straywriter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Phong和Blinn-Phong光照模型
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-03-18 13:45:33 / Modified: 19:51:42" itemprop="dateCreated datePublished" datetime="2021-03-18T13:45:33+08:00">2021-03-18</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">计算机图形学</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="/2021/03/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/Phong%E5%85%89%E7%85%A7%E6%A8%A1%E5%9E%8B/image-20210318194905161.png"></p>
+<h2 id="简介">简介</h2>
+<p>在3D计算机图形学中，<strong>Phong</strong>着色是计算机图形学先驱<strong>Bui Tuong Phong</strong>发明的一种用于表面着色的插值技术。也称为Phong插值或法向矢量插值阴影。它会在栅格化的多边形上内插表面法线，并根据内插法线和反射模型计算像素颜色。Phong阴影也可以指Phong插值和Phong反射模型的特定组合。</p>
+<ol type="1">
+<li>计算多边形顶点的法向量</li>
+<li>双线性插值计算每个像素点的法向量</li>
+<li>通过每个像素的法向量计算光强</li>
+<li>根据光强绘制像素</li>
+</ol>
+<p><strong>历史：</strong></p>
+<p>在1975年，由Phong提出，以他的名字冠名。是一种局部光照的模型，他认为一个光照模型可以用三种不同的部分组成，主要包括<code>ambient</code>,<code>diffuse</code>,<code>specular</code>(环境光，漫反射和高光)。</p>
+<h3 id="phong着色法与gouraud着色法-对比">Phong着色法与Gouraud着色法 对比</h3>
+<p>Phong着色法与Gouraud着色法类似，区别在于进行双线性插值的不是光照强度本身，而是顶点的法线。因此使用这种着色法计算出的高光比Gouraud着色更精确。Phong著色法 与Gouraud著色法比较，Phong著色法的效果更逼真，能够提供更好的光滑曲面的近似值。Phong著色法假设一个平滑变化的曲面为一矢量。</p>
+<p>在对于有较小的高光曲线区的反射模型，例如PHONG模型时，Phong著色法比Gouraud著色法更优。但运算程序也比前者为复杂。Gouraud著色法在遇到在较大的多边形模型中央有高光曲线区时会产生严重的问题。因为这些高光曲线区在多边形的顶点处会产生缺失，而Gouraud著色法是基于顶点的颜色的，这些高光曲线区会从多边形的内部缺失。这个问题在Phong著色法中得到了解决。不同于通过多边形差值的Gouraud著色法，Phong著色法中一个矢量是从多边形顶点的法线到多边形表面进行差值的。为了或得到最后的像素颜色，面的法线被差值，应用于一个反射模型。由于Phong著色法需要逐像素点进行计算，因此运算量远大于Gouraud著色法。</p>
+<p>Phong光照模型是真实图形学中提出的第一个有影响的光照明模型，该模型只考虑物体对直接光照的反射作用，认为环境光是常量，没有考虑物体之间相互的反射光，物体间的反射光只用环境光表示。Phong光照模型属于简单光照模型。</p>
+<h2 id="基本概念">基本概念</h2>
+<p>Phong模型认为物体表面反射光线由三部分组成：</p>
+<ul>
+<li>环境光（Ambient）：场景中的其他间接光照</li>
+<li>漫反射（Diffuse）：散射部分（大但不光亮）</li>
+<li>高光反射（Specular）：镜面反射部分（小而亮）</li>
+</ul>
+<h2 id="数学基础">数学基础</h2>
+<h3 id="平面法线计算">平面法线计算</h3>
+<p>给定一个多边形上任意三个非共线的点，P0 P1 P2，计算该平面的法线：</p>
+<p><img src="/2021/03/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/Phong%E5%85%89%E7%85%A7%E6%A8%A1%E5%9E%8B/image-20210318161522914.png" alt style="zoom:54%;"></p>
+<p>公式 <span class="math display">\[
+\vec{n} = ( P _ { 1 } - P _ { 0 } ) \times ( P _ { 2 } - P _ { 0 } )
+\]</span></p>
+<h3 id="反射向量计算">反射向量计算</h3>
+<p><img src="/2021/03/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/Phong%E5%85%89%E7%85%A7%E6%A8%A1%E5%9E%8B/image-20210318161651139.png" alt style="zoom:67%;"> <span class="math display">\[
+\begin{gather}
+\vec{n}^{\prime}=(\vec{n} \cdot \vec{l}) \vec{n} \\
+\vec{u}=\vec{n}^{\prime}-\vec{l} \\
+\vec{r}=\vec{l}+2 \vec{u}=\vec{l}+2\left(\vec{n}^{\prime}-\vec{l}\right)=2(\vec{n} \cdot \vec{l}) \vec{n}-\vec{l}
+\end{gather}
+\]</span></p>
+<h3 id="半角向量计算">半角向量计算</h3>
+<p>平均分割了一个角的向量</p>
+<p><img src="/2021/03/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/Phong%E5%85%89%E7%85%A7%E6%A8%A1%E5%9E%8B/advanced_lighting_halfway_vector.png"></p>
+<p><span class="math display">\[
+H = \frac { L + V } { | | L + V | | }
+\]</span></p>
+<h2 id="公式推导">公式推导</h2>
+<p>光照最终结果=环境光照+漫反射光照+镜面反射光照</p>
+<p><img src="/2021/03/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/Phong%E5%85%89%E7%85%A7%E6%A8%A1%E5%9E%8B/image-20210318160838858.png"></p>
+<ul>
+<li>法向量（Normal vector）：<span class="math inline">\(n\)</span></li>
+<li>视口向量（View vector）：<span class="math inline">\(v\)</span></li>
+<li>光源向量（Light vector）：<span class="math inline">\(l\)</span></li>
+<li>反射向量（Reflection vector）：<span class="math inline">\(r\)</span></li>
+</ul>
+<h3 id="环境光-ambient">环境光 Ambient</h3>
+<p>环境光照是考虑到即使在不可见光源的地方，经过各种反射，总会带有微弱的光照。光线追踪的算法会更加准确，但是在这里采用一种简化的方法。就是将光源的颜色，乘以一个很小的系数，再乘以物体的颜色。</p>
+<p>由于环境光计算过于复制，并难以计算。在Phong模型中环境光被简化为一个环境光反射系数和环境光光照强度的乘积：</p>
+<hr>
+<p><strong>计算方程:</strong> <span class="math display">\[
+0 \leq k _ { a } \leq 1\\\\
+I _ { a } = k _ { a } L _ { a }
+\]</span></p>
+<ul>
+<li>**环境光ambient=环境光反射系数*环境光光照强度**</li>
+</ul>
+<h3 id="漫反射-diffuse">漫反射 Diffuse</h3>
+<blockquote>
+<p><strong>漫反射</strong>（简称<strong>漫射</strong>，英语：diffuse reflection）是指当一束平行的入射光线射到粗糙的表面时，粗糙的表面会把光线向着各个方向反射的现象。虽然入射线互相平行，由于粗糙的表面上的各点的法线方向不一致，造成反射光线向不同的方向无规则地反射。这种反射的光称为漫射光。很多物体，如植物、墙壁、衣服等，其表面粗看起来似乎是平滑，但用放大镜仔细观察，就会看到其表面是凹凸不平的，所以本来是平行的太阳光被这些表面反射后，弥漫地射向不同方向。</p>
+</blockquote>
+<p><img src="/2021/03/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/Phong%E5%85%89%E7%85%A7%E6%A8%A1%E5%9E%8B/image-20210318163049171.png" alt style="zoom:67%;">、</p>
+<p><strong>计算方程:</strong> <span class="math display">\[
+I _ { d } = k _ { d } m a x ( 0 , \vec{n} \cdot \vec{l} ) L _ { d }\\\\
+0 \leq k _ { d } \leq 1
+\]</span></p>
+<ul>
+<li>漫反射亮度受光线入射方向<span class="math inline">\(l\)</span>与单位表面的法线<span class="math inline">\(n\)</span>夹角影响</li>
+<li>受<span class="math inline">\(l\)</span>和<span class="math inline">\(n\)</span>的夹角的影响，夹角为0时光照最亮，夹角为90度时无光照</li>
+<li>如果$   &lt;0$ ，代表光照方向和法线方向相反，此时不做光照处理：$m a x ( 0 ,  l ) $ </li>
+</ul>
+<h3 id="高光反射-specular">高光反射 Specular</h3>
+<p>镜面反射是指若反射面比较光滑，当平行入射的光线射到这个反射面时，仍会平行地向一个方向反射出来，这种反射就属于镜面反射</p>
+<p>当一束平行光触及光滑物体表面时，光线则发生规律性反射，反射后的光线也相互平行，这种规律性反射称为光的单向反射或镜面反射。但物体的光滑程度是相对的，而一般物体的表面多粗糙不平，入射线虽然为平行光线，但反射后的光线则向各个方向分散，此种现象为光的漫反射。</p>
+<hr>
+<p><strong>计算方程：</strong> <span class="math display">\[
+I_{s}=k_{s}(\vec{r} \cdot \vec{v})^{s} L_{s}
+\]</span></p>
+<ul>
+<li>取反射方向和视口方向的夹角作为高光区域的判定</li>
+<li>指数系数<span class="math inline">\(s\)</span>: 如下图所示，控制高光区域的大小</li>
+</ul>
+<p><img src="/2021/03/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/Phong%E5%85%89%E7%85%A7%E6%A8%A1%E5%9E%8B/binnphong3.jpg"></p>
+<hr>
+<h3 id="phong-模型">Phong 模型</h3>
+<p><span class="math display">\[
+\begin{aligned}
+I &amp;=I_{a}+I_{d}+I_{s} \\
+&amp;=k_{a} L_{a}+k_{d} \max (0, \vec{n} \cdot \vec{l}) L_{d}+k_{s}(\vec{r} \cdot \vec{v})^{s} L_{s}
+\end{aligned}
+\]</span></p>
+<h2 id="blinn-phong光照模型">Blinn-Phong光照模型</h2>
+<p>Blinn-Phong光照模型在物理上的正确性不必Phong高，但计算效率提高了很多。当观察向量与反射向量越接近，那么半角向量与法向量N越接近，观察者看到的镜面光成分越强。</p>
+<p><img src="/2021/03/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/Phong%E5%85%89%E7%85%A7%E6%A8%A1%E5%9E%8B/220px-Blinn_Vectors.svg.png"></p>
+<h4 id="blinn-phong-计算方程">Blinn-Phong 计算方程</h4>
+<p><span class="math display">\[
+\begin{aligned}
+I &amp;=I_{a}+I_{d}+I_{s} \\
+&amp;=k_{a} L_{a}+k_{d} \max (0, \vec{n} \cdot \vec{l}) L_{d}+k_{s}(\vec{n} \cdot \vec{h})^{s} L_{s}
+\end{aligned}
+\]</span></p>
+<h4 id="blinn-phong和phong对比">Blinn-Phong和Phong对比</h4>
+<h2 id="相关链接">相关链接</h2>
+<p><a target="_blank" rel="noopener" href="https://web.eecs.umich.edu/~sugih/courses/eecs487/lectures/16-Phong+Shading.pdf">Phong+Shading pdf)</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cs.utexas.edu/~bajaj/graphics2012/cs354/lectures/lect14.pdf">Illumination I: The Phong Illumination Model pdf</a></p>
+<p><a target="_blank" rel="noopener" href="http://gb.oversea.cnki.net/KCMS/detail/detail.aspx?filename=XTFZ200212021&amp;dbcode=CJFD&amp;dbname=cjfd2002">一种改进的Phong光照模型及光线跟踪实现</a></p>
+<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Phong_reflection_model">Phong wiki</a></p>
+<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Jim_Blinn">Jim Blinn</a></p>
+<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Bui_Tuong_Phong">Bui Tuong Phong</a></p>
+<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Phong_reflection_model">Phong reflection model</a></p>
+<p>Blinn–Phong GLSL多光源实现 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Blinn%E2%80%93Phong_reflection_model">Blinn–Phong reflection model</a></p>
+<p><strong>Blog</strong></p>
+<p><a target="_blank" rel="noopener" href="https://seblagarde.wordpress.com/2012/03/29/relationship-between-phong-and-blinn-lighting-model/">Phong和Blinn照明模型之间的关系</a></p>
+<p><a target="_blank" rel="noopener" href="https://garykeen27.wixsite.com/portfolio/blinn-phong-shading">blinn-phong-shading</a></p>
+<p><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E9%95%9C%E9%9D%A2%E5%8F%8D%E5%B0%84/805523">百度百科 镜面反射</a></p>
+<p><strong>国外大学课程</strong></p>
+<p>使用WebGL实现了一些效果 <a target="_blank" rel="noopener" href="https://www.cs.uregina.ca/Links/class-info/315/WebGL/Lab7/">CS315: Illumination 2</a></p>
+<p><strong>代码实现</strong></p>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/50875639/opengl-blinn-phong-model-implemented-in-shaders-give-wrong-result">OpenGL: Blinn-Phong model implemented in shaders give wrong result</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/1587e2b96d76">opengl高级光照-Blinn-Phong</a></p>
+<p><a target="_blank" rel="noopener" href="https://takinginitiative.wordpress.com/2010/08/30/directx-10-tutorial-8-lighting-theory-and-hlsl/">DirectX10 Tutorial 8: Lighting Theory and HLSL</a></p>
+<p><a target="_blank" rel="noopener" href="https://brooknovak.wordpress.com/2008/11/13/hlsl-per-pixel-point-light-using-phong-blinn-lighting-model/">HLSL per-pixel point light using phong-blinn lighting model</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/85511319">Lambert、Phong、BlinnPhong光照模型(逐顶点+逐像素计算)</a></p>
+<p><strong>论文</strong></p>
+<p>Bui Tuong Phong published his illumination model in 1973: "<a target="_blank" rel="noopener" href="http://portal.acm.org/citation.cfm?id=906584&amp;dl=ACM&amp;coll=&amp;CFID=15151515&amp;CFTOKEN=6184618">Illumination for Computer-Generated Images</a>".</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/03/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/%E5%85%89%E6%BA%90%E6%A8%A1%E5%9E%8B/" rel="prev" title="光源模型">
+      <i class="fa fa-chevron-left"></i> 光源模型
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/03/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/Lambert%E5%85%89%E7%85%A7%E6%A8%A1%E5%9E%8B/" rel="next" title="Lambert光照模型">
+      Lambert光照模型 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#phong%E7%9D%80%E8%89%B2%E6%B3%95%E4%B8%8Egouraud%E7%9D%80%E8%89%B2%E6%B3%95-%E5%AF%B9%E6%AF%94"><span class="nav-number">1.1.</span> <span class="nav-text">Phong着色法与Gouraud着色法 对比</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">2.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80"><span class="nav-number">3.</span> <span class="nav-text">数学基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B9%B3%E9%9D%A2%E6%B3%95%E7%BA%BF%E8%AE%A1%E7%AE%97"><span class="nav-number">3.1.</span> <span class="nav-text">平面法线计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8D%E5%B0%84%E5%90%91%E9%87%8F%E8%AE%A1%E7%AE%97"><span class="nav-number">3.2.</span> <span class="nav-text">反射向量计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%8A%E8%A7%92%E5%90%91%E9%87%8F%E8%AE%A1%E7%AE%97"><span class="nav-number">3.3.</span> <span class="nav-text">半角向量计算</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AC%E5%BC%8F%E6%8E%A8%E5%AF%BC"><span class="nav-number">4.</span> <span class="nav-text">公式推导</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E5%85%89-ambient"><span class="nav-number">4.1.</span> <span class="nav-text">环境光 Ambient</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%AB%E5%8F%8D%E5%B0%84-diffuse"><span class="nav-number">4.2.</span> <span class="nav-text">漫反射 Diffuse</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AB%98%E5%85%89%E5%8F%8D%E5%B0%84-specular"><span class="nav-number">4.3.</span> <span class="nav-text">高光反射 Specular</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#phong-%E6%A8%A1%E5%9E%8B"><span class="nav-number">4.4.</span> <span class="nav-text">Phong 模型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#blinn-phong%E5%85%89%E7%85%A7%E6%A8%A1%E5%9E%8B"><span class="nav-number">5.</span> <span class="nav-text">Blinn-Phong光照模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#blinn-phong-%E8%AE%A1%E7%AE%97%E6%96%B9%E7%A8%8B"><span class="nav-number">5.0.1.</span> <span class="nav-text">Blinn-Phong 计算方程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#blinn-phong%E5%92%8Cphong%E5%AF%B9%E6%AF%94"><span class="nav-number">5.0.2.</span> <span class="nav-text">Blinn-Phong和Phong对比</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E9%93%BE%E6%8E%A5"><span class="nav-number">6.</span> <span class="nav-text">相关链接</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">straywriter</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">124</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/straywriter" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;straywriter" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">straywriter</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

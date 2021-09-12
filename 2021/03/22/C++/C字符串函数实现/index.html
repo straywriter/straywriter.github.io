@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"straywriter.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="C字符串函数实现">
+<meta property="og:url" content="https://straywriter.github.io/2021/03/22/C++/C%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-03-22T13:59:11.315Z">
+<meta property="article:modified_time" content="2021-04-18T00:28:41.565Z">
+<meta property="article:author" content="straywriter">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://straywriter.github.io/2021/03/22/C++/C%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>C字符串函数实现 | Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://straywriter.github.io/2021/03/22/C++/C%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="straywriter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C字符串函数实现
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-03-22 21:59:11" itemprop="dateCreated datePublished" datetime="2021-03-22T21:59:11+08:00">2021-03-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-04-18 08:28:41" itemprop="dateModified" datetime="2021-04-18T08:28:41+08:00">2021-04-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <hr>
+<hr>
+<h3 id="strcpy函数">strcpy函数</h3>
+<ol type="1">
+<li><strong>原型</strong>：<code>char * strcpy(char * destin, const char * source)</code></li>
+<li><strong>作用</strong>：把source指向的字符串拷贝到destin指向的字符串中</li>
+<li><strong>代码</strong>：</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">char</span> * <span class="title">my_strcpy</span><span class="params">(<span class="keyword">char</span> * destin, <span class="keyword">const</span> <span class="keyword">char</span> * source)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    assert(destin != <span class="literal">NULL</span> &amp;&amp; source != <span class="literal">NULL</span>); </span><br><span class="line">    <span class="keyword">char</span> *tmp = destin;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        *destin++ = *source++</span><br><span class="line">    &#125;<span class="keyword">while</span>(*destin &amp;&amp; *source);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> tmp;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> destination[<span class="number">100</span>] = &#123;<span class="number">1</span>&#125;;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *source = <span class="string">&quot;abcdefgh&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">char</span> *destion = my_strcpy(destination, source);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, destion);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="strncpy函数">strncpy函数</h3>
+<ol type="1">
+<li><strong>原型</strong>：<code>char * strncpy(char * str1, char * str2, int count)</code></li>
+<li><strong>作用</strong>：把str2指向的前count个字符拷贝到str1指向的字符串中</li>
+<li><strong>代码</strong>：</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;assert.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">char</span> * <span class="title">my_strncpy</span><span class="params">(<span class="keyword">char</span> * str1, <span class="keyword">char</span> * str2, <span class="keyword">int</span> count)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    assert(str1 != <span class="literal">NULL</span>);</span><br><span class="line">    <span class="keyword">while</span>(count &amp;&amp; (*str1++ = *str2++))</span><br><span class="line">    &#123;</span><br><span class="line">        count--;  <span class="comment">//长度随着复制的进行而减少</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span>(count--)</span><br><span class="line">    &#123;</span><br><span class="line">        *str1++ = <span class="string">&#x27;\0&#x27;</span>;  <span class="comment">//如果str2的长度小于count那就用NULL填充str1的剩余</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> str1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> destination[<span class="number">10</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">    <span class="keyword">char</span> *source = <span class="string">&quot;abcdefgh&quot;</span>;</span><br><span class="line">    <span class="keyword">int</span> count = <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line">    my_strncpy(destination, source, count);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, destination);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="strcmp函数">strcmp函数</h3>
+<ol type="1">
+<li><strong>原型</strong>：<code>int strcmp(const char * str1, const char * str2)</code></li>
+<li><strong>作用</strong>：比较str1和str2，str1 &gt; str2返回1，str1 == str2返回0</li>
+<li><strong>代码</strong>：</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">my_strcmp</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> * str1, <span class="keyword">const</span> <span class="keyword">char</span> * str2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">/***比较str1和str2，str1 &gt; str2返回大于0的数，str1 == str2返回0，str1 &lt; str2返回小于0的数***/</span></span><br><span class="line">    <span class="keyword">while</span>( ! ((*str1 != *str2) &amp;&amp; str1 != <span class="string">&#x27;\0&#x27;</span>))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//如果str1和str2的字符相等且字符str1没有到末尾则进入循环</span></span><br><span class="line">        str1++;  <span class="comment">//指针str1向后加一位</span></span><br><span class="line">        str2++;  <span class="comment">//指针str2向后加一位</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> (*str1 - *str2);  <span class="comment">//返回跳出循环的str1和str2当前的字符的差值比较的结果(0或1或-1)</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> *buf1 = <span class="string">&quot;aaaa&quot;</span>,</span><br><span class="line">         *buf2 = <span class="string">&quot;aaaab&quot;</span>,</span><br><span class="line">         *buf3 = <span class="string">&quot;aaaac&quot;</span>;</span><br><span class="line">    <span class="keyword">int</span> ptr = <span class="number">0</span>;  <span class="comment">//定义变量用来存放my_strcmp返回的值</span></span><br><span class="line"></span><br><span class="line">    ptr = my_strcmp(buf2, buf1);</span><br><span class="line">    <span class="keyword">if</span> (ptr &gt; <span class="number">0</span>)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;string 2 is bigger than string 1\n&quot;</span>);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;string 2 is smaller than string 1\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    ptr = my_strcmp(buf2, buf3);</span><br><span class="line">    <span class="keyword">if</span> (ptr &gt; <span class="number">0</span>)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;string 2 is bigger than string 3\n&quot;</span>);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;string 2 is smaller than string 3\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="strncmp函数">strncmp函数</h3>
+<ol type="1">
+<li><strong>原型</strong>：<code>int strncmp(const char * str1, const char * str2, int count)</code></li>
+<li><strong>作用</strong>：比较str1和str2的前n个字符</li>
+<li><strong>代码</strong>：</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">my_strncmp</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> * str1, <span class="keyword">const</span> <span class="keyword">char</span> * str2, <span class="keyword">int</span> count)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">/***比较str1和str2的前n个字符***/</span></span><br><span class="line">    <span class="keyword">if</span>(!count)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(--count &amp;&amp; *str1 &amp;&amp; *str1 == *str2)</span><br><span class="line">    &#123;</span><br><span class="line">        str1++;</span><br><span class="line">        str2++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> (*str1 - *str2);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> *str1 = <span class="string">&quot;China is a nation!&quot;</span>;</span><br><span class="line">    <span class="keyword">char</span> *str2 = <span class="string">&quot;French is a nation!&quot;</span>;</span><br><span class="line">    <span class="keyword">int</span> count = <span class="number">5</span>,</span><br><span class="line">        ptr = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    ptr = my_strncmp(str1, str2, count);</span><br><span class="line">    <span class="keyword">if</span>(ptr != <span class="number">0</span>)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;str1 is not equal to str2!\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="stricmp函数">stricmp函数</h3>
+<ol type="1">
+<li><strong>原型</strong>：<code>int my_stricmp(const char *str1, const char *str2)</code></li>
+<li><strong>作用</strong>：不区分大小写的比较str1和str2</li>
+<li><strong>代码</strong>：</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">my_stricmp</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *str1, <span class="keyword">const</span> <span class="keyword">char</span> *str2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">/***不区分大小写的比较str1和str2***/</span></span><br><span class="line">    <span class="keyword">char</span> ch1 = <span class="string">&#x27;0&#x27;</span>,</span><br><span class="line">         ch2 = <span class="string">&#x27;0&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">do</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>((ch1 = (<span class="keyword">unsigned</span> <span class="keyword">char</span>)(*(str1++))) &gt;= <span class="string">&#x27;A&#x27;</span> &amp;&amp; ch1 &lt;= <span class="string">&#x27;Z&#x27;</span>)</span><br><span class="line">            ch1 += <span class="number">0x20</span>;</span><br><span class="line">        <span class="keyword">if</span>((ch2 = (<span class="keyword">unsigned</span> <span class="keyword">char</span>)(*(str2++))) &gt;= <span class="string">&#x27;A&#x27;</span> &amp;&amp; ch2 &lt;= <span class="string">&#x27;Z&#x27;</span>)</span><br><span class="line">            ch2 += <span class="number">0x20</span>;</span><br><span class="line">    &#125;<span class="keyword">while</span>(ch1 &amp;&amp; (ch1 == ch2));  <span class="comment">// 判断是否相等且str1不为&#x27;\0&#x27;，是则进入循环</span></span><br><span class="line">    <span class="keyword">return</span> (ch1 - ch2);  <span class="comment">//返回两个数的大小</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> *str1= <span class="string">&quot;ammana&quot;</span>;</span><br><span class="line">    <span class="keyword">char</span> *str2 = <span class="string">&quot;bibi&quot;</span>;</span><br><span class="line">    <span class="keyword">char</span> *str3 = <span class="string">&quot;AMMANA&quot;</span>;</span><br><span class="line">    <span class="keyword">int</span> ptr = <span class="number">0</span>,</span><br><span class="line">        ptr1 = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    ptr = my_stricmp(str1, str2);</span><br><span class="line">    <span class="keyword">if</span>(ptr &gt; <span class="number">0</span>)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;str1 bigger than str2!\n&quot;</span>);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;str1 smaller than str2!\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    ptr1 = my_stricmp(str1, str3);</span><br><span class="line">    <span class="keyword">if</span>(ptr1 &gt; <span class="number">0</span>)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;str1 bigger than str3!\n&quot;</span>);</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(ptr1 &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;str1 smaller than str3!\n&quot;</span>);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;str1 equal to str3!\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="strlen函数">strlen函数</h3>
+<ol type="1">
+<li><strong>原型</strong>：<code>unsigned int strlen(const char * str)</code></li>
+<li><strong>作用</strong>：计算str的长度并返回</li>
+<li><strong>代码</strong>：</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">unsigned</span> <span class="keyword">int</span> <span class="title">my_strlen</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> * str)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">/***计算str的长度并返回***/</span></span><br><span class="line">    <span class="keyword">unsigned</span> length = <span class="number">0</span>;  <span class="comment">//定义无符号变量length统计str的长度</span></span><br><span class="line">    <span class="keyword">while</span>(*str != <span class="string">&#x27;\0&#x27;</span>)  <span class="comment">//判断str指向的字符是否为&#x27;\0&#x27;</span></span><br><span class="line">    &#123;</span><br><span class="line">        length++;  <span class="comment">//长度加1</span></span><br><span class="line">        str++;  <span class="comment">//指向的地址向后加1位</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> length;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> * str = <span class="string">&quot;abcdefgh&quot;</span>;</span><br><span class="line">    <span class="keyword">int</span> len = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    len = my_strlen(str);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, len);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="strcat函数">strcat函数</h3>
+<ol type="1">
+<li><strong>原型</strong>：<code>char * strcat(char* destin, const char *source)</code></li>
+<li><strong>作用</strong>：连接两个字符串，将source连接到destin</li>
+<li><strong>代码</strong>：</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">char</span> * <span class="title">my_strcat</span><span class="params">(<span class="keyword">char</span>* destin, <span class="keyword">const</span> <span class="keyword">char</span> *source)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">/***连接两个字符串，将source连接到destin***/</span></span><br><span class="line">    <span class="keyword">char</span> * temp = destin;  <span class="comment">//定义temp指针变量存放destin的地址</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(*temp)  <span class="comment">//判断temp字符串是否读到了&#x27;\0&#x27;</span></span><br><span class="line">    &#123;</span><br><span class="line">        temp++;  <span class="comment">//将temp指针读到字符串末尾</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(*temp++ = *source++)  <span class="comment">//把source字符串从temp末尾开始复制给temp</span></span><br><span class="line">        &#123;&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> temp;  <span class="comment">//返回链接好的字符串的指针</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">/***对函数Strcat的调用***/</span></span><br><span class="line">    <span class="keyword">char</span> destination[<span class="number">25</span>];  <span class="comment">//定义一个大小为25的数组</span></span><br><span class="line">    <span class="keyword">char</span> *space = <span class="string">&quot; &quot;</span>,</span><br><span class="line">         *String = <span class="string">&quot;C++!&quot;</span>,</span><br><span class="line">         *Hello = <span class="string">&quot;Hello&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">strcpy</span>(destination, Hello);  <span class="comment">//进行拷贝</span></span><br><span class="line">    my_strcat(destination, space);</span><br><span class="line">    my_strcat(destination, String);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, destination);  <span class="comment">//打印最终结果</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="strchr函数">strchr函数</h3>
+<ol type="1">
+<li><strong>原型</strong>：<code>char * strchr(char * str, const char c)</code></li>
+<li><strong>作用</strong>：查找str中c首次出现的位置，并返回位置或者NULL</li>
+<li><strong>代码</strong>：</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">char</span> * <span class="title">my_strchr</span><span class="params">(<span class="keyword">char</span> * str, <span class="keyword">const</span> <span class="keyword">char</span> c)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">/***查找str中c首次出现的位置，并返回位置或者NULL***/</span></span><br><span class="line">    <span class="keyword">while</span>(*str != <span class="string">&#x27;\0&#x27;</span> &amp;&amp; *str != c)  <span class="comment">//判断str是否为&#x27;\0&#x27;且等于c</span></span><br><span class="line">    &#123;</span><br><span class="line">        str++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//判断如果str等于c则返回与c匹配的str否则返回NULL</span></span><br><span class="line">    <span class="keyword">return</span> (*str == c ? str : <span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> * <span class="built_in">string</span> = <span class="string">&quot;abcdefgh&quot;</span>;</span><br><span class="line">    <span class="keyword">char</span> c = <span class="string">&#x27;d&#x27;</span>,</span><br><span class="line">         *ptr = <span class="literal">NULL</span>,  <span class="comment">//存放my_strchr的返回值</span></span><br><span class="line"></span><br><span class="line">    ptr = my_strchr(<span class="built_in">string</span>, c);</span><br><span class="line">    <span class="keyword">if</span>(ptr)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%c\n&quot;</span>, c);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Not Found!\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="strrchr函数">strrchr函数</h3>
+<ol type="1">
+<li><strong>原型</strong>：<code>char * strrchr(char * str, const char c)</code></li>
+<li><strong>作用</strong>：查找str中c最后一次出现的位置，并返回位置或者NULL</li>
+<li><strong>代码</strong>：</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">char</span> * <span class="title">my_strrchr</span><span class="params">(<span class="keyword">char</span> * str, <span class="keyword">const</span> <span class="keyword">char</span> c)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">/***查找str中c最后一次出现的位置，并返回位置或者NULL***/</span></span><br><span class="line">    <span class="keyword">char</span> * end = str + <span class="built_in">strlen</span>(str);  <span class="comment">//定义指针end存放str的末尾地址</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(*str != *end &amp;&amp; *end != c)  <span class="comment">//判断end没有到头部且没找到和c匹配的字符</span></span><br><span class="line">    &#123;</span><br><span class="line">        end--;  <span class="comment">//向前进行移动</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(*end == *str &amp;&amp; *end != c)  <span class="comment">//如果没找到则返回NULL</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> end;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> * <span class="built_in">string</span> = <span class="string">&quot;abcdefgh&quot;</span>;</span><br><span class="line">    <span class="keyword">char</span> c = <span class="string">&#x27;d&#x27;</span>,</span><br><span class="line">         *ptr = <span class="literal">NULL</span>,  <span class="comment">//存放my_strchr的返回值</span></span><br><span class="line"></span><br><span class="line">    ptr = my_strrchr(<span class="built_in">string</span>, c);</span><br><span class="line">    <span class="keyword">if</span>(ptr)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%c\n&quot;</span>, c);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Not Found!\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="strrev函数">strrev函数</h3>
+<ol type="1">
+<li><strong>原型</strong>：<code>char * strrev(char * str)</code></li>
+<li><strong>作用</strong>：翻转字符串并返回字符串指针</li>
+<li><strong>代码</strong>：</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">char</span> * <span class="title">my_strrev</span><span class="params">(<span class="keyword">char</span> * str)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">/***翻转字符串并返回字符串指针***/</span></span><br><span class="line">    assert(str != <span class="literal">NULL</span>);</span><br><span class="line">    <span class="keyword">char</span> *end = str;</span><br><span class="line">    <span class="keyword">char</span> *head = str;</span><br><span class="line">    <span class="keyword">char</span> temp = <span class="string">&#x27;0&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(*end++)</span><br><span class="line">    &#123;&#125;;</span><br><span class="line"></span><br><span class="line">    end--;  <span class="comment">/* 与end++抵消 */</span></span><br><span class="line">    end--;  <span class="comment">/* 回跳过结束符&#x27;\0&#x27; */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 当head和end未重合时，交换它们所指向的字符 */</span></span><br><span class="line">    <span class="keyword">while</span>(head &lt; end)</span><br><span class="line">    &#123;</span><br><span class="line">        temp = *head;</span><br><span class="line">        *head++ = *end;  <span class="comment">/* head向尾部移动 */</span></span><br><span class="line">        *end-- = temp;  <span class="comment">/* end向头部移动 */</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> str;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> 0</span></span><br><span class="line"><span class="comment">/*第二种实现方式*/</span></span><br><span class="line"><span class="function"><span class="keyword">char</span> * <span class="title">my_strrev</span><span class="params">(<span class="keyword">char</span> * str)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">/***翻转字符串并返回字符串指针***/</span></span><br><span class="line">    assert(str != <span class="literal">NULL</span>);</span><br><span class="line">    <span class="keyword">char</span> *end = <span class="built_in">strlen</span>(str) + str <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">char</span> temp = <span class="string">&#x27;0&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(str &lt; end)</span><br><span class="line">    &#123;</span><br><span class="line">        temp = *str;</span><br><span class="line">        *str = *end;</span><br><span class="line">        *end = temp;</span><br><span class="line">        str++;</span><br><span class="line">        end--;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> str;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">/***只能逆置字符数组，而不能逆置字符串指针指向的字符串，</span></span><br><span class="line"><span class="comment">        因为字符串指针指向的是字符串常量，常量不能被修改***/</span></span><br><span class="line">    <span class="keyword">char</span> str[] = <span class="string">&quot;Hello World&quot;</span>;  <span class="comment">//定义str数组</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Before reversal: %s\n&quot;</span>, str);</span><br><span class="line">    my_strrev(str);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;After reversal:  %s\n&quot;</span>, str);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="strdup函数">strdup函数</h3>
+<ol type="1">
+<li><strong>原型</strong>：<code>char * strdup(const char * str)</code></li>
+<li><strong>作用</strong>：拷贝字符串到新申请的内存中返回内存指针，否则返回NULL</li>
+<li><strong>代码</strong>：</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;assert.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">char</span> * <span class="title">my_strdup</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> * str)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">/***拷贝字符串到新申请的内存中返回内存指针，否则返回NULL***/</span></span><br><span class="line">    <span class="keyword">char</span> * temp = (<span class="keyword">char</span>*)<span class="built_in">malloc</span>(<span class="built_in">strlen</span>(str) + <span class="number">1</span>);  <span class="comment">//给temp申请内存</span></span><br><span class="line">    assert(str != <span class="literal">NULL</span> &amp;&amp; temp != <span class="literal">NULL</span>);  <span class="comment">//进行检查是否为NULL</span></span><br><span class="line">    <span class="built_in">strcpy</span>(temp, str);  <span class="comment">//进行拷贝</span></span><br><span class="line">    <span class="keyword">return</span> temp;  <span class="comment">//返回的内存在堆中需要手动释放内存</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> *str = <span class="literal">NULL</span>,</span><br><span class="line">         *<span class="built_in">string</span> = <span class="string">&quot;abcde&quot;</span>;</span><br><span class="line"></span><br><span class="line">    str = my_strdup(<span class="built_in">string</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, str);</span><br><span class="line">    <span class="built_in">free</span>(str);  <span class="comment">//释放内存</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="strstr函数">strstr函数</h3>
+<ol type="1">
+<li><strong>原型</strong>：<code>char * strstr(const char * str1, char * str2)</code></li>
+<li><strong>作用</strong>：查找str2在str1中出现的位置，找到返回位置，否则返回NULL</li>
+<li><strong>代码</strong>：</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">char</span> * <span class="title">my_strstr</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> * str1, <span class="keyword">char</span> * str2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">/***查找str2在str1中出现的位置，找到返回位置，否则返回NULL***/</span></span><br><span class="line">    assert(str1 != <span class="literal">NULL</span> &amp; str2 != <span class="literal">NULL</span>);  <span class="comment">//检查str1和str2</span></span><br><span class="line">    <span class="keyword">int</span> len1 = <span class="built_in">strlen</span>(str1);  <span class="comment">//定len1来获取str1的长度</span></span><br><span class="line">    <span class="keyword">int</span> len2 = <span class="built_in">strlen</span>(str2);  <span class="comment">//定len2来获取str2的长度</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(len1 &gt;= len2)  <span class="comment">//必须str1的长度大于str2的长度</span></span><br><span class="line">    &#123;</span><br><span class="line">        len1--;  <span class="comment">//str1的长度每一次减去一个</span></span><br><span class="line">        <span class="keyword">if</span>(!<span class="built_in">strncmp</span>(str1, str2, len2))  <span class="comment">//进行比较str2和str1的前len2个字符</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> str2;  <span class="comment">//如果匹配返回str2</span></span><br><span class="line">        &#125;</span><br><span class="line">        str1++;  <span class="comment">//str1每一次都要向后走一步</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> *str1 = <span class="string">&quot;China is a nation!&quot;</span>,</span><br><span class="line">         *str2 = <span class="string">&quot;nation&quot;</span>,</span><br><span class="line">         *ptr = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    ptr = my_strstr(str1, str2);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;The string is: %s\n&quot;</span>, ptr);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="strpbrk函数">strpbrk函数</h3>
+<ol type="1">
+<li><strong>原型</strong>：<code>char *strpbrk(const char *str1, const char *str2)</code></li>
+<li><strong>作用</strong>：从str1的第一个字符向后检索，直到’\0’，如果当前字符存在于str2中，那么返回当前字符的地址，并停止检索.</li>
+<li><strong>代码</strong>：</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;assert.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">my_strpbrk</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *str1, <span class="keyword">const</span> <span class="keyword">char</span> *str2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">/***strpbrk()从str1的第一个字符向后检索，直到&#x27;\0&#x27;，如果当前字符存在于str2中，</span></span><br><span class="line"><span class="comment">        那么返回当前字符的地址，并停止检索***/</span></span><br><span class="line">    assert(str1 != <span class="literal">NULL</span> &amp;&amp; str2 != <span class="literal">NULL</span>);</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *str3 = str2;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(*str1)  <span class="comment">//判断石头人字符串str1是否结束</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(str3 = str2; *str3; ++str3)  <span class="comment">//str2进行循环与str1的自费比较</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(*str1 == *str3)  <span class="comment">//如果相等则进行str1的下一个判断</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(*str3)  <span class="comment">//如果str3结束则结束比较</span></span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        str1++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(*str3 == <span class="string">&#x27;\0&#x27;</span>)  <span class="comment">//如果str1到末尾则返回NULL</span></span><br><span class="line">        str1 = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">return</span> (<span class="keyword">char</span>*)str1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> s1[] = <span class="string">&quot;http://see.xidian.edu.cn/cpp/u/xitong/&quot;</span>;</span><br><span class="line">    <span class="keyword">char</span> s2[] = <span class="string">&quot;see&quot;</span>;</span><br><span class="line">    <span class="keyword">char</span> *p = my_strpbrk(s1, s2);</span><br><span class="line">    <span class="keyword">if</span>(p)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;The result is: %s\n&quot;</span>,p);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Sorry!\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="strspn函数">strspn函数</h3>
+<ol type="1">
+<li><strong>原型</strong>：<code>int my_strspn(const char *str1, const char *str2)</code></li>
+<li><strong>作用</strong>：从参数str1字符串的开头计算连续的字符,而这些字符都完全是str2所指字符串中的字符。</li>
+<li><strong>代码</strong>：</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;assert.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/***strspn()函数检索区分大小写***/</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">my_strspn</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *str1, <span class="keyword">const</span> <span class="keyword">char</span> *str2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">/***从参数str1字符串的开头计算连续的字符,而这些字符都完全是str2所指字符串中的字符。</span></span><br><span class="line"><span class="comment">    简单的说,若strspn()返回的数值为n,则代表字符串str1开头连续有n个字符都是属于字符串str2内的字符***/</span></span><br><span class="line">    assert(str1 != <span class="literal">NULL</span> &amp;&amp; str2 != <span class="literal">NULL</span>);</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *tmp = str1;  <span class="comment">//临时变量存储str1的地址</span></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *str3;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(*tmp)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(str3 = str2; *str3; ++str3)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(*str3 == *tmp)  <span class="comment">//判断str1是否存在str2的字符</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(*str3 == <span class="string">&#x27;\0&#x27;</span>)  <span class="comment">//如果str2结束则跳出循环str1++</span></span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        tmp++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> tmp - str1;  <span class="comment">//返回差值，即str1共有几个连续的字符是str2中存在的</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> s1[] = <span class="string">&quot;hello world!&quot;</span>;</span><br><span class="line">    <span class="keyword">char</span> s2[] = <span class="string">&quot;i am lihua&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> p = my_strspn(s1, s2);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;The result is:%d\n&quot;</span>, p);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="strtok函数">strtok函数</h3>
+<ol type="1">
+<li><strong>原型</strong>：<code>char *my_strtok(char *sou, char *delim)</code></li>
+<li><strong>作用</strong>：将字符串分割成一个个片段</li>
+<li><strong>代码</strong>：</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/***因strtok函数内部使用了静态指针，因此它不是线程安全的***/</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">char</span> *olds;  <span class="comment">//定义全局变量来进行定位</span></span><br><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">my_strtok</span><span class="params">(<span class="keyword">char</span> *sou, <span class="keyword">char</span> *delim)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">/***strtok函数用来将字符串分割成一个个片段，</span></span><br><span class="line"><span class="comment">    在参数sou的字符串中发现到参数delim的分割字符时则会将该字符改为\0 字符***/</span></span><br><span class="line">    <span class="comment">//参数sou指向欲分割的字符串，参数delim为分割字符串</span></span><br><span class="line">    <span class="comment">//在第一次调用时，strtok()必需给予参数sou字符串，往后的调用则将参数sou设置成NULL</span></span><br><span class="line">    <span class="comment">//每次调用成功则返回下一个分割后的字符串指针</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">char</span> *token = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">if</span>(sou == <span class="literal">NULL</span>)  <span class="comment">//如果sou为空则将上一次的位置给sou</span></span><br><span class="line">    &#123;</span><br><span class="line">        sou = olds;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*将指针移到第一个非delim的位置*/</span></span><br><span class="line">    sou += <span class="built_in">strspn</span>(sou, delim);</span><br><span class="line">    <span class="keyword">if</span>(*sou == <span class="string">&#x27;\0&#x27;</span>)  <span class="comment">//如果是结束符，则将结束符保存并退出函数</span></span><br><span class="line">    &#123;</span><br><span class="line">        olds = sou;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*获取delim的字符在字符串sou中第一次出现的位置*/</span></span><br><span class="line">    token = sou;</span><br><span class="line">    sou = <span class="built_in">strpbrk</span>(token, delim);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(sou == <span class="literal">NULL</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        olds = __rawmemchr (token, <span class="string">&#x27;\0&#x27;</span>);  <span class="comment">//参考http://dev.wikl.net/89401.html</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        *sou = <span class="string">&#x27;\0&#x27;</span>;  <span class="comment">//将分隔符的位置用&#x27;\0&#x27;替换</span></span><br><span class="line">        olds = sou + <span class="number">1</span>;  <span class="comment">//将olds指向下一次需要操作的位置</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> token;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//strtok处理的是函数的局部状态信息，所以不能同时解析两个字符串</span></span><br><span class="line">    <span class="keyword">char</span> sou[<span class="number">100</span>] = <span class="string">&quot; Micael_SX is so good&quot;</span>;</span><br><span class="line">    <span class="keyword">char</span> *delim = <span class="string">&quot; &quot;</span>;</span><br><span class="line">    <span class="keyword">char</span> *token;</span><br><span class="line">    token = my_strtok(sou, delim);</span><br><span class="line">    <span class="keyword">while</span>(token != <span class="literal">NULL</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, token);</span><br><span class="line">        token = my_strtok(<span class="literal">NULL</span>, delim);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="strsep函数">strsep函数</h3>
+<ol type="1">
+<li><strong>原型</strong>：<code>char *my_strsep(char **stringp, const char *delim)</code></li>
+<li><strong>作用</strong>：将字符串分割成一个个片段</li>
+<li><strong>代码</strong>：</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/***********************************************************</span></span><br><span class="line"><span class="comment">a：如果*stringp为NULL，则该函数不进行任何操作，直接返回NULL；</span></span><br><span class="line"><span class="comment">b：strsep每次都是从*stringp指向的位置开始搜索，搜索到任一分割字符之后，将其置为’\0’，</span></span><br><span class="line"><span class="comment">   并使*stringp指向它的下一个字符。如果找不到任何分割字符，则将*stringp置为NULL。</span></span><br><span class="line"><span class="comment">c：strsep内部没有使用静态指针，因而strsep是线程安全的。</span></span><br><span class="line"><span class="comment">d：strsep返回的子串有可能是空字符串，实际上，就是因为strtok无法返回空子串，才引入的strsep函数。</span></span><br><span class="line"><span class="comment">   不过strtok符合C89/C99标准，因而移植性更好。但strsep却不是。</span></span><br><span class="line"><span class="comment">e: &quot;二八定律&quot;,即80%情况下分隔符只有一个字节，使用strchr完成,20%情况有多个字节,调用strpbrk完成</span></span><br><span class="line"><span class="comment">*************************************************************/</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">my_strsep</span><span class="params">(<span class="keyword">char</span> **stringp, <span class="keyword">const</span> <span class="keyword">char</span> *delim)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">/***strsep函数用来将字符串分割成一个个片段***/</span></span><br><span class="line">    <span class="keyword">char</span> *begin,</span><br><span class="line">         *end;</span><br><span class="line">    begin = *stringp;</span><br><span class="line">    <span class="keyword">if</span>(begin == <span class="literal">NULL</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*delim分隔符是单个字符的情况是非常频繁的，因此不需要使用代价昂贵的strpbrk函数</span></span><br><span class="line"><span class="comment">     而只需要调用strchr就能解决*/</span></span><br><span class="line">    <span class="keyword">if</span>(delim[<span class="number">0</span>] == <span class="string">&#x27;\0&#x27;</span> || delim[<span class="number">1</span>] == <span class="string">&#x27;\0&#x27;</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">char</span> ch = delim[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">if</span>(ch == <span class="string">&#x27;\0&#x27;</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            end = <span class="literal">NULL</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(*begin == ch)</span><br><span class="line">            &#123;</span><br><span class="line">                end = begin;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(*begin == <span class="string">&#x27;\0&#x27;</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                end = <span class="literal">NULL</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                end = <span class="built_in">strchr</span>(begin + <span class="number">1</span>, ch);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">/*delim有两个字符以上,才调用strpbrk*/</span></span><br><span class="line">        end = <span class="built_in">strpbrk</span>(begin, delim);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(end)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">/*用0封闭这个token；返回stringp，指向一个null指针*/</span></span><br><span class="line">        *end++ = <span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line">        *stringp = end;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">/*没有出现delim，这是最后一个token*/</span></span><br><span class="line">        *stringp = <span class="literal">NULL</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> begin;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> source[] = <span class="string">&quot;hello, world! welcome to China!&quot;</span>;</span><br><span class="line">    <span class="keyword">char</span> delim[] = <span class="string">&quot; ,!&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">char</span> *s = strdup(source);</span><br><span class="line">    <span class="keyword">char</span> *token;</span><br><span class="line">    <span class="keyword">for</span>(token = my_strsep(&amp;s, delim); token != <span class="literal">NULL</span>; token = my_strsep(&amp;s, delim))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(token);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;+&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="strdel函数">strdel函数</h3>
+<p>这个是我面试的一个上机题目，不是库里边的，所以自己写出原型。</p>
+<p>char <em>strDel(char</em> str,const char chToDel)，删除str中所有的chToDel字符。</p>
+<p><strong>源码：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//基本思想是：通过pRefStr2遍历str，找出不等于chToDel的值，将其赋值与pRefStr2</span></span><br><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">strDel</span><span class="params">(<span class="keyword">char</span>* str,<span class="keyword">char</span> chToDel)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	</span><br><span class="line">	assert((str!=<span class="literal">NULL</span>)&amp;&amp; (chToDel!=<span class="literal">NULL</span>));</span><br><span class="line">   <span class="keyword">char</span> *pRefStr1, *pRefStr2;</span><br><span class="line">	pRefStr1=pRefStr2=str;<span class="comment">//将两个指针变量同时指向str，后续改变指针变量的值相当于改变str的值</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(*pRefStr2++)&#123;</span><br><span class="line">		<span class="keyword">if</span>(*pRefStr2!=chToDel) </span><br><span class="line">		&#123;</span><br><span class="line">			*pRefStr1++=*pRefStr2;<span class="comment">//找到不等于chToDel的值，并将其赋值与pRefStr1，再将pRefStr1的指针向后移动；</span></span><br><span class="line">		&#125;</span><br><span class="line">	 &#125;</span><br><span class="line">    *pRefStr1=<span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line">    <span class="keyword">return</span> str;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>关键点： 注意C语言程序的顺序执行，以及指针。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;assert.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">char</span> destStr[<span class="number">10</span>]=<span class="string">&quot;aadddfcca&quot;</span>;</span><br><span class="line">	<span class="keyword">char</span> delStr=<span class="string">&#x27;a&#x27;</span>;</span><br><span class="line">	strDel(destStr,delStr);</span><br><span class="line">	<span class="built_in">cout</span>&lt;&lt;destStr&lt;&lt;<span class="built_in">endl</span>;&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="参考文章">参考文章</h3>
+<p><strong>链接:</strong></p>
+<ol type="1">
+<li>http://blog.csdn.net/kangroger/article/details/24383571</li>
+<li>http://zheng-ji.info/blog/2014/02/05/shen-ru-strtokhan-shu/</li>
+<li>http://blog.csdn.net/gqtcgq/article/details/48399957</li>
+</ol>
+<h2 id="相关参考">相关参考</h2>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/xingerr/article/details/70257234">C语言str函数的源码</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/wjeson/article/details/9185585">C语言字符串函数源码详解</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/03/22/C++Log/spdlog%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8/" rel="prev" title="C++ spdlog 基础使用">
+      <i class="fa fa-chevron-left"></i> C++ spdlog 基础使用
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/03/22/C++/C++%E5%B8%B8%E7%94%A8%E7%BD%91%E7%AB%99/" rel="next" title="C++ 常用网站">
+      C++ 常用网站 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#strcpy%E5%87%BD%E6%95%B0"><span class="nav-number">1.</span> <span class="nav-text">strcpy函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#strncpy%E5%87%BD%E6%95%B0"><span class="nav-number">2.</span> <span class="nav-text">strncpy函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#strcmp%E5%87%BD%E6%95%B0"><span class="nav-number">3.</span> <span class="nav-text">strcmp函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#strncmp%E5%87%BD%E6%95%B0"><span class="nav-number">4.</span> <span class="nav-text">strncmp函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#stricmp%E5%87%BD%E6%95%B0"><span class="nav-number">5.</span> <span class="nav-text">stricmp函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#strlen%E5%87%BD%E6%95%B0"><span class="nav-number">6.</span> <span class="nav-text">strlen函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#strcat%E5%87%BD%E6%95%B0"><span class="nav-number">7.</span> <span class="nav-text">strcat函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#strchr%E5%87%BD%E6%95%B0"><span class="nav-number">8.</span> <span class="nav-text">strchr函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#strrchr%E5%87%BD%E6%95%B0"><span class="nav-number">9.</span> <span class="nav-text">strrchr函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#strrev%E5%87%BD%E6%95%B0"><span class="nav-number">10.</span> <span class="nav-text">strrev函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#strdup%E5%87%BD%E6%95%B0"><span class="nav-number">11.</span> <span class="nav-text">strdup函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#strstr%E5%87%BD%E6%95%B0"><span class="nav-number">12.</span> <span class="nav-text">strstr函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#strpbrk%E5%87%BD%E6%95%B0"><span class="nav-number">13.</span> <span class="nav-text">strpbrk函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#strspn%E5%87%BD%E6%95%B0"><span class="nav-number">14.</span> <span class="nav-text">strspn函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#strtok%E5%87%BD%E6%95%B0"><span class="nav-number">15.</span> <span class="nav-text">strtok函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#strsep%E5%87%BD%E6%95%B0"><span class="nav-number">16.</span> <span class="nav-text">strsep函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#strdel%E5%87%BD%E6%95%B0"><span class="nav-number">17.</span> <span class="nav-text">strdel函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0"><span class="nav-number">18.</span> <span class="nav-text">参考文章</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E5%8F%82%E8%80%83"><span class="nav-number"></span> <span class="nav-text">相关参考</span></a></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">straywriter</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">124</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/straywriter" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;straywriter" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">straywriter</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

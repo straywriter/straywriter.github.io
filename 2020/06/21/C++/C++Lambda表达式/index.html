@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"straywriter.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="C++ Lambda 表达式">
+<meta property="og:url" content="https://straywriter.github.io/2020/06/21/C++/C++Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://straywriter.github.io/2020/06/21/C++/C++Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/image-20210404214006671.png">
+<meta property="og:image" content="https://straywriter.github.io/2020/06/21/C++/C++Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/lambdaexpsyntax.png">
+<meta property="article:published_time" content="2020-06-21T13:59:11.000Z">
+<meta property="article:modified_time" content="2021-04-04T13:44:21.502Z">
+<meta property="article:author" content="straywriter">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://straywriter.github.io/2020/06/21/C++/C++Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/image-20210404214006671.png">
+
+<link rel="canonical" href="https://straywriter.github.io/2020/06/21/C++/C++Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>C++ Lambda 表达式 | Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://straywriter.github.io/2020/06/21/C++/C++Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="straywriter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C++ Lambda 表达式
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-06-21 21:59:11" itemprop="dateCreated datePublished" datetime="2020-06-21T21:59:11+08:00">2020-06-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-04-04 21:44:21" itemprop="dateModified" datetime="2021-04-04T21:44:21+08:00">2021-04-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="/2020/06/21/C++/C++Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/image-20210404214006671.png"></p>
+<h2 id="简介">简介</h2>
+<h3 id="lambda与函数对象">lambda与函数对象</h3>
+<h3 id="lambda和闭包">Lambda和闭包</h3>
+<ol type="1">
+<li>lambda匿名函数和闭包的关系就如同类和类对象的关系，匿名函数和类的定义都只存在于源码（代码段）中，而闭包和类对象则是在运行时占用内存空间的实体；</li>
+<li>对匿名函数的定义会生成一个独一无二的类，并在运行时生成其类对象；</li>
+</ol>
+<h2 id="lambda表达式声明">Lambda表达式声明</h2>
+<figure>
+<img src="/2020/06/21/C++/C++Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/lambdaexpsyntax.png" alt="lambda 表达式的结构化元素"><figcaption aria-hidden="true">lambda 表达式的结构化元素</figcaption>
+</figure>
+<ol type="1">
+<li>捕获</li>
+<li>参数列表 可有可无. (也称为 <em>lambda 声明符</em>)</li>
+<li>可变规范 可有可无.</li>
+<li>异常规范 可有可无.</li>
+<li>尾随-返回类型 可有可无.</li>
+<li>lambda 定义。</li>
+</ol>
+<h3 id="c-17-lambda">C++ 17 lambda</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[ capture-list ] ( params ) mutable(optional) constexpr(optional)(c++17) exception attribute -&gt; ret &#123; body &#125; </span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 简化语法</span><br><span class="line">[ capture-list ] ( params ) -&gt; ret &#123; body &#125;     </span><br><span class="line">[ capture-list ] ( params ) &#123; body &#125;    </span><br><span class="line">[ capture-list ] &#123; body &#125; </span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>capture-list</strong>：捕捉列表，这个不用多说，前面已经讲过，记住它不能省略；</li>
+<li><strong>params</strong>：参数列表，可以省略（但是后面必须紧跟函数体）；</li>
+<li><strong>mutable</strong>：可选，将<code>lambda</code>表达式标记为<code>mutable</code>后，函数体就可以修改传值方式捕获的变量；</li>
+<li><strong>constexpr</strong>：可选，C++17，可以指定<code>lambda</code>表达式是一个常量函数；</li>
+<li><strong>exception</strong>：可选，指定<code>lambda</code>表达式可以抛出的异常；</li>
+<li><strong>attribute</strong>：可选，指定<code>lambda</code>表达式的特性；</li>
+<li><strong>ret</strong>：可选，返回值类型；</li>
+<li><strong>body</strong>：函数执行体。</li>
+</ul>
+<p><strong>示例</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cmath&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">abssort</span><span class="params">(<span class="keyword">float</span>* x, <span class="keyword">unsigned</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">std</span>::sort(x, x + n,</span><br><span class="line">        <span class="comment">// Lambda expression begins</span></span><br><span class="line">        [](<span class="keyword">float</span> a, <span class="keyword">float</span> b) &#123;</span><br><span class="line">            <span class="keyword">return</span> (<span class="built_in">std</span>::<span class="built_in">abs</span>(a) &lt; <span class="built_in">std</span>::<span class="built_in">abs</span>(b));</span><br><span class="line">        &#125; <span class="comment">// end of lambda expression</span></span><br><span class="line">    );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="捕获变量">捕获变量</h2>
+<p>类似参数传递方式（值传递、引入传递、指针传递），在Lambda表达式中，外部变量的捕获方式也有值捕获、引用捕获、隐式捕获。</p>
+<p><strong>C++11中的Lambda表达式捕获外部变量主要有以下形式：</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>捕获形式</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>[]</td>
+<td>不捕获任何外部变量</td>
+</tr>
+<tr class="even">
+<td>[变量名, …]</td>
+<td>默认以值得形式捕获指定的多个外部变量（用逗号分隔），如果引用捕获，需要显示声明（使用&amp;说明符）</td>
+</tr>
+<tr class="odd">
+<td>[this]</td>
+<td>以值的形式捕获this指针</td>
+</tr>
+<tr class="even">
+<td>[=]</td>
+<td>以值的形式捕获所有外部变量</td>
+</tr>
+<tr class="odd">
+<td>[&amp;]</td>
+<td>以引用形式捕获所有外部变量</td>
+</tr>
+<tr class="even">
+<td>[=, &amp;x]</td>
+<td>变量x以引用形式捕获，其余变量以传值形式捕获</td>
+</tr>
+<tr class="odd">
+<td>[&amp;, x]</td>
+<td>变量x以值的形式捕获，其余变量以引用形式捕获</td>
+</tr>
+</tbody>
+</table>
+<p><strong>示例：</strong></p>
+<ul>
+<li>[]：默认不捕获任何变量；</li>
+<li>[=]：默认以值捕获所有变量；</li>
+<li>[&amp;]：默认以引用捕获所有变量；</li>
+<li>[x]：仅以值捕获x，其它变量不捕获；</li>
+<li>[&amp;x]：仅以引用捕获x，其它变量不捕获；</li>
+<li>[=, &amp;x]：默认以值捕获所有变量，但是x是例外，通过引用捕获；</li>
+<li>[&amp;, x]：默认以引用捕获所有变量，但是x是例外，通过值捕获；</li>
+<li>[this]：通过引用捕获当前对象（其实是复制指针）；</li>
+<li>[*this]：通过传值方式捕获当前对象；</li>
+</ul>
+<h3 id="注意事项">注意事项</h3>
+<ul>
+<li>若要在类方法的主体中使用 lambda 表达式，请将 <strong><code>this</code></strong> 指针传递给捕获子句，以提供对封闭类的方法和数据成员的访问。</li>
+<li>引用捕获可用于修改外部变量，而值捕获却不能实现此操作。 (<strong><code>mutable</code></strong> 允许修改副本，而不是原始副本。 )</li>
+<li>引用捕获会反映外部变量的更新，而值捕获却不会反映。</li>
+<li>引用捕获引入生存期依赖项，而值捕获却没有生存期依赖项。 当 lambda 以异步方式运行时，这一点尤其重要。 如果在异步 lambda 中通过引用捕获本地变量，该本地变量将很可能在 lambda 运行时消失，从而导致运行时访问冲突。</li>
+</ul>
+<h4 id="隐式捕获">隐式捕获</h4>
+<p>上面的值捕获和引用捕获都需要我们在捕获列表中显示列出Lambda表达式中使用的外部变量。除此之外，我们还可以让编译器根据函数体中的代码来推断需要捕获哪些变量，这种方式称之为隐式捕获。隐式捕获有两种方式，分别是[=]和[&amp;]。[=]表示以值捕获的方式捕获外部变量，[&amp;]表示以引用捕获的方式捕获外部变量。</p>
+<h4 id="混合方式">混合方式</h4>
+<p>上面的例子，要么是值捕获，要么是引用捕获，Lambda表达式还支持混合的方式捕获外部变量，这种方式主要是以上几种捕获方式的组合使用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[]      &#x2F;&#x2F; 沒有定义任何变量。使用未定义变量会引发错误。</span><br><span class="line">[x, &amp;y] &#x2F;&#x2F; x以传值方式传入（默认），y以引用方式传入。</span><br><span class="line">[&amp;]     &#x2F;&#x2F; 任何被使用到的外部变量都隐式地以引用方式加以引用。</span><br><span class="line">[&#x3D;]     &#x2F;&#x2F; 任何被使用到的外部变量都隐式地以传值方式加以引用。</span><br><span class="line">[&amp;, x]  &#x2F;&#x2F; x显式地以传值方式加以引用。其余变量以引用方式加以引用。</span><br><span class="line">[&#x3D;, &amp;z] &#x2F;&#x2F; z显式地以引用方式加以引用。其余变量以传值方式加以引用。</span><br></pre></td></tr></table></figure>
+<h4 id="修改捕获变量"><strong>修改捕获变量</strong></h4>
+<p>前面我们提到过，在Lambda表达式中，如果以传值方式捕获外部变量，则函数体中不能修改该外部变量，否则会引发编译错误。那么有没有办法可以修改值捕获的外部变量呢？这是就需要使用mutable关键字，该关键字用以说明表达式体内的代码可以修改值捕获的变量。</p>
+<h4 id="悬空引用指针">悬空引用/指针</h4>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>* x = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">1000000</span>];</span><br><span class="line">x[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">auto</span> AnonyFunc = [&amp;x]()</span><br><span class="line">&#123;        </span><br><span class="line">    x[<span class="number">0</span>] = <span class="number">1</span>; <span class="comment">// Segmentation fault</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">delete</span>[] x;</span><br><span class="line">AnonyFunc();</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Foo</span></span></span><br><span class="line"><span class="class">&#123;</span>        </span><br><span class="line">    <span class="keyword">int</span> x_[<span class="number">1000000</span>];</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Foo* f = <span class="keyword">new</span> Foo();</span><br><span class="line">    f-&gt;x_[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">auto</span> AnonyFunc = f -&gt; <span class="keyword">void</span></span><br><span class="line">    &#123;           </span><br><span class="line">        f-&gt;x_[<span class="number">0</span>] = <span class="number">1</span>; <span class="comment">// Segmentation fault</span></span><br><span class="line">    &#125;;</span><br><span class="line">        <span class="keyword">delete</span> f;</span><br><span class="line">        AnonyFunc();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+<p><strong>示例2：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">std::function&lt;int(int)&gt; add_x(int x)</span><br><span class="line">&#123;</span><br><span class="line">    return [&#x3D;](int a) &#123; return x + a; &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="可变参数模板">可变参数模板</h4>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">template&lt;class... Args&gt;</span><br><span class="line">void f(Args... args) &#123;</span><br><span class="line">    auto x &#x3D; [args...] &#123; return g(args...); &#125;;</span><br><span class="line">    x();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="相互赋值">相互赋值</h4>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">auto a &#x3D; [] &#123; cout &lt;&lt; &quot;A&quot; &lt;&lt; endl; &#125;;</span><br><span class="line">auto b &#x3D; [] &#123; cout &lt;&lt; &quot;B&quot; &lt;&lt; endl; &#125;;</span><br><span class="line"></span><br><span class="line">a &#x3D; b;   &#x2F;&#x2F; 非法，lambda无法赋值</span><br><span class="line">auto c &#x3D; a;   &#x2F;&#x2F; 合法，生成一个副本</span><br></pre></td></tr></table></figure>
+<h2 id="c14-lambda表达式">C++14 lambda表达式</h2>
+<h3 id="泛型lambda表达式">泛型<code>lambda</code>表达式</h3>
+<p>从<code>C++14</code>开始，<code>lambda</code>表达式支持泛型：其参数可以使用自动推断类型的功能，而不需要显示地声明具体类型。这就如同函数模板一样，参数要使用类型自动推断功能，只需要将其类型指定为<code>auto</code>，类型推断规则与函数模板一样。这里给出一个简单例子：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> add = [](<span class="keyword">auto</span> x, <span class="keyword">auto</span> y) &#123; <span class="keyword">return</span> x + y; &#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> x = add(<span class="number">2</span>, <span class="number">3</span>);   <span class="comment">// 5</span></span><br><span class="line"><span class="keyword">double</span> y = add(<span class="number">2.5</span>, <span class="number">3.5</span>);  <span class="comment">// 6.0</span></span><br></pre></td></tr></table></figure>
+<h3 id="lambda捕捉表达式"><code>lambda</code>捕捉表达式</h3>
+<p>前面讲过，<code>lambda</code>表达式可以按复制或者引用捕获在其作用域范围内的变量。而有时候，我们希望捕捉不在其作用域范围内的变量，而且最重要的是我们希望捕捉右值。所以<code>C++14</code>中引入了表达式捕捉，其允许用任何类型的表达式初始化捕捉的变量。看下面的例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 利用表达式捕获，可以更灵活地处理作用域内的变量</span><br><span class="line">int x &#x3D; 4;</span><br><span class="line">auto y &#x3D; [&amp;r &#x3D; x, x &#x3D; x + 1] &#123; r +&#x3D; 2; return x * x; &#125;();</span><br><span class="line">&#x2F;&#x2F; 此时 x 更新为6，y 为25</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 直接用字面值初始化变量</span><br><span class="line">auto z &#x3D; [str &#x3D; &quot;string&quot;]&#123; return str; &#125;();</span><br><span class="line">&#x2F;&#x2F; 此时z是const char* 类型，存储字符串 string</span><br></pre></td></tr></table></figure>
+<p>可以看到捕捉表达式扩大了<code>lambda</code>表达式的捕捉能力，有时候你可以用<code>std::move</code>初始化变量。这对不能复制只能移动的对象很重要，比如<code>std::unique_ptr</code>，因为其不支持复制操作，你无法以值方式捕捉到它。但是利用<code>lambda</code>捕捉表达式，可以通过移动来捕捉它：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> myPi = <span class="built_in">std</span>::make_unique&lt;<span class="keyword">double</span>&gt;(<span class="number">3.1415</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">auto</span> circle_area = [pi = <span class="built_in">std</span>::move(myPi)](<span class="keyword">double</span> r) &#123; <span class="keyword">return</span> *pi * r * r; &#125;;</span><br><span class="line"><span class="built_in">cout</span> &lt;&lt; circle_area(<span class="number">1.0</span>) &lt;&lt; <span class="built_in">endl</span>; <span class="comment">// 3.1415</span></span><br></pre></td></tr></table></figure>
+<p>其实用表达式初始化捕捉变量，与使用<code>auto</code>声明一个变量的机理是类似的。</p>
+<h3 id="广义lambda捕获generalized-lambda-captures">广义lambda捕获（Generalized Lambda Captures）</h3>
+<p>C++ 14 中引入了新的<strong>广义 lambda 捕获</strong>（<a href="https://link.zhihu.com/?target=https%3A//en.wikipedia.org/wiki/C%2B%2B14%23Generic_lambdas">Generalized Lambda Captures</a>），即可以在捕获列表中以任意方式初始化匿名函数中的变量，使得某些被禁用了拷贝构造函数的类型可以通过 <code>std::move</code> 的方式被捕获到匿名函数中：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> ptr_0 = make_unique&lt;<span class="keyword">int</span>&gt;( <span class="number">0</span> );</span><br><span class="line"><span class="keyword">auto</span> AnonyFunc = [ptr_0 = move(ptr_0)]()</span><br><span class="line">&#123;</span><br><span class="line">    *ptr_0 = <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; *ptr_0 &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;;</span><br><span class="line">AnonyFunc();</span><br></pre></td></tr></table></figure>
+<p>这里捕获列表中左边和右边的 <code>ptr_0</code> 不是同一个变量，它们的作用域分别是匿名函数内和匿名函数外；</p>
+<p>除此之外广义 lambda 捕获还可以用来间接地捕获 <code>*this</code>，即在 C++ 11 中无法实现的按值捕获 this 指向的对象：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> AnonyFunc = [this_copy = *<span class="keyword">this</span>]() <span class="keyword">mutable</span></span><br><span class="line">&#123;</span><br><span class="line">    this_copy.x_ = <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; this_copy.x_ &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;;</span><br><span class="line">AnonyFunc();</span><br></pre></td></tr></table></figure>
+<h2 id="c-17-lambda表达式">C++ 17 lambda表达式</h2>
+<h3 id="捕获-this">捕获 <code>*this</code></h3>
+<p>在 C++ 17 中，终于可以直接捕获 <code>*this</code> 了，<a href="https://link.zhihu.com/?target=http%3A//www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0018r3.html">提案 P0018R3</a> 指出捕获 <code>*this</code> 可以用于需要进行异步操作的并发应用，因为 <code>this</code> 可能失效：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> AnonyFunc = [*<span class="keyword">this</span>]() <span class="keyword">mutable</span></span><br><span class="line">&#123;</span><br><span class="line">    x_ = <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; x_ &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;;</span><br><span class="line">AnonyFunc();</span><br><span class="line"><span class="built_in">cout</span> &lt;&lt; x_ &lt;&lt; <span class="built_in">endl</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1</span><br><span class="line">0</span><br></pre></td></tr></table></figure>
+<h2 id="相关参考">相关参考</h2>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/d686ad9de817">C++ lambda表达式与函数对象</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/06/21/C++/C++%E9%97%AD%E5%8C%85/" rel="prev" title="C++ 闭包 closure">
+      <i class="fa fa-chevron-left"></i> C++ 闭包 closure
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/02/22/CMake/CMake%E5%9C%A8vs%E4%B8%AD%E5%88%9B%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9%E7%BB%84%E7%BB%87%E7%9B%AE%E6%A0%87%E5%B7%A5%E7%A8%8B/" rel="next" title="CMake在vs中创建文件夹组织目标工程">
+      CMake在vs中创建文件夹组织目标工程 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#lambda%E4%B8%8E%E5%87%BD%E6%95%B0%E5%AF%B9%E8%B1%A1"><span class="nav-number">1.1.</span> <span class="nav-text">lambda与函数对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lambda%E5%92%8C%E9%97%AD%E5%8C%85"><span class="nav-number">1.2.</span> <span class="nav-text">Lambda和闭包</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%A3%B0%E6%98%8E"><span class="nav-number">2.</span> <span class="nav-text">Lambda表达式声明</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#c-17-lambda"><span class="nav-number">2.1.</span> <span class="nav-text">C++ 17 lambda</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8D%95%E8%8E%B7%E5%8F%98%E9%87%8F"><span class="nav-number">3.</span> <span class="nav-text">捕获变量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">3.1.</span> <span class="nav-text">注意事项</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9A%90%E5%BC%8F%E6%8D%95%E8%8E%B7"><span class="nav-number">3.1.1.</span> <span class="nav-text">隐式捕获</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B7%B7%E5%90%88%E6%96%B9%E5%BC%8F"><span class="nav-number">3.1.2.</span> <span class="nav-text">混合方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E6%8D%95%E8%8E%B7%E5%8F%98%E9%87%8F"><span class="nav-number">3.1.3.</span> <span class="nav-text">修改捕获变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%82%AC%E7%A9%BA%E5%BC%95%E7%94%A8%E6%8C%87%E9%92%88"><span class="nav-number">3.1.4.</span> <span class="nav-text">悬空引用&#x2F;指针</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0%E6%A8%A1%E6%9D%BF"><span class="nav-number">3.1.5.</span> <span class="nav-text">可变参数模板</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9B%B8%E4%BA%92%E8%B5%8B%E5%80%BC"><span class="nav-number">3.1.6.</span> <span class="nav-text">相互赋值</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c14-lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-number">4.</span> <span class="nav-text">C++14 lambda表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%9B%E5%9E%8Blambda%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-number">4.1.</span> <span class="nav-text">泛型lambda表达式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lambda%E6%8D%95%E6%8D%89%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-number">4.2.</span> <span class="nav-text">lambda捕捉表达式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B9%BF%E4%B9%89lambda%E6%8D%95%E8%8E%B7generalized-lambda-captures"><span class="nav-number">4.3.</span> <span class="nav-text">广义lambda捕获（Generalized Lambda Captures）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-17-lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-number">5.</span> <span class="nav-text">C++ 17 lambda表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8D%95%E8%8E%B7-this"><span class="nav-number">5.1.</span> <span class="nav-text">捕获 *this</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E5%8F%82%E8%80%83"><span class="nav-number">6.</span> <span class="nav-text">相关参考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">straywriter</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">124</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/straywriter" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;straywriter" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">straywriter</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

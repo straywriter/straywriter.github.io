@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"straywriter.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="C++ STL容器用法">
+<meta property="og:url" content="https://straywriter.github.io/2021/03/22/C++/C++STL%E5%AE%B9%E5%99%A8/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-03-22T13:59:11.000Z">
+<meta property="article:modified_time" content="2021-04-17T10:58:26.743Z">
+<meta property="article:author" content="straywriter">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://straywriter.github.io/2021/03/22/C++/C++STL%E5%AE%B9%E5%99%A8/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>C++ STL容器用法 | Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://straywriter.github.io/2021/03/22/C++/C++STL%E5%AE%B9%E5%99%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="straywriter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C++ STL容器用法
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-03-22 21:59:11" itemprop="dateCreated datePublished" datetime="2021-03-22T21:59:11+08:00">2021-03-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-04-17 18:58:26" itemprop="dateModified" datetime="2021-04-17T18:58:26+08:00">2021-04-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <hr>
+<h1 id="a">a</h1>
+<ul>
+<li>序列容器
+<ul>
+<li>vector</li>
+<li>list</li>
+<li>deque</li>
+<li>array</li>
+<li>forward_list</li>
+</ul></li>
+<li>容器适配器
+<ul>
+<li>stack</li>
+<li>queue</li>
+<li>priority_queue</li>
+</ul></li>
+<li>关联容器
+<ul>
+<li>set</li>
+<li>multset</li>
+<li>map</li>
+<li>multimap</li>
+</ul></li>
+<li>无序关联容器
+<ul>
+<li>unordered_set</li>
+<li>unordered_multiset</li>
+<li>unordered_map</li>
+<li>unordered_multimap</li>
+</ul></li>
+</ul>
+<p>any</p>
+<h2 id="开始">开始</h2>
+<ul>
+<li></li>
+</ul>
+<h2 id="vector">vector</h2>
+<ul>
+<li><p>C + + 标准库 vector 类是序列容器的类模板。</p></li>
+<li><p>vector以线性方式存储给定类型的元素，并允许快速随机访问任何元素。 当随机访问性能处于高级版时，vector是序列的首选容器。</p></li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">Type</span>, <span class="keyword">class</span> <span class="title">Allocator</span> =</span> allocator&lt;Type&gt;&gt;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">vector</span></span></span><br></pre></td></tr></table></figure>
+<p><strong>参数</strong></p>
+<p><em><code>Type</code></em><br>
+要存储在矢量中的元素数据类型</p>
+<p><em><code>Allocator</code></em><br>
+表示所存储分配器对象的类型，该分配器对象封装有关矢量的内存分配和解除分配的详细信息。 此参数为可选参数，默认值为 <code>allocator&lt;Type&gt;</code>。</p>
+<p><strong>注解</strong></p>
+<p>向量允许在序列末尾插入和删除常量事件。 若要在矢量中间插入或删除元素，则需要线性时间。 <code>deque</code> 类容器在序列的开头和结尾处速度更快。 <code>list</code> 类容器在序列内任何位置的插入和删除速度更快。</p>
+<p>当成员函数必须将矢量对象中所含序列增加到超过其当前存储容量时，将进行矢量重新分配。 其他的插入和删除均可能改变序列中的各个存储地址。 在所有此类情况下，指向序列更改部分的迭代器或引用将变为无效。 如果未进行重新分配，则只有插入/删除点前的迭代器和引用保持有效。</p>
+<p><code>vector&lt;bool&gt;</code> 类是类型的元素的类模板向量的完全专用化 <strong><code>bool</code></strong> 。 它具有用于专用化的基础类型的分配器。</p>
+<p><code>vector&lt;bool&gt;</code> 引用类是一个嵌套类，其对象可提供对对象中 (单个位) 的元素的引用 <code>vector&lt;bool&gt;</code> 。</p>
+<p><strong>成员</strong></p>
+<p><strong>Typedef</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>名称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="#allocator_type">allocator_type</a></td>
+<td>一个类型，它表示矢量对象的 <code>allocator</code> 类。</td>
+</tr>
+<tr class="even">
+<td><a href="#const_iterator"><code>const_iterator</code></a></td>
+<td>一种类型，它提供可读取矢量中元素的随机访问迭代器 <strong><code>const</code></strong> 。</td>
+</tr>
+<tr class="odd">
+<td><a href="#const_pointer"><code>const_pointer</code></a></td>
+<td>一种类型，它提供指向 <strong><code>const</code></strong> 矢量中元素的指针。</td>
+</tr>
+<tr class="even">
+<td><a href="#const_reference"><code>const_reference</code></a></td>
+<td>一种类型，该类型提供对 <strong><code>const</code></strong> 存储在向量中的元素的引用。 它用于读取和执行 <strong><code>const</code></strong> 操作。</td>
+</tr>
+<tr class="odd">
+<td><a href="#const_reverse_iterator"><code>const_reverse_iterator</code></a></td>
+<td>一种类型，它提供可读取矢量中任何元素的随机访问迭代器 <strong><code>const</code></strong> 。</td>
+</tr>
+<tr class="even">
+<td><a href="#difference_type"><code>difference_type</code></a></td>
+<td>一个类型，它提供矢量中两个元素的址间的差异。</td>
+</tr>
+<tr class="odd">
+<td><a href="#iterator"><code>iterator</code></a></td>
+<td>一个类型，它提供可读取或修改向量中任何元素的随机访问迭代器。</td>
+</tr>
+<tr class="even">
+<td><a href="#pointer"><code>pointer</code></a></td>
+<td>一个类型，提供指向向量中元素的指针。</td>
+</tr>
+<tr class="odd">
+<td><a href="#reference"><code>reference</code></a></td>
+<td>一个类型，它提供对向量中存储的元素的引用。</td>
+</tr>
+<tr class="even">
+<td><a href="#reverse_iterator"><code>reverse_iterator</code></a></td>
+<td>一个类型，它提供可读取或修改反向矢量中的任意元素的随机访问迭代器。</td>
+</tr>
+<tr class="odd">
+<td><a href="#size_type"><code>size_type</code></a></td>
+<td>一个类型，它计算矢量中的元素数目。</td>
+</tr>
+<tr class="even">
+<td><a href="#value_type"><code>value_type</code></a></td>
+<td>一个类型，它代表向量中存储的数据类型。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>函数</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>名称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="#assign"><code>assign</code></a></td>
+<td>清除矢量并将指定的元素复制到该空矢量。</td>
+</tr>
+<tr class="even">
+<td><a href="#at"><code>at</code></a></td>
+<td>返回对矢量中指定位置的元素的引用。</td>
+</tr>
+<tr class="odd">
+<td><a href="#back"><code>back</code></a></td>
+<td>返回对向量中最后一个元素的引用。</td>
+</tr>
+<tr class="even">
+<td><a href="#begin"><code>begin</code></a></td>
+<td>对该向量中第一个元素返回随机访问迭代器。</td>
+</tr>
+<tr class="odd">
+<td><a href="#capacity"><code>capacity</code></a></td>
+<td>返回在不分配更多的存储的情况下向量可以包含的元素数。</td>
+</tr>
+<tr class="even">
+<td><a href="#cbegin"><code>cbegin</code></a></td>
+<td>返回指向向量中第一个元素的随机访问常量迭代器。</td>
+</tr>
+<tr class="odd">
+<td><a href="#cend"><code>cend</code></a></td>
+<td>返回一个随机访问常量迭代器，它指向刚超过矢量末尾的位置。</td>
+</tr>
+<tr class="even">
+<td><a href="#crbegin"><code>crbegin</code></a></td>
+<td>返回一个指向反向矢量中第一个元素的常量迭代器。</td>
+</tr>
+<tr class="odd">
+<td><a href="#crend"><code>crend</code></a></td>
+<td>返回一个指向反向矢量末尾的常量迭代器。</td>
+</tr>
+<tr class="even">
+<td><a href="#clear"><code>clear</code></a></td>
+<td>清除向量的元素。</td>
+</tr>
+<tr class="odd">
+<td><a href="#data"><code>data</code></a></td>
+<td>返回指向向量中第一个元素的指针。</td>
+</tr>
+<tr class="even">
+<td><a href="#emplace"><code>emplace</code></a></td>
+<td>将就地构造的元素插入到指定位置的向量中。</td>
+</tr>
+<tr class="odd">
+<td><a href="#emplace_back"><code>emplace_back</code></a></td>
+<td>将一个就地构造的元素添加到向量末尾。</td>
+</tr>
+<tr class="even">
+<td><a href="#empty"><code>empty</code></a></td>
+<td>测试矢量容器是否为空。</td>
+</tr>
+<tr class="odd">
+<td><a href="#end"><code>end</code></a></td>
+<td>返回指向矢量末尾的随机访问迭代器。</td>
+</tr>
+<tr class="even">
+<td><a href="#erase"><code>erase</code></a></td>
+<td>从指定位置删除向量中的一个元素或一系列元素。</td>
+</tr>
+<tr class="odd">
+<td><a href="#front"><code>front</code></a></td>
+<td>返回对向量中第一个元素的引用。</td>
+</tr>
+<tr class="even">
+<td><a href="#get_allocator"><code>get_allocator</code></a></td>
+<td>将对象返回到矢量使用的 <code>allocator</code> 类。</td>
+</tr>
+<tr class="odd">
+<td><a href="#insert"><code>insert</code></a></td>
+<td>将一个或多个元素插入到指定位置的向量中。</td>
+</tr>
+<tr class="even">
+<td><a href="#max_size"><code>max_size</code></a></td>
+<td>返回向量的最大长度。</td>
+</tr>
+<tr class="odd">
+<td><a href="#pop_back"><code>pop_back</code></a></td>
+<td>删除矢量末尾处的元素。</td>
+</tr>
+<tr class="even">
+<td><a href="#push_back"><code>push_back</code></a></td>
+<td>在矢量末尾处添加一个元素。</td>
+</tr>
+<tr class="odd">
+<td><a href="#rbegin"><code>rbegin</code></a></td>
+<td>返回指向反向向量中第一个元素的迭代器。</td>
+</tr>
+<tr class="even">
+<td><a href="#rend"><code>rend</code></a></td>
+<td>返回一个指向反向矢量末尾的迭代器。</td>
+</tr>
+<tr class="odd">
+<td><a href="#reserve"><code>reserve</code></a></td>
+<td>保留向量对象的最小存储长度。</td>
+</tr>
+<tr class="even">
+<td><a href="#resize"><code>resize</code></a></td>
+<td>为矢量指定新的大小。</td>
+</tr>
+<tr class="odd">
+<td><a href="#shrink_to_fit"><code>shrink_to_fit</code></a></td>
+<td>放弃额外容量。</td>
+</tr>
+<tr class="even">
+<td><a href="#size"><code>size</code></a></td>
+<td>返回向量中的元素数量。</td>
+</tr>
+<tr class="odd">
+<td><a href="#swap"><code>swap</code></a></td>
+<td>交换两个向量的元素。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>运算符</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>名称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="#op_at"><code>operator[]</code></a></td>
+<td>返回对指定位置的矢量元素的引用。</td>
+</tr>
+<tr class="even">
+<td><a href="#op_eq"><code>operator=</code></a></td>
+<td>用另一个向量的副本替换该向量中的元素。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="assign">assign</h3>
+<p>清除矢vector将指定的元素复制到该空vector。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">assign</span><span class="params">(size_type count, <span class="keyword">const</span> Type&amp; value)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">assign</span><span class="params">(<span class="built_in">initializer_list</span>&lt;Type&gt; init_list)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">InputIterator</span>&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">assign</span><span class="params">(InputIterator first, InputIterator last)</span></span>;</span><br></pre></td></tr></table></figure>
+<p><strong>参数</strong></p>
+<p><em><code>first</code></em><br>
+要复制的元素范围内的第一个元素的位置。</p>
+<p><em><code>last</code></em><br>
+要复制的元素范围外的第一个元素的位置。</p>
+<p><em><code>count</code></em><br>
+要插入到矢量的元素的副本数。</p>
+<p><em><code>value</code></em><br>
+插入到向量中的元素的值。</p>
+<p><em><code>init_list</code></em><br>
+包含要插入的元素的 initializer_list。</p>
+<p>首先， <code>assign</code> 清除向量中的任何现有元素。 然后，将 <code>assign</code> 原始向量中指定范围的元素插入到向量中，或将新的指定值元素的副本插入到向量中。</p>
+<h3 id="at">at</h3>
+<p>返回对矢量中指定位置的元素的引用。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">reference <span class="title">at</span><span class="params">(size_type position)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function">const_reference <span class="title">at</span><span class="params">(size_type position)</span> <span class="keyword">const</span></span>;</span><br></pre></td></tr></table></figure>
+<p><strong>参数</strong></p>
+<p><em><code>position</code></em><br>
+要在矢量中引用的元素的下标或位置编号。</p>
+<p><strong>返回值</strong></p>
+<p>对自变量中的下标元素的引用。 如果 <em><code>position</code></em> 大于矢量的大小，将 <code>at</code> 引发异常。</p>
+<p><strong>注解</strong></p>
+<p>如果将的返回值 <code>at</code> 分配给 <code>const_reference</code> ，则无法修改矢量对象。 如果将 <code>at</code> 的返回值分配给 <code>reference</code>，则可以修改矢量对象。</p>
+<h3 id="back">back</h3>
+<p>返回对向量中最后一个元素的引用。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">reference <span class="title">back</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function">const_reference <span class="title">back</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br></pre></td></tr></table></figure>
+<p><strong>返回值</strong></p>
+<p>向量的最后一个元素。 如果向量为空，则返回值不确定。</p>
+<p><strong>注解</strong></p>
+<p>如果将的返回值 <code>back</code> 分配给 <code>const_reference</code> ，则无法修改矢量对象。 如果将 <code>back</code> 的返回值分配给 <code>reference</code>，则可以修改矢量对象。</p>
+<p>当使用 <a href="../standard-library/iterator-debug-level.md"><code>_ITERATOR_DEBUG_LEVEL</code></a> 定义为1或2的进行编译时，如果尝试访问空向量中的元素，将发生运行时错误。 有关详细信息，请参阅 <a href="../standard-library/checked-iterators.md">检查迭代</a>器。</p>
+<h3 id="begin">begin</h3>
+<p>对该向量中第一个元素返回随机访问迭代器。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">const_iterator <span class="title">begin</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function">iterator <span class="title">begin</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+<p><strong>返回值</strong></p>
+<p>发现 <code>vector</code> 中第一个元素或空 <code>vector</code> 之后的位置的随机访问迭代器。 请始终比较返回的值 <a href="#end"><code>vector::end</code></a> 以确保它有效。</p>
+<p><strong>注解</strong></p>
+<p>如果将的返回值 <code>begin</code> 分配给 <a href="#const_iterator"><code>vector::const_iterator</code></a> ，则 <code>vector</code> 无法修改对象。 如果将的返回值 <code>begin</code> 分配给 <a href="#iterator"><code>vector::iterator</code></a> ，则 <code>vector</code> 可以修改该对象。</p>
+<h3 id="capacity">capacity</h3>
+<p>返回在不分配更多的存储的情况下向量可以包含的元素数。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">size_type <span class="title">capacity</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br></pre></td></tr></table></figure>
+<p><strong>返回值</strong></p>
+<p>分配给该向量的当前存储长度。</p>
+<p><strong>注解</strong></p>
+<p><a href="#resize"><code>resize</code></a>如果分配足够的内存来容纳此函数，则成员函数将更有效。 使用成员函数 <a href="#reserve"><code>reserve</code></a> 指定分配的内存量。</p>
+<h3 id="cbegin">cbegin</h3>
+<p>返回一个 <strong><code>const</code></strong> 迭代器，该迭代器用于寻址范围内的第一个元素。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">const_iterator <span class="title">cbegin</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br></pre></td></tr></table></figure>
+<p><strong>返回值</strong></p>
+<p>一个 <strong><code>const</code></strong> 随机访问迭代器，指向范围的第一个元素，或刚超出空范围末尾 (空范围) 的位置 <code>cbegin() == cend()</code> 。</p>
+<p><strong>注解</strong></p>
+<p>如果返回值为 <code>cbegin</code> ，则不能修改范围中的元素。</p>
+<p>可以使用此成员函数替代 <code>begin()</code> 成员函数，以保证返回值为 <code>const_iterator</code>。 通常，它与 <a href="../cpp/auto-cpp.md"><code>auto</code></a> 类型推导关键字一起使用，如下面的示例中所示。 在此示例中，将视为 <code>Container</code> 支持和的任何类型的可修改 (非 <strong><code>const</code></strong>) 容器 <code>begin()</code> <code>cbegin()</code> 。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> i1 = Container.begin();</span><br><span class="line"><span class="comment">// i1 is Container&lt;T&gt;::iterator</span></span><br><span class="line"><span class="keyword">auto</span> i2 = Container.cbegin();</span><br><span class="line"></span><br><span class="line"><span class="comment">// i2 is Container&lt;T&gt;::const_iterator</span></span><br></pre></td></tr></table></figure>
+<h3 id="cend">cend</h3>
+<p>返回 <strong><code>const</code></strong> 后端迭代器，该迭代器指向矢量最后一个元素之后的元素。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">const_iterator <span class="title">cend</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br></pre></td></tr></table></figure>
+<p><strong>返回值</strong></p>
+<p><code>const</code>向量的过去的迭代器。 它指向矢量最后一个元素之后的元素。 该元素是占位符，不应取消引用。 仅将它用于比较。 如果向量为空，则为 <code>vector::cend() == vector::cbegin()</code> 。</p>
+<p><strong>注解</strong></p>
+<p><code>cend</code> 用于测试迭代器是否超过了其范围的末尾。</p>
+<p>可以使用此成员函数替代 <code>end()</code> 成员函数，以保证返回值为 <code>const_iterator</code>。 通常，它与 <a href="../cpp/auto-cpp.md"><code>auto</code></a> 类型推导关键字一起使用，如下面的示例中所示。 在此示例中，将视为 <code>Container</code> 支持和的任何类型的可修改 (非 <strong><code>const</code></strong>) 容器 <code>end()</code> <code>cend()</code> 。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> i1 = Container.end();</span><br><span class="line"><span class="comment">// i1 is Container&lt;T&gt;::iterator</span></span><br><span class="line"><span class="keyword">auto</span> i2 = Container.cend();</span><br><span class="line"></span><br><span class="line"><span class="comment">// i2 is Container&lt;T&gt;::const_iterator</span></span><br></pre></td></tr></table></figure>
+<p>返回的值 <code>cend</code> 不应被取消引用。 仅将它用于比较。</p>
+<h3 id="clear">clear</h3>
+<p>清除向量的元素。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">clear</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+<h3 id="const_iterator">const_iterator</h3>
+<p>一种类型，它提供可读取矢量中元素的随机访问迭代器 <strong><code>const</code></strong> 。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> implementation-defined const_iterator;</span><br></pre></td></tr></table></figure>
+<p><strong>注解</strong></p>
+<p>类型 <code>const_iterator</code> 不能用于修改元素的值。</p>
+<h3 id="const_pointer">const_pointer</h3>
+<p>一种类型，它提供指向 <strong><code>const</code></strong> 矢量中元素的指针。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">typename</span> Allocator::const_pointer const_pointer;</span><br></pre></td></tr></table></figure>
+<p><strong>注解</strong></p>
+<p>类型 <code>const_pointer</code> 不能用于修改元素的值。</p>
+<p><a href="#iterator">iterator</a> 更常用于访问矢量元素。</p>
+<h3 id="const_reference">const_reference</h3>
+<p>一种类型，该类型提供对 <strong><code>const</code></strong> 存储在向量中的元素的引用。 它用于读取和执行 <strong><code>const</code></strong> 操作。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">typename</span> Allocator::const_reference const_reference;</span><br></pre></td></tr></table></figure>
+<p><strong>注解</strong></p>
+<p>类型 <code>const_reference</code> 不能用于修改元素的值。</p>
+<h3 id="const_reverse_iterator">const_reverse_iterator</h3>
+<p>一种类型，它提供可读取矢量中任何元素的随机访问迭代器 <strong><code>const</code></strong> 。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="built_in">std</span>::reverse_iterator&lt;const_iterator&gt; const_reverse_iterator;</span><br></pre></td></tr></table></figure>
+<p><strong>注解</strong></p>
+<p>类型 <code>const_reverse_iterator</code> 无法修改元素的值，它用于反向循环访问矢量。</p>
+<h3 id="crbegin">crbegin</h3>
+<p>返回一个指向反向矢量中第一个元素的常量迭代器。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">const_reverse_iterator <span class="title">crbegin</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br></pre></td></tr></table></figure>
+<p><strong>返回值</strong></p>
+<p>一种常量反向随机访问迭代器，用于寻址反向 <a href="../standard-library/vector-class.md"><code>vector</code></a> 或处理非反向中最后一个元素之后的第一个元素 <code>vector</code> 。</p>
+<p><strong>注解</strong></p>
+<p>如果返回值为 <code>crbegin</code> ，则 <code>vector</code> 无法修改对象。</p>
+<h3 id="crend">crend</h3>
+<p>返回一个 <code>const</code> 后端反向迭代器，该迭代器指向反向向量的最后一个元素之后的元素。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">const_reverse_iterator <span class="title">crend</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br></pre></td></tr></table></figure>
+<p><strong>返回值</strong></p>
+<p><code>const</code>反向向量的反向结束迭代器。 它指向反向向量的最后一个元素之后的元素，该元素与非反转向量的第一个元素之前的元素相同。 该元素是占位符，不应取消引用。 仅将它用于比较。</p>
+<p><strong>注解</strong></p>
+<p><code>crend</code> 用于反向，正 <code>vector</code> 如 <a href="#cend"><code>vector::cend</code></a> 用于 <code>vector</code> 。</p>
+<p>如果返回值为 <code>crend</code> (适当递减的) ，则 <code>vector</code> 无法修改对象。</p>
+<p><code>crend</code> 可用于测试反向迭代器是否已到达其 <code>vector</code> 的末尾。</p>
+<p>返回的值 <code>crend</code> 不应被取消引用。 仅将它用于比较。</p>
+<h3 id="data">data</h3>
+<p>返回指向向量中第一个元素的指针。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">const_pointer <span class="title">data</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function">pointer <span class="title">data</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+<p><strong>返回值</strong></p>
+<p>一个指针，指向中的第一个元素 <a href="../standard-library/vector-class.md"><code>vector</code></a> 或空后面的位置 <code>vector</code> 。</p>
+<h3 id="difference_type">difference_type</h3>
+<p>一个类型，它提供引用同一向量中元素的两个迭代器之间的差异。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">typename</span> Allocator::difference_type difference_type;</span><br></pre></td></tr></table></figure>
+<p><strong>注解</strong></p>
+<p><code>difference_type</code> 也可以被描述为两个指针之间的元素数，因为指向一个元素的指针包含其地址。</p>
+<p><a href="#iterator">iterator</a> 更常用于访问矢量元素。</p>
+<h3 id="emplace">emplace</h3>
+<p>将就地构造的元素插入到指定位置的向量中。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;class... Types&gt;</span><br><span class="line"><span class="function">iterator <span class="title">emplace</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    const_iterator position,</span></span></span><br><span class="line"><span class="function"><span class="params">    Types&amp;&amp;... args)</span></span>;</span><br></pre></td></tr></table></figure>
+<p><strong>参数</strong></p>
+<p><em><code>position</code></em><br>
+中 <a href="../standard-library/vector-class.md"><code>vector</code></a> 插入第一个元素的位置。</p>
+<p><em><code>args</code></em><br>
+构造函数参数。 函数根据所提供的自变量来推断要调用的构造函数重载。</p>
+<p><strong>返回值</strong></p>
+<p>该函数将返回一个指向 <code>vector</code> 中新元素的插入位置的迭代器。</p>
+<p><strong>注解</strong></p>
+<p>任何插入操作都可能会消耗大量资源，请参阅<a href="../standard-library/vector-class.md"><code>vector</code> 类</a>以了解性能的讨论 <code>vector</code> 。</p>
+<h3 id="emplace_back">emplace_back</h3>
+<p>将一个就地构造的元素添加到向量末尾。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;class... Types&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">emplace_back</span><span class="params">(Types&amp;&amp;... args)</span></span>;</span><br></pre></td></tr></table></figure>
+<p><strong>参数</strong></p>
+<p><em><code>args</code></em><br>
+构造函数参数。 函数根据所提供的自变量来推断要调用的构造函数重载。</p>
+<h3 id="empty">empty</h3>
+<p>测试矢量是否为空。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">empty</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br></pre></td></tr></table></figure>
+<p><strong>返回值</strong></p>
+<p><strong><code>true</code></strong> 如果向量为空，则为; 否则为。 <strong><code>false</code></strong> 如果矢量不为空，则为。</p>
+<h3 id="end">end</h3>
+<p>返回后端迭代器，该迭代器指向矢量最后一个元素之后的元素。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">iterator <span class="title">end</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function">const_iterator <span class="title">end</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br></pre></td></tr></table></figure>
+<p><strong>返回值</strong></p>
+<p>向量的过去的迭代器。 它指向矢量最后一个元素之后的元素。 该元素是占位符，不应取消引用。 仅将它用于比较。 如果向量为空，则为 <code>vector::end() == vector::begin()</code> 。</p>
+<p><strong>注解</strong></p>
+<p>如果将的返回值 <code>end</code> 分配给类型的变量 <code>const_iterator</code> ，则不能修改矢量对象。 如果将的返回值 <code>end</code> 分配给类型的变量 <code>iterator</code> ，则可以修改矢量对象。</p>
+<h3 id="erase">erase</h3>
+<p>从指定位置删除向量中的一个元素或一系列元素。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">iterator <span class="title">erase</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    const_iterator position)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function">iterator <span class="title">erase</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    const_iterator first,</span></span></span><br><span class="line"><span class="function"><span class="params">    const_iterator last)</span></span>;</span><br></pre></td></tr></table></figure>
+<p><strong>参数</strong></p>
+<p><em><code>position</code></em><br>
+要从向量中移除的元素的位置。</p>
+<p><em><code>first</code></em><br>
+要从向量中移除的第一个元素的位置。</p>
+<p><em><code>last</code></em><br>
+紧接要从向量中移除的最后一个元素的位置。</p>
+<p><strong>返回值</strong></p>
+<p>一个迭代器，它指定已移除的任何元素之外保留的第一个元素或指向向量末尾的指针（若此类元素不存在）。</p>
+<h3 id="front">front</h3>
+<p>返回对向量中第一个元素的引用。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">reference <span class="title">front</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function">const_reference <span class="title">front</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br></pre></td></tr></table></figure>
+<p><strong>返回值</strong></p>
+<p>对向量对象中第一个元素的引用。 如果向量为空，则返回值不确定。</p>
+<p><strong>注解</strong></p>
+<p>如果将的返回值 <code>front</code> 分配给 <code>const_reference</code> ，则无法修改矢量对象。 如果将的返回值 <code>front</code> 分配给 <strong><code>reference</code></strong> ，则可以修改矢量对象。</p>
+<p>当使用 <code>_ITERATOR_DEBUG_LEVEL</code> 定义为1或2的进行编译时，如果尝试访问空向量中的元素，将发生运行时错误。 有关详细信息，请参阅 检查迭代器。</p>
+<h3 id="get_allocator">get_allocator</h3>
+<p>返回用于构造矢量的分配器对象的一个副本。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Allocator <span class="title">get_allocator</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br></pre></td></tr></table></figure>
+<p><strong>返回值</strong></p>
+<p>向量所使用的分配器。</p>
+<p><strong>注解</strong></p>
+<p>矢量类的分配器指定类管理存储的方式。 C++ 标准库容器类提供的默认分配器足以满足大多编程需求。 编写和使用你自己的分配器类是高级 c + + 功能。</p>
+<h3 id="insert">insert</h3>
+<p>将一个元素或多个元素或一系列元素插入到指定位置的向量中。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">iterator <span class="title">insert</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    const_iterator position,</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">const</span> Type&amp; value)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function">iterator <span class="title">insert</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    const_iterator position,</span></span></span><br><span class="line"><span class="function"><span class="params">    Type&amp;&amp; value)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">insert</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    const_iterator position,</span></span></span><br><span class="line"><span class="function"><span class="params">    size_type count,</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">const</span> Type&amp; value)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">InputIterator</span>&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">insert</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    const_iterator position,</span></span></span><br><span class="line"><span class="function"><span class="params">    InputIterator first,</span></span></span><br><span class="line"><span class="function"><span class="params">    InputIterator last)</span></span>;</span><br></pre></td></tr></table></figure>
+<p><strong>参数</strong></p>
+<p><em><code>position</code></em><br>
+向量中插入第一个元素的位置。</p>
+<p><em><code>value</code></em><br>
+插入到向量中的元素的值。</p>
+<p><em><code>count</code></em><br>
+插入向量中的元素数目。</p>
+<p><em><code>first</code></em><br>
+要复制的范围元素中的第一个元素的位置。</p>
+<p><em><code>last</code></em><br>
+要复制的元素范围以外的第一个元素的位置。</p>
+<p><strong>返回值</strong></p>
+<p>前两个 <code>insert</code> 函数返回一个指定新元素插入到向量的位置的迭代器。</p>
+<p><strong>注解</strong></p>
+<p>作为前置条件， <em><code>first</code></em> <em><code>last</code></em> 不能将迭代器放入矢量，或者行为未定义。 任何插入操作都可能会消耗大量资源，请参阅 <code>vector</code> 类以了解性能的讨论 <code>vector</code> 。</p>
+<h3 id="iterator">iterator</h3>
+<p>一个类型，它提供可读取或修改向量中任何元素的随机访问迭代器。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> implementation-defined iterator;</span><br></pre></td></tr></table></figure>
+<p><strong>注解</strong></p>
+<p>类型 <strong><code>iterator</code></strong> 可用于修改元素的值。</p>
+<h3 id="max_size">max_size</h3>
+<p>返回向量的最大长度。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">size_type <span class="title">max_size</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br></pre></td></tr></table></figure>
+<p><strong>返回值</strong></p>
+<p>向量的最大可取长度。</p>
+<h3 id="operator">operator[]</h3>
+<p>返回对指定位置的矢量元素的引用。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">reference <span class="keyword">operator</span>[](size_type position);</span><br><span class="line"></span><br><span class="line">const_reference <span class="keyword">operator</span>[](size_type position) <span class="keyword">const</span>;</span><br></pre></td></tr></table></figure>
+<p><strong>参数</strong></p>
+<p><em><code>position</code></em><br>
+矢量元素的位置。</p>
+<p><strong>返回值</strong></p>
+<p>如果指定的位置大于或等于容器大小，则结果为 undefined。</p>
+<p><strong>注解</strong></p>
+<p>如果将的返回值 <code>operator[]</code> 分配给 <code>const_reference</code> ，则无法修改矢量对象。 如果将 <code>operator[]</code> 的返回值分配给引用，则可以修改矢量对象。</p>
+<p>当使用 <a href="../standard-library/iterator-debug-level.md"><code>_ITERATOR_DEBUG_LEVEL</code></a> 定义为1或2的进行编译时，如果尝试访问向量边界之外的元素，将发生运行时错误。 有关详细信息，请参阅 <a href="../standard-library/checked-iterators.md">检查迭代</a>器。</p>
+<h3 id="operator-1">operator=</h3>
+<p>用另一个向量的副本替换该向量中的元素。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&amp; <span class="keyword">operator</span>=(<span class="keyword">const</span> <span class="built_in">vector</span>&amp; right);</span><br><span class="line"></span><br><span class="line"><span class="built_in">vector</span>&amp; <span class="keyword">operator</span>=(<span class="built_in">vector</span>&amp;&amp; right);</span><br></pre></td></tr></table></figure>
+<p><strong>参数</strong></p>
+<p><em><code>right</code></em><br>
+<a href="../standard-library/vector-class.md"><code>vector</code></a>要复制到中的 <code>vector</code> 。</p>
+<p><strong>注解</strong></p>
+<p>清除中的任何现有元素后 <code>vector</code> ，会 <code>operator=</code> 将的内容复制或移动 <em><code>right</code></em> 到 <code>vector</code> 。</p>
+<h3 id="pointer">pointer</h3>
+<p>一个类型，提供指向向量中元素的指针。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">typename</span> Allocator::pointer pointer;</span><br></pre></td></tr></table></figure>
+<p><strong>注解</strong></p>
+<p>类型 <strong><code>pointer</code></strong> 可用于修改元素的值。</p>
+<h3 id="pop_back">pop_back</h3>
+<p>删除矢量末尾处的元素。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">pop_back</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+<p><strong>注解</strong></p>
+<p>有关代码示例，请参阅 <a href="#push_back">vector::push_back()</a>。</p>
+<h3 id="push_back">push_back</h3>
+<p>在矢量末尾处添加一个元素。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">push_back</span><span class="params">(<span class="keyword">const</span> T&amp; value)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">push_back</span><span class="params">(T&amp;&amp; value)</span></span>;</span><br></pre></td></tr></table></figure>
+<p><strong>参数</strong></p>
+<p><em><code>value</code></em><br>
+要赋给添加到矢量末尾处的元素的值。</p>
+<h3 id="rbegin">rbegin</h3>
+<p>返回指向反向向量中第一个元素的迭代器。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">reverse_iterator <span class="title">rbegin</span><span class="params">()</span></span>;</span><br><span class="line"><span class="function">const_reverse_iterator <span class="title">rbegin</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br></pre></td></tr></table></figure>
+<p><strong>返回值</strong></p>
+<p>发现反向矢量中的第一个元素或发现曾是非反向矢量中的最后一个元素的反向双向迭代器。</p>
+<p><strong>注解</strong></p>
+<p>如果将的返回值 <code>rbegin</code> 分配给 <code>const_reverse_iterator</code> ，则无法修改矢量对象。 如果将 <code>rbegin</code> 的返回值分配给 <code>reverse_iterator</code>，则可以修改矢量对象。</p>
+<h3 id="reference">reference</h3>
+<p>一个类型，它提供对向量中存储的元素的引用。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">typename</span> Allocator::reference reference;</span><br></pre></td></tr></table></figure>
+<h3 id="rend">rend</h3>
+<p>返回一个后端反向迭代器，该迭代器指向反向向量的最后一个元素之后的元素。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">const_reverse_iterator <span class="title">rend</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line"><span class="function">reverse_iterator <span class="title">rend</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+<p><strong>返回值</strong></p>
+<p>反向向量的反向结束迭代器。 它指向反向向量的最后一个元素之后的元素，该元素与非反转向量的第一个元素之前的元素相同。 该元素是占位符，不应取消引用。 仅将它用于比较。</p>
+<p><strong>注解</strong></p>
+<p><code>rend</code> 与反向矢量一起使用，就像 <a href="#end"><code>end</code></a> 与矢量一起使用一样。</p>
+<p>如果将的返回值 <code>rend</code> 分配给 <code>const_reverse_iterator</code> ，则无法修改矢量对象。 如果将 <code>rend</code> 的返回值分配给 <code>reverse_iterator</code>，则可以修改矢量对象。</p>
+<p><code>rend</code> 可用于测试反向迭代器是否已到达其矢量末尾。</p>
+<p>返回的值 <code>rend</code> 不应被取消引用。 仅将它用于比较。</p>
+<h3 id="reserve">reserve</h3>
+<p>为向量对象保留最小的存储长度，必要时为其分配空间。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">reserve</span><span class="params">(size_type count)</span></span>;</span><br></pre></td></tr></table></figure>
+<p><strong>参数</strong></p>
+<p><em><code>count</code></em><br>
+要分配给向量的最小存储长度。</p>
+<h3 id="resize">resize</h3>
+<p>为矢量指定新的大小。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">resize</span><span class="params">(size_type new_size)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">resize</span><span class="params">(size_type new_size, Type value)</span></span>;</span><br></pre></td></tr></table></figure>
+<p><strong>参数</strong></p>
+<p><em><code>new_size</code></em><br>
+矢量的新大小。</p>
+<p><em><code>value</code></em><br>
+新大小大于旧大小时添加至矢量的新元素的初始化值。 如果省略该值，则新对象将使用其默认构造函数。</p>
+<p><strong>注解</strong></p>
+<p>如果容器的大小小于请求的大小，则 <em><code>new_size</code></em> <code>resize</code> 会将元素添加到向量，直到达到请求的大小。 如果容器的大小大于请求的大小，则 <code>resize</code> 删除接近容器末尾的元素，直到达到大小 <em><code>new_size</code></em> 。 如果容器的当前大小与请求的大小相同，则不执行任何操作。</p>
+<p><a href="#size"><code>size</code></a> 反映矢量的当前大小。</p>
+<h3 id="reverse_iterator">reverse_iterator</h3>
+<p>一个类型，它提供可读取或修改反向矢量中的任意元素的随机访问迭代器。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="built_in">std</span>::reverse_iterator&lt;iterator&gt; reverse_iterator;</span><br></pre></td></tr></table></figure>
+<p><strong>注解</strong></p>
+<p><code>reverse_iterator</code> 类型用于反向循环访问向量。</p>
+<h3 id="shrink_to_fit">shrink_to_fit</h3>
+<p>放弃额外容量。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">shrink_to_fit</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+<h3 id="size">size</h3>
+<p>返回向量中的元素数量。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">size_type <span class="title">size</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br></pre></td></tr></table></figure>
+<p><strong>返回值</strong></p>
+<p>向量的当前长度。</p>
+<h3 id="size_type">size_type</h3>
+<p>一个类型，它计算矢量中的元素数目。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">typename</span> Allocator::size_type size_type;</span><br></pre></td></tr></table></figure>
+<h3 id="swap">swap</h3>
+<p>交换两个向量的元素。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">swap</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="built_in">vector</span>&lt;Type, Allocator&gt;&amp; right)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">friend</span> <span class="keyword">void</span> <span class="title">swap</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="built_in">vector</span>&lt;Type, Allocator&gt;&amp; left,</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="built_in">vector</span>&lt;Type, Allocator&gt;&amp; right)</span></span>;</span><br></pre></td></tr></table></figure>
+<p><strong>参数</strong></p>
+<p><em><code>right</code></em><br>
+提供要交换的元素的向量。 或，其元素要与矢量中的元素进行交换的向量 <em><code>left</code></em> 。</p>
+<p><em><code>left</code></em><br>
+一个向量，其元素将与矢量中的元素进行交换 <em><code>right</code></em> 。</p>
+<h3 id="value_type">value_type</h3>
+<p>一个类型，它代表向量中存储的数据类型。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">typename</span> Allocator::value_type value_type;</span><br></pre></td></tr></table></figure>
+<p><strong>注解</strong></p>
+<p><code>value_type</code> 是模板参数 <code>Type</code> 的同义词。</p>
+<h3 id="vector-1">vector</h3>
+<p>构造向量。 重载构造特定大小的向量，或具有特定值的元素。 或作为某些其他矢量的全部或部分的副本。 某些重载还允许您指定要使用的分配器。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>();</span><br><span class="line"><span class="function"><span class="keyword">explicit</span> <span class="title">vector</span><span class="params">(<span class="keyword">const</span> Allocator&amp; allocator)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">explicit</span> <span class="title">vector</span><span class="params">(size_type count)</span></span>;</span><br><span class="line"><span class="built_in">vector</span>(size_type count, <span class="keyword">const</span> Type&amp; value);</span><br><span class="line"><span class="built_in">vector</span>(size_type count, <span class="keyword">const</span> Type&amp; value, <span class="keyword">const</span> Allocator&amp; allocator);</span><br><span class="line"></span><br><span class="line"><span class="built_in">vector</span>(<span class="keyword">const</span> <span class="built_in">vector</span>&amp; source);</span><br><span class="line"><span class="built_in">vector</span>(<span class="built_in">vector</span>&amp;&amp; source);</span><br><span class="line"><span class="built_in">vector</span>(<span class="built_in">initializer_list</span>&lt;Type&gt; init_list, <span class="keyword">const</span> Allocator&amp; allocator);</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">InputIterator</span>&gt;</span></span><br><span class="line"><span class="built_in">vector</span>(InputIterator first, InputIterator last);</span><br><span class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">InputIterator</span>&gt;</span></span><br><span class="line"><span class="built_in">vector</span>(InputIterator first, InputIterator last, <span class="keyword">const</span> Allocator&amp; allocator);</span><br></pre></td></tr></table></figure>
+<p><strong>参数</strong></p>
+<p><em><code>allocator</code></em><br>
+要用于此对象的分配器类。 <a href="#get_allocator"><code>get_allocator</code></a> 返回对象的分配器类。</p>
+<p><em><code>count</code></em><br>
+构造的矢量中的元素数。</p>
+<p><em><code>value</code></em><br>
+构造的矢量中的元素值。</p>
+<p><em><code>source</code></em><br>
+要成为副本的构造的矢量中的矢量。</p>
+<p><em><code>first</code></em><br>
+要复制的元素范围内的第一个元素的位置。</p>
+<p><em><code>last</code></em><br>
+要复制的元素范围外的第一个元素的位置。</p>
+<p><em><code>init_list</code></em><br>
+<code>initializer_list</code>包含要复制的元素的。</p>
+<p><strong>注解</strong></p>
+<p>所有构造函数都存储分配器对象 (<em><code>allocator</code></em>) 并初始化向量。</p>
+<p>前两个构造函数指定一个空初始矢量。 第二个构造函数显式指定要使用) 的分配器类型 (<em><code>allocator</code></em> 。</p>
+<p>第三个构造函数指定 (<em><code>count</code></em> 类的默认值元素) 元素的重复 <code>Type</code> 。</p>
+<p>第四个和第五个构造函数指定 (<em><code>count</code></em>) 的值元素的重复 <em><code>value</code></em> 。</p>
+<p>第六个构造函数指定矢量的副本 <em><code>source</code></em> 。</p>
+<p>第七个构造函数移动矢量 <em><code>source</code></em> 。</p>
+<p>第八个构造函数使用 initializer_list 指定元素。</p>
+<p>第九个和第十个构造函数复制矢量的范围（<code>first</code>、<code>last</code>）。</p>
+<h2 id="list">list</h2>
+<p>C + + 标准库列表类是序列容器的类模板，用于在线性排列中维护其元素，并允许在序列内的任何位置高效插入和删除。 序列存储为双向链接的元素列表，每个包含一些 <em>Type</em> 类型的成员。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">Type</span>, <span class="keyword">class</span> <span class="title">Allocator</span>=</span> allocator&lt;Type&gt;&gt;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">list</span></span></span><br></pre></td></tr></table></figure>
+<p>容器类型选择通常应根据应用程序所需的搜索和插入的类型。 当对任何元素的随机访问超出限制并且仅要求在序列的末尾插入或删除元素时，矢量应作为用于管理序列的首选容器。 当需要随机访问并且在序列起始处和末尾处插入和删除元素已到达极限时，应首选类 deque 容器进行操作。</p>
+<p>列表成员函数 <a href="#merge">merge</a>、<a href="#reverse">reverse</a>、<a href="#unique">unique</a>、<a href="#remove">remove</a> 和 <a href="#remove_if">remove_if</a> 已针对对列表的操作进行了优化，它们可作为泛型对应函数的高性能替代函数。</p>
+<p>当成员函数必须插入或删除列表中的元素时，将发生列表的重新分配。 在所有这类情况下，仅指向受控制序列被消除部分的迭代器或引用将变为无效。</p>
+<p>包括 c + + 标准库标准标头 &lt;list&gt; 以定义 <a href="../standard-library/stl-containers.md">容器</a> 类模板列表和多个支持模板。</p>
+<p><strong>构造函数</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>名称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="#list">list</a></td>
+<td>构造一个列表，它具有特定大小或它的元素具有特定值，或具有特定 <code>allocator</code> 或作为某个其他列表副本。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Typedef</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>名称</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="#allocator_type">allocator_type</a></td>
+<td>表示列表对象的 <code>allocator</code> 类的类型。</td>
+</tr>
+<tr class="even">
+<td><a href="#const_iterator">const_iterator</a></td>
+<td>一种类型，它提供可读取列表中元素的双向迭代器 <strong><code>const</code></strong> 。</td>
+</tr>
+<tr class="odd">
+<td><a href="#const_pointer">const_pointer</a></td>
+<td>提供指向列表中元素的指针的类型 <strong><code>const</code></strong> 。</td>
+</tr>
+<tr class="even">
+<td><a href="#const_reference">const_reference</a></td>
+<td>一种类型，它提供对 <strong><code>const</code></strong> 存储在列表中用于读取和执行操作的元素的引用 <strong><code>const</code></strong> 。</td>
+</tr>
+<tr class="odd">
+<td><a href="#const_reverse_iterator">const_reverse_iterator</a></td>
+<td>一种类型，它提供可读取列表中任何元素的双向迭代器 <strong><code>const</code></strong> 。</td>
+</tr>
+<tr class="even">
+<td><a href="#difference_type">difference_type</a></td>
+<td>提供引用同一列表中的元素的两个迭代器之间的差异的类型。</td>
+</tr>
+<tr class="odd">
+<td><a href="#iterator">iterator</a></td>
+<td>提供可读取或修改列表中任何元素的双向迭代器的类型。</td>
+</tr>
+<tr class="even">
+<td><a href="#pointer">pointer</a></td>
+<td>提供指向列表中元素的指针的类型。</td>
+</tr>
+<tr class="odd">
+<td><a href="#reference">reference</a></td>
+<td>一种类型，它提供对 <strong><code>const</code></strong> 存储在列表中用于读取和执行操作的元素的引用 <strong><code>const</code></strong> 。</td>
+</tr>
+<tr class="even">
+<td><a href="#reverse_iterator">reverse_iterator</a></td>
+<td>提供可读取或修改反向列表中的元素的双向迭代器的类型。</td>
+</tr>
+<tr class="odd">
+<td><a href="#size_type">size_type</a></td>
+<td>计算列表中元素的数目的类型。</td>
+</tr>
+<tr class="even">
+<td><a href="#value_type">value_type</a></td>
+<td>表示列表中存储的数据类型的类型。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>函数</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>名称</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="#assign">assign</a></td>
+<td>将元素从列表中擦除并将一组新的元素复制到目标列表。</td>
+</tr>
+<tr class="even">
+<td><a href="#back">back</a></td>
+<td>返回对列表中最后一个元素的引用。</td>
+</tr>
+<tr class="odd">
+<td><a href="#back">back</a></td>
+<td>返回发现列表中第一个元素的位置的迭代器。</td>
+</tr>
+<tr class="even">
+<td><a href="#cbegin">cbegin</a></td>
+<td>返回发现列表中第一个元素的位置的常量迭代器。</td>
+</tr>
+<tr class="odd">
+<td><a href="#cend">cend</a></td>
+<td>返回发现一个列表中最后一个元素之后的位置的敞亮表达式。</td>
+</tr>
+<tr class="even">
+<td><a href="#clear">clear</a></td>
+<td>消除列表中的全部元素。</td>
+</tr>
+<tr class="odd">
+<td><a href="#crbegin">crbegin</a></td>
+<td>返回发现反向列表中第一个元素的位置的常量迭代器。</td>
+</tr>
+<tr class="even">
+<td><a href="#crend">crend</a></td>
+<td>返回用于发现反向列表中最后一个元素之后的位置的常量迭代器。</td>
+</tr>
+<tr class="odd">
+<td><a href="#emplace">emplace</a></td>
+<td>将构造的元素插入到列表中的指定位置。</td>
+</tr>
+<tr class="even">
+<td><a href="#emplace_back">emplace_back</a></td>
+<td>在列表的结尾处添加一个就地构造的元素。</td>
+</tr>
+<tr class="odd">
+<td><a href="#emplace_front">emplace_front</a></td>
+<td>在列表的起始位置添加一个就地构造的元素。</td>
+</tr>
+<tr class="even">
+<td><a href="#empty">empty</a></td>
+<td>测试列表是否为空。</td>
+</tr>
+<tr class="odd">
+<td><a href="#end">end</a></td>
+<td>返回用于发现列表中最后一个元素之后的位置的迭代器。</td>
+</tr>
+<tr class="even">
+<td><a href="#erase">erase</a></td>
+<td>从列表中的指定位置移除一个或一系列元素。</td>
+</tr>
+<tr class="odd">
+<td><a href="#front">front</a></td>
+<td>返回对列表中第一个元素的引用。</td>
+</tr>
+<tr class="even">
+<td><a href="#get_allocator">get_allocator</a></td>
+<td>返回用于构造列表的 <code>allocator</code> 对象的一个副本。</td>
+</tr>
+<tr class="odd">
+<td><a href="#insert">insert</a></td>
+<td>将一个、几个或一系列元素插入列表中的指定位置。</td>
+</tr>
+<tr class="even">
+<td><a href="#max_size">max_size</a></td>
+<td>返回列表的最大长度。</td>
+</tr>
+<tr class="odd">
+<td><a href="#merge">merge</a></td>
+<td>将元素从参数列表移除，将它们插入目标列表，将新的组合元素集以升序或其他指定顺序排序。</td>
+</tr>
+<tr class="even">
+<td><a href="#pop_back">pop_back</a></td>
+<td>删除列表末尾的元素。</td>
+</tr>
+<tr class="odd">
+<td><a href="#pop_front">pop_front</a></td>
+<td>删除列表起始处的一个元素。</td>
+</tr>
+<tr class="even">
+<td><a href="#push_back">push_back</a></td>
+<td>在列表的末尾添加元素。</td>
+</tr>
+<tr class="odd">
+<td><a href="#push_front">push_front</a></td>
+<td>在列表的开头添加元素。</td>
+</tr>
+<tr class="even">
+<td><a href="#rbegin">rbegin</a></td>
+<td>返回发现反向列表中第一个元素的位置的迭代器。</td>
+</tr>
+<tr class="odd">
+<td><a href="#remove">remove</a></td>
+<td>清除列表中与指定值匹配的元素。</td>
+</tr>
+<tr class="even">
+<td><a href="#remove_if">remove_if</a></td>
+<td>将满足指定谓词的元素从列表中消除。</td>
+</tr>
+<tr class="odd">
+<td><a href="#rend">rend</a></td>
+<td>返回发现反向列表中最后一个元素之后的位置的迭代器。</td>
+</tr>
+<tr class="even">
+<td><a href="#resize">resize</a></td>
+<td>为列表指定新的大小。</td>
+</tr>
+<tr class="odd">
+<td><a href="#reverse">reverse</a></td>
+<td>反转列表中元素的顺序。</td>
+</tr>
+<tr class="even">
+<td><a href="#size">size</a></td>
+<td>返回列表中元素的数目。</td>
+</tr>
+<tr class="odd">
+<td><a href="#sort">sort</a></td>
+<td>按升序或其他顺序关系排列列表中的元素。</td>
+</tr>
+<tr class="even">
+<td><a href="#splice">splice</a></td>
+<td>将元素从自变量列表中删除或将它们插入目标列表。</td>
+</tr>
+<tr class="odd">
+<td><a href="#swap">swap</a></td>
+<td>交换两个列表的元素。</td>
+</tr>
+<tr class="even">
+<td><a href="#unique">unique</a></td>
+<td>从列表中删除满足某些其他二元谓词的相邻重复元素或相邻元素。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="运算符">运算符</h3>
+<table>
+<thead>
+<tr class="header">
+<th>名称</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="#op_eq">operator =</a></td>
+<td>用另一个列表的副本替换列表中的元素。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="deque">deque</h2>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/03/22/CMake/CMake-MSVC%E7%BC%96%E8%AF%91%E5%99%A8%E9%80%89%E9%A1%B9/" rel="prev" title="CMake MSVC编译器选项">
+      <i class="fa fa-chevron-left"></i> CMake MSVC编译器选项
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/03/22/CMake/CMake%E5%9F%BA%E7%A1%80/" rel="next" title="C++基础">
+      C++基础 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#a"><span class="nav-number">1.</span> <span class="nav-text">a</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E5%A7%8B"><span class="nav-number">1.1.</span> <span class="nav-text">开始</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vector"><span class="nav-number">1.2.</span> <span class="nav-text">vector</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#assign"><span class="nav-number">1.2.1.</span> <span class="nav-text">assign</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#at"><span class="nav-number">1.2.2.</span> <span class="nav-text">at</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#back"><span class="nav-number">1.2.3.</span> <span class="nav-text">back</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#begin"><span class="nav-number">1.2.4.</span> <span class="nav-text">begin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#capacity"><span class="nav-number">1.2.5.</span> <span class="nav-text">capacity</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cbegin"><span class="nav-number">1.2.6.</span> <span class="nav-text">cbegin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cend"><span class="nav-number">1.2.7.</span> <span class="nav-text">cend</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#clear"><span class="nav-number">1.2.8.</span> <span class="nav-text">clear</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#const_iterator"><span class="nav-number">1.2.9.</span> <span class="nav-text">const_iterator</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#const_pointer"><span class="nav-number">1.2.10.</span> <span class="nav-text">const_pointer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#const_reference"><span class="nav-number">1.2.11.</span> <span class="nav-text">const_reference</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#const_reverse_iterator"><span class="nav-number">1.2.12.</span> <span class="nav-text">const_reverse_iterator</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#crbegin"><span class="nav-number">1.2.13.</span> <span class="nav-text">crbegin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#crend"><span class="nav-number">1.2.14.</span> <span class="nav-text">crend</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#data"><span class="nav-number">1.2.15.</span> <span class="nav-text">data</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#difference_type"><span class="nav-number">1.2.16.</span> <span class="nav-text">difference_type</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#emplace"><span class="nav-number">1.2.17.</span> <span class="nav-text">emplace</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#emplace_back"><span class="nav-number">1.2.18.</span> <span class="nav-text">emplace_back</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#empty"><span class="nav-number">1.2.19.</span> <span class="nav-text">empty</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#end"><span class="nav-number">1.2.20.</span> <span class="nav-text">end</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#erase"><span class="nav-number">1.2.21.</span> <span class="nav-text">erase</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#front"><span class="nav-number">1.2.22.</span> <span class="nav-text">front</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#get_allocator"><span class="nav-number">1.2.23.</span> <span class="nav-text">get_allocator</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#insert"><span class="nav-number">1.2.24.</span> <span class="nav-text">insert</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#iterator"><span class="nav-number">1.2.25.</span> <span class="nav-text">iterator</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#max_size"><span class="nav-number">1.2.26.</span> <span class="nav-text">max_size</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#operator"><span class="nav-number">1.2.27.</span> <span class="nav-text">operator[]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#operator-1"><span class="nav-number">1.2.28.</span> <span class="nav-text">operator&#x3D;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pointer"><span class="nav-number">1.2.29.</span> <span class="nav-text">pointer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pop_back"><span class="nav-number">1.2.30.</span> <span class="nav-text">pop_back</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#push_back"><span class="nav-number">1.2.31.</span> <span class="nav-text">push_back</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rbegin"><span class="nav-number">1.2.32.</span> <span class="nav-text">rbegin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#reference"><span class="nav-number">1.2.33.</span> <span class="nav-text">reference</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rend"><span class="nav-number">1.2.34.</span> <span class="nav-text">rend</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#reserve"><span class="nav-number">1.2.35.</span> <span class="nav-text">reserve</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#resize"><span class="nav-number">1.2.36.</span> <span class="nav-text">resize</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#reverse_iterator"><span class="nav-number">1.2.37.</span> <span class="nav-text">reverse_iterator</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#shrink_to_fit"><span class="nav-number">1.2.38.</span> <span class="nav-text">shrink_to_fit</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#size"><span class="nav-number">1.2.39.</span> <span class="nav-text">size</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#size_type"><span class="nav-number">1.2.40.</span> <span class="nav-text">size_type</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#swap"><span class="nav-number">1.2.41.</span> <span class="nav-text">swap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#value_type"><span class="nav-number">1.2.42.</span> <span class="nav-text">value_type</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vector-1"><span class="nav-number">1.2.43.</span> <span class="nav-text">vector</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#list"><span class="nav-number">1.3.</span> <span class="nav-text">list</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">1.3.1.</span> <span class="nav-text">运算符</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#deque"><span class="nav-number">1.4.</span> <span class="nav-text">deque</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">straywriter</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">124</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/straywriter" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;straywriter" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">straywriter</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

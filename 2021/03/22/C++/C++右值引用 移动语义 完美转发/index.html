@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"straywriter.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="C++右值引用 移动语义 完美转发">
+<meta property="og:url" content="https://straywriter.github.io/2021/03/22/C++/C++%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8%20%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89%20%E5%AE%8C%E7%BE%8E%E8%BD%AC%E5%8F%91/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-03-22T13:59:11.000Z">
+<meta property="article:modified_time" content="2021-04-17T10:57:00.906Z">
+<meta property="article:author" content="straywriter">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://straywriter.github.io/2021/03/22/C++/C++%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8%20%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89%20%E5%AE%8C%E7%BE%8E%E8%BD%AC%E5%8F%91/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>C++右值引用 移动语义 完美转发 | Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://straywriter.github.io/2021/03/22/C++/C++%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8%20%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89%20%E5%AE%8C%E7%BE%8E%E8%BD%AC%E5%8F%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="straywriter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C++右值引用 移动语义 完美转发
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-03-22 21:59:11" itemprop="dateCreated datePublished" datetime="2021-03-22T21:59:11+08:00">2021-03-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-04-17 18:57:00" itemprop="dateModified" datetime="2021-04-17T18:57:00+08:00">2021-04-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <hr>
+<h2 id="section"></h2>
+<ul>
+<li>右值引用
+<ul>
+<li>左值和右值</li>
+<li>左值引用和右值引用</li>
+<li>常量左值引用</li>
+<li>万能引用</li>
+<li>引用折叠</li>
+</ul></li>
+<li>移动语言
+<ul>
+<li>移动构造和移动赋值</li>
+<li>universal references(通用引用)</li>
+</ul></li>
+<li>完美转发</li>
+</ul>
+<h2 id="右值引用">右值引用</h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">int x &#x3D; 20;   &#x2F;&#x2F; 左值</span><br><span class="line">int&amp;&amp; rx &#x3D; x * 2;  &#x2F;&#x2F; x*2的结果是一个右值，rx延长其生命周期</span><br><span class="line">int y &#x3D; rx + 2;   &#x2F;&#x2F; 因此你可以重用它：42</span><br><span class="line">rx &#x3D; 100;         &#x2F;&#x2F; 一旦你初始化一个右值引用变量，该变量就成为了一个左值，可以被赋值</span><br></pre></td></tr></table></figure>
+<p>右值引用的作用</p>
+<ul>
+<li>延长生命周期</li>
+<li>转移不可拷贝的资源</li>
+</ul>
+<h3 id="左值和右值">左值和右值</h3>
+<ul>
+<li>在C++11提出右值引用之前，C++03及更早的C++标准中，表达式的“值分类”（value categories）属性为左值或右值。</li>
+<li>左值是指表达式结束后依然存在的<em>持久化对象</em>，右值是指表达式结束时就不再存在的<em>临时对象</em>。</li>
+<li>左值和右值的区分标准在于能否获取地址。</li>
+<li><code>C++</code>中所有的值都必然属于左值、右值二者之一。</li>
+<li>所有的具名变量或者对象都是左值，而右值不具名。</li>
+<li>区分左值和右值的便捷方法：看能不能对表达式取地址，如果能，则为左值，否则为右值。</li>
+<li>凡是真正的存在内存当中，而不是寄存器当中的值就是左值，其余的都是右值。</li>
+<li>右值可以是字面量、临时对象等表达式。</li>
+<li>C++的const左值是不可赋值的；而作为临时对象的右值可能允许被赋值</li>
+</ul>
+<p><strong>C++03及以前的标准定义了在表达式中左值到右值的三类隐式自动转换：</strong></p>
+<ul>
+<li>左值转化为右值；如整数变量<code>i</code>在表达式 <code>（i+3）</code></li>
+<li>数组名是常量左值，在表达式中转化为数组首元素的地址值</li>
+<li>函数名是常量左值，在表达式中转化为函数的地址值</li>
+</ul>
+<h3 id="左值引用与右值引用">左值引用与右值引用</h3>
+<ul>
+<li><p>引用可以给左值起一个别名，当然也可以给右值起一个别名。</p></li>
+<li><p>绑定左值的引用就是左值引用，绑定右值的引用就是右值引用。</p></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">int i &#x3D; 0;</span><br><span class="line">int&amp; j &#x3D; i;               &#x2F;&#x2F; 左值引用</span><br><span class="line">int&amp;&amp; k &#x3D; 0;              &#x2F;&#x2F; 右值引用</span><br></pre></td></tr></table></figure>
+<p><code>T</code>是一个具体类型：</p>
+<ol type="1">
+<li>左值引用， 使用 <code>T&amp;</code>, 只能绑定<strong>左值</strong></li>
+<li>右值引用， 使用 <code>T&amp;&amp;</code>， 只能绑定<strong>右值</strong></li>
+<li>常量左值， 使用 <code>const T&amp;</code>, 既可以绑定<strong>左值</strong>又可以绑定<strong>右值</strong></li>
+<li>右值引用根据其修饰符的不同，也可以分为非常量右值引用和常量右值引用。</li>
+<li><strong>非常量右值引用</strong>只能绑定到非常量右值，不能绑定到非常量左值、常量左值和常量右值</li>
+<li><strong>常量右值引用</strong>可以绑定到非常量右值和常量右值，不能绑定到非常量左值和常量左值</li>
+<li>已命名的<strong>右值引用</strong>，编译器会认为是个<strong>左值</strong></li>
+<li>编译器有返回值优化，但不要过于依赖</li>
+</ol>
+<hr>
+<h3 id="常量左值引用">常量左值引用</h3>
+<ul>
+<li><p><strong>常量左值引用是个万能的引用类型。它既可以绑定到左值也可以绑定到右值</strong>。</p></li>
+<li><p>它像右值引用一样可以延长右值的生命期。不过相比于右值引用所引用的右值，常量左值引用的右值在它的余生中只能是只读的；</p></li>
+<li><p>常量左值引用可以绑定到所有类型的值，包括非常量左值、常量左值、非常量右值和常量右值。</p></li>
+<li><p>常量左值应用可以理解为常量引用。</p></li>
+<li><p>使用左值引用初始化右值，安全地将右值绑定(bind)到左值的唯一方法是通过将左值标记为const。</p></li>
+</ul>
+<h3 id="万能引用">万能引用</h3>
+<ul>
+<li><p>当T是一个具体的类型时，T&amp;&amp;表示右值引用，只能绑定右值。</p></li>
+<li><p>若T&amp;&amp;在发生自动类型推断的时候，它是未定的引用类型，如果被一个左值初始化，它就是一个左值引用；</p></li>
+<li><p>如果它被一个右值初始化，它就是一个右值引用，</p></li>
+<li><p>它是左值引用还是右值引用取决于它的初始化。因此，也被称为万能引用。</p></li>
+</ul>
+<h3 id="引用折叠转发引用">引用折叠/转发引用</h3>
+<ul>
+<li>在C++中，引用的引用是非法的。对于C++语言，不可以在源程序中直接对引用类型再施加引用。<code>T&amp; &amp;</code>将编译报错。</li>
+<li>编译器在通过类型别名或模板参数推导等语境中，会间接定义出引用的引用，这时引用会形成折叠。</li>
+<li>引用折叠只会发生在模板实例化、auto类型推导、创建和运用typedef和别名声明、以及decltype语境中。</li>
+<li>万能引用就是利用模板推导和引用折叠的相关规则，生成不同的实例化模板来接收传进来的参数。</li>
+</ul>
+<p><strong>具体规则：</strong></p>
+<ul>
+<li><p>所有右值引用折叠到右值引用上仍然是一个右值引用。如T&amp;&amp; &amp;&amp;折叠为T&amp;&amp;。</p></li>
+<li><p>所有的其他引用类型之间的折叠都将变成左值引用。如T&amp; &amp;, T&amp; &amp;&amp;, T&amp;&amp; &amp;折叠为T&amp;。可见左值引用会传染，沾上一个左值引用就变左值引用了。根本原因：在一处声明为左值，就说明该对象为持久对象，编译器就必须保证此对象可靠(左值)。</p></li>
+<li><p>T&amp; &amp;变为T&amp;</p></li>
+<li><p>T&amp; &amp;&amp;变为T&amp;</p></li>
+<li><p>T&amp;&amp; &amp;变为T&amp;</p></li>
+<li><p>T&amp;&amp; &amp;&amp;变为T&amp;&amp;</p></li>
+</ul>
+<p><strong>所以：</strong></p>
+<ul>
+<li>当万能引用(T&amp;&amp;)绑定到左值时，T会被推导为T&amp;类型。从而参数类型为<code>T&amp; &amp;&amp;</code>，引用折叠后的类型为T&amp;，左值引用；</li>
+<li>当万能引用(T&amp;&amp;)绑定到右值时，T会被推导为T&amp;&amp;类型。从而参数类型为<code>T&amp;&amp; &amp;&amp;</code>，引用折叠后的类型为T&amp;&amp;，右值引用。</li>
+</ul>
+<h4 id="模板参数类型推导">模板参数类型推导</h4>
+<p>对函数模板<code>template&lt;typename T&gt;void foo(T&amp;&amp;);</code>，应用上述引用折叠规则，可推导出如下结论：</p>
+<ul>
+<li>如果实参是类型A的左值，则模板参数T的类型为A&amp;，形参类型为A&amp;；</li>
+<li>如果实参是类型A的右值，则模板参数T的类型为A&amp;&amp;，形参类型为A&amp;&amp;。</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span> &gt;</span> <span class="class"><span class="keyword">class</span> <span class="title">vector</span> &#123;</span></span><br><span class="line">    <span class="keyword">public</span>: </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">push_back</span><span class="params">(T&amp;&amp; x)</span></span>; <span class="comment">// T是类模板参数 ⇒ 该成员函数不需要类型推导;这里的函数参数类型就是T的右值引用</span></span><br><span class="line">     <span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">Args</span>&gt;</span> <span class="function"><span class="keyword">void</span> <span class="title">emplace_back</span><span class="params">(Args&amp;&amp; args)</span></span>; <span class="comment">//  该成员函数是个函数模板，有自己的模板参数，需要类型推导</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;<span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">(<span class="keyword">const</span> T&amp;&amp; param)</span></span>; <span class="comment">// 这里的“&amp;&amp;”不需要类型推导，意味着“常量类型T的右值引用”</span></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;<span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">(<span class="built_in">std</span>::<span class="built_in">vector</span>&lt;T&gt;&amp;&amp; param)</span></span>;  <span class="comment">// 这里的“&amp;&amp;”不需要类型推导，意味着std::vector&lt;T&gt;的右值引用</span></span><br></pre></td></tr></table></figure>
+<h4 id="typedef的类型推导">typedef的类型推导</h4>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;    <span class="class"><span class="keyword">class</span> <span class="title">Widget</span> &#123;</span></span><br><span class="line">    <span class="keyword">typedef</span> T&amp; LvalueRefType;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line">Widget&lt;<span class="keyword">int</span>&amp;&amp;&gt; w; <span class="comment">// LvalueRefType的类型为int&amp;</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">(Widget&lt;<span class="keyword">int</span>&amp;&gt;::LvalueRefType&amp;&amp; param)</span></span>; <span class="comment">//param的类型为int&amp;</span></span><br></pre></td></tr></table></figure>
+<h4 id="decltype类型推导">decltype类型推导</h4>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> var;</span><br><span class="line"><span class="keyword">decltype</span>(var)&amp;&amp; v1=<span class="built_in">std</span>::move(var); <span class="comment">//类型是int&amp;&amp;</span></span><br></pre></td></tr></table></figure>
+<h3 id="示例">示例</h3>
+<p><strong>万能引用示例</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun</span><span class="params">(T&amp;&amp; t)</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">int</span> x = <span class="number">10</span>;</span><br><span class="line">  fun(<span class="number">10</span>);                <span class="comment">// t是右值</span></span><br><span class="line">  fun(x);                 <span class="comment">// t是左值</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>左值引用使用右值引用示例</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">obj</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function">obj <span class="title">bar</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    obj x;</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    obj &amp;a1 = bar();</span><br><span class="line">    obj &amp;&amp;a2 = bar();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">In function &#39;int main()&#39;:</span><br><span class="line">10:16: error: cannot bind non-const lvalue reference of type &#39;obj&amp;&#39; to an rvalue of type &#39;obj&#39;</span><br><span class="line">  obj &amp; a1 &#x3D; bar();</span><br></pre></td></tr></table></figure>
+<p><strong>正确：</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">obj</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function">obj <span class="title">bar</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    obj x;</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">const</span> obj &amp;a1 = bar();</span><br><span class="line">    obj &amp;&amp;a2 = bar();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><strong>移动构造器和移动赋值运算符示例：</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">X</span>  </span></span><br><span class="line"><span class="class">&#123;</span>  </span><br><span class="line">    X();                         <span class="comment">//缺省构造器  </span></span><br><span class="line">    X(<span class="keyword">const</span> X&amp; that);            <span class="comment">//拷贝构造器  </span></span><br><span class="line">    X(X&amp;&amp; that);                 <span class="comment">//移动构造器  </span></span><br><span class="line">    X&amp; <span class="keyword">operator</span>=(<span class="keyword">const</span> X&amp; that); <span class="comment">//拷贝赋值运算符  </span></span><br><span class="line">    X&amp; <span class="keyword">operator</span>=(X&amp;&amp; that);      <span class="comment">//移动赋值运算符  </span></span><br><span class="line">&#125;;  </span><br><span class="line">  </span><br><span class="line">X a;                             <span class="comment">//调用缺省构造器  </span></span><br><span class="line">X b = a;                         <span class="comment">//调用拷贝构造器  </span></span><br><span class="line">X c = <span class="built_in">std</span>::move(b);              <span class="comment">//调用移动构造器  </span></span><br><span class="line">b = a;                           <span class="comment">//调用拷贝赋值运算符  </span></span><br><span class="line">c = <span class="built_in">std</span>::move(b);                <span class="comment">//调用移动赋值运算符  </span></span><br></pre></td></tr></table></figure>
+<h2 id="移动语义">移动语义</h2>
+<p>作为一种追求执行效率的语言，C++在用临时对象或函数返回值给左值对象赋值时的深度拷贝（deep copy）一直受到诟病。考虑到临时对象的生命期仅在表达式中持续，如果把临时对象的内容直接移动（move）给被赋值的左值对象，效率改善将是显著的。这就是<strong>移动语义</strong>的来源。</p>
+<ul>
+<li><p>与传统的拷贝赋值运算符（copy assignment）成员函数、拷贝构造（copy ctor）成员函数对应，移动语义需要有移动赋值（move assignment）成员函数、移动构造（move ctor）成员函数的实现机制。可以通过函数重载来确定是调用拷贝语义还是移动语义的实现。</p></li>
+<li><p>右值引用就是为了实现移动语义与完美转发所需要而设计出来的新的数据类型。右值引用的实例对应于临时对象；右值引用并区别于左值引用，用作形参时能重载辨识（overload resolution）是调用拷贝语义还是移动语义的函数。</p></li>
+<li><p>无论是传统的左值引用还是C++11引进的右值引用，从编译后的反汇编层面上，都是对象的存储地址与自动解引用（dereference）。因此，右值引用与左值引用的变量都不能悬空(dangling)，也即定义时必须初始化从而绑定到一个对象上。</p></li>
+<li><p>右值引用变量绑定的对象，是编程者认为可以通过移动语义移走其内容的对象，对这种对象就需要定义为一种独特的值分类，即C++11标准称之为“临终值”（eXpire Value）。</p></li>
+<li><p>临终值对象既有存储地址因此可以绑定到右值引用变量上，而且它又是一个即将停止使用的对象可以被移走内容。所以临终值既不同于左值，也不同于传统的右值（C++11称之为纯右值），不能取地址运算（&amp;）。另一方面，临终值兼有传统的左值与右值的性质：既对应于一个（临时）对象，称之为有标识（identity）；同时其内容可以移走，称之为可移动性（movability）。C++11标准把临终值与左值合称为广义左值，即指向某个物理存在的对象；把临终值与纯右值（对应C++03时的右值概念）合称为右值（C++11重新定义的概念），其内容可以移走（该右值生命期到此为止，此后将不再使用）。之所以称为右值而不叫做广义右值，是因为右值引用即可以与临终值对象绑定，也可以与纯右值对象绑定（这时往往自动生成一个临时对象）。</p></li>
+<li><p>C++语言在引入了右值引用之后，面临着一个问题：如何让编程者指出哪个对象具有临终值？这有两种显式指定方法：如果函数（或运算符）的返回类型为右值引用，或者通过类型转换如static_cast&lt;Type&amp;&amp;&gt;或者std::move()模板函数。</p></li>
+</ul>
+<h3 id="移动语义-1">移动语义</h3>
+<ul>
+<li>移动语义（move semantics）是指某个对象接管另一个对象所拥有的外部资源的所有权。</li>
+<li>移动语义需要通过移动（窃取）其他对象所拥有的资源来完成。</li>
+</ul>
+<p><strong>移动语义的具体实现（即一次that对象到this对象的移动（move））通常包含以下若干步骤：</strong></p>
+<blockquote>
+<ul>
+<li>如果this对象自身也拥有资源，释放该资源</li>
+<li>将this对象的指针或句柄指向that对象所拥有的资源</li>
+<li>将that对象原本指向该资源的指针或句柄设为空值</li>
+</ul>
+</blockquote>
+<h3 id="拷贝语义">拷贝语义</h3>
+<ul>
+<li>传统的拷贝语义（copy semantics）是指某个对象拷贝（复制）另一个对象所拥有的外部资源并获得新生资源的所有权。</li>
+</ul>
+<p><strong>拷贝语义的具体实现（即一次that对象到this对象的拷贝（copy））通常包含以下若干步骤：</strong></p>
+<blockquote>
+<ul>
+<li><p>如果this对象自身也拥有资源，释放该资源</p></li>
+<li><p>拷贝（复制）that对象所拥有的资源</p></li>
+<li><p>将this对象的指针或句柄指向新生的资源</p></li>
+<li><p>如果that对象为临时对象（右值），那么拷贝完成之后that对象所拥有的资源将会因that对象被销毁而即刻得以释放</p></li>
+</ul>
+</blockquote>
+<h3 id="示例-1">示例</h3>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;  </span></span></span><br><span class="line">  </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MemoryBlock</span>  </span></span><br><span class="line"><span class="class">&#123;</span>  </span><br><span class="line"><span class="keyword">public</span>:  </span><br><span class="line">  </span><br><span class="line">    <span class="comment">// 构造器（初始化资源）  </span></span><br><span class="line">    <span class="function"><span class="keyword">explicit</span> <span class="title">MemoryBlock</span><span class="params">(<span class="keyword">size_t</span> length)</span>  </span></span><br><span class="line"><span class="function">        : _<span class="title">length</span><span class="params">(length)</span>  </span></span><br><span class="line">        , _data(new int[length])  </span><br><span class="line">    &#123;  </span><br><span class="line">    &#125;  </span><br><span class="line">  </span><br><span class="line">    <span class="comment">// 析构器（释放资源）  </span></span><br><span class="line">    ~MemoryBlock()  </span><br><span class="line">    &#123;  </span><br><span class="line">        <span class="keyword">if</span> (_data != <span class="literal">nullptr</span>)  </span><br><span class="line">        &#123;  </span><br><span class="line">            <span class="keyword">delete</span>[] _data;  </span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;  </span><br><span class="line">  </span><br><span class="line">    <span class="comment">// 拷贝构造器（实现拷贝语义：拷贝that）  </span></span><br><span class="line">    MemoryBlock(<span class="keyword">const</span> MemoryBlock&amp; that)  </span><br><span class="line">        <span class="comment">// 拷贝that对象所拥有的资源  </span></span><br><span class="line">        : _length(that._length)  </span><br><span class="line">        , _data(<span class="keyword">new</span> <span class="keyword">int</span>[that._length])  </span><br><span class="line">    &#123;  </span><br><span class="line">        <span class="built_in">std</span>::copy(that._data, that._data + _length, _data);  </span><br><span class="line">    &#125;  </span><br><span class="line">  </span><br><span class="line">    <span class="comment">// 拷贝赋值运算符（实现拷贝语义：释放this ＋ 拷贝that）  </span></span><br><span class="line">    MemoryBlock&amp; <span class="keyword">operator</span>=(<span class="keyword">const</span> MemoryBlock&amp; that)  </span><br><span class="line">    &#123;  </span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span> != &amp;that)  </span><br><span class="line">        &#123;  </span><br><span class="line">            <span class="comment">// 释放自身的资源  </span></span><br><span class="line">            <span class="keyword">delete</span>[] _data;  </span><br><span class="line">  </span><br><span class="line">            <span class="comment">// 拷贝that对象所拥有的资源  </span></span><br><span class="line">            _length = that._length;  </span><br><span class="line">            _data = <span class="keyword">new</span> <span class="keyword">int</span>[_length];  </span><br><span class="line">            <span class="built_in">std</span>::copy(that._data, that._data + _length, _data);  </span><br><span class="line">        &#125;  </span><br><span class="line">        <span class="keyword">return</span> *<span class="keyword">this</span>;  </span><br><span class="line">    &#125;  </span><br><span class="line">  </span><br><span class="line">    <span class="comment">// 移动构造器（实现移动语义：移动that）  </span></span><br><span class="line">    MemoryBlock(MemoryBlock&amp;&amp; that)  </span><br><span class="line">        <span class="comment">// 将自身的资源指针指向that对象所拥有的资源  </span></span><br><span class="line">        : _length(that._length)  </span><br><span class="line">        , _data(that._data)  </span><br><span class="line">    &#123;  </span><br><span class="line">        <span class="comment">// 将that对象原本指向该资源的指针设为空值  </span></span><br><span class="line">        that._data = <span class="literal">nullptr</span>;  </span><br><span class="line">        that._length = <span class="number">0</span>;  </span><br><span class="line">    &#125;  </span><br><span class="line">  </span><br><span class="line">    <span class="comment">// 移动赋值运算符（实现移动语义：释放this ＋ 移动that）  </span></span><br><span class="line">    MemoryBlock&amp; <span class="keyword">operator</span>=(MemoryBlock&amp;&amp; that)  </span><br><span class="line">    &#123;  </span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span> != &amp;that)  </span><br><span class="line">        &#123;  </span><br><span class="line">            <span class="comment">// 释放自身的资源  </span></span><br><span class="line">            <span class="keyword">delete</span>[] _data;  </span><br><span class="line">  </span><br><span class="line">            <span class="comment">// 将自身的资源指针指向that对象所拥有的资源  </span></span><br><span class="line">            _data = that._data;  </span><br><span class="line">            _length = that._length;  </span><br><span class="line">  </span><br><span class="line">            <span class="comment">// 将that对象原本指向该资源的指针设为空值  </span></span><br><span class="line">            that._data = <span class="literal">nullptr</span>;  </span><br><span class="line">            that._length = <span class="number">0</span>;  </span><br><span class="line">        &#125;  </span><br><span class="line">        <span class="keyword">return</span> *<span class="keyword">this</span>;  </span><br><span class="line">    &#125;  </span><br><span class="line"><span class="keyword">private</span>:  </span><br><span class="line">    <span class="keyword">size_t</span> _length; <span class="comment">// 资源的长度  </span></span><br><span class="line">    <span class="keyword">int</span>* _data; <span class="comment">// 指向资源的指针，代表资源本身  </span></span><br><span class="line">&#125;;  </span><br><span class="line">  </span><br><span class="line"><span class="function">MemoryBlock <span class="title">f</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> MemoryBlock(<span class="number">50</span>); &#125;  </span><br><span class="line">  </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span>  </span></span><br><span class="line"><span class="function"></span>&#123;  </span><br><span class="line">    MemoryBlock a = f();            <span class="comment">// 调用移动构造器，移动语义  </span></span><br><span class="line">    MemoryBlock b = a;              <span class="comment">// 调用拷贝构造器，拷贝语义  </span></span><br><span class="line">    MemoryBlock c = <span class="built_in">std</span>::move(a);   <span class="comment">// 调用移动构造器，移动语义  </span></span><br><span class="line">    a = f();                        <span class="comment">// 调用移动赋值运算符，移动语义  </span></span><br><span class="line">    b = a;                          <span class="comment">// 调用拷贝赋值运算符，拷贝语义  </span></span><br><span class="line">    c = <span class="built_in">std</span>::move(a);               <span class="comment">// 调用移动赋值运算符，移动语义  </span></span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+<h2 id="完美转发">完美转发</h2>
+<ul>
+<li><p>所谓转发，就是通过一个函数将参数继续转交给另一个函数进行处理，原参数可能是右值，可能是左值，如果还能继续保持参数的原有特征，那么它就是完美的。</p></li>
+<li><p>完美转发也是C++11标准引入右值引用这一概念所要实现的目标之一。万能引用的引入主要是为了解决完美转发问题。</p></li>
+<li><p>完美转发（perfect forwarding）问题是指函数模板在向其他函数转发（传递）自身参数（形参）时该如何保留该参数（实参）的左右值属性的问题。</p></li>
+<li><p>函数模板在向其他函数转发（传递）自身形参时，如果相应实参是左值，它就应该被转发为左值；同样如果相应实参是右值，它就应该被转发为右值。这样做是为了保留在其他函数针对转发而来的参数的左右值属性进行不同处理（比如参数为左值时实施拷贝语义；参数为右值时实施移动语义）的可能性。</p></li>
+<li><p>如果将自身参数不分左右值一律转发为左值，其他函数就只能将转发而来的参数视为左值，从而失去针对该参数的左右值属性进行不同处理的可能性。</p></li>
+</ul>
+<h3 id="示例-2">示例</h3>
+<hr>
+<p><strong>在C++程序设计中，一个常见的类工厂函数，如下例：</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> Arg&gt; </span><br><span class="line"><span class="function"><span class="built_in">shared_ptr</span>&lt;T&gt; <span class="title">factory</span><span class="params">(Arg arg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">shared_ptr</span>&lt;T&gt;( <span class="keyword">new</span> T(arg) );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>参数对象arg在上例中是传值方式传递，这带来了生成额外的临时对象的代价。对于类工厂函数，完美的参数传递应该是引用方式传递。因而，在<code>boost:bind</code>中，参数是左值引用：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> Arg&gt; </span><br><span class="line"><span class="function"><span class="built_in">shared_ptr</span>&lt;T&gt; <span class="title">factory</span><span class="params">(Arg&amp; arg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">shared_ptr</span>&lt;T&gt;( <span class="keyword">new</span> T(arg) );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种实现的问题是形参不能绑定右值实参。如<code>factory&lt;X&gt;(102)</code>将编译报错。进一步解决办法是按常量引用方式传递参数，如下例：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> Arg&gt; </span><br><span class="line"><span class="function"><span class="built_in">shared_ptr</span>&lt;T&gt; <span class="title">factory</span><span class="params">(<span class="keyword">const</span> Arg&amp; arg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">shared_ptr</span>&lt;T&gt;( <span class="keyword">new</span> T(arg) );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种实现的问题是不能支持移动语义。</p>
+<p>形参使用右值引用可以解决完美转发问题。</p>
+<hr>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">f</span><span class="params">(T&amp;&amp; x)</span> </span>&#123;                    <span class="comment">// x 是转发引用</span></span><br><span class="line">    <span class="keyword">return</span> g(<span class="built_in">std</span>::forward&lt;T&gt;(x)); <span class="comment">// 从而能被转发</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    f(i); <span class="comment">// 实参是左值，调用 f&lt;int&amp;&gt;(int&amp;), std::forward&lt;int&amp;&gt;(x) 是左值</span></span><br><span class="line">    f(<span class="number">0</span>); <span class="comment">// 实参是右值，调用 f&lt;int&gt;(int&amp;&amp;), std::forward&lt;int&gt;(x) 是右值</span></span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">g</span><span class="params">(<span class="keyword">const</span> T&amp;&amp; x)</span></span>; <span class="comment">// x 不是转发引用：const T 不是无 cv 限定的</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span> <span class="class"><span class="keyword">struct</span> <span class="title">A</span> &#123;</span></span><br><span class="line">    <span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">U</span>&gt;</span></span><br><span class="line">    A(T&amp;&amp; x, U&amp;&amp; y, <span class="keyword">int</span>* p); <span class="comment">// x 不是转发引用：T 不是构造函数的类型模板形参</span></span><br><span class="line">                             <span class="comment">// 但 y 是转发引用</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<hr>
+<p>悬垂引用 尽管引用一旦初始化，就始终指代一个有效的对象或函数，但有可能创建一个程序，被指代对象的生存期结束，但引用仍保持可访问（悬垂（dangling））。访问这种引用是未定义行为。 一个常见例子是返回自动变量的引用的函数：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="built_in">std</span>::<span class="built_in">string</span>&amp; <span class="title">f</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">string</span> s = <span class="string">&quot;Example&quot;</span>;</span><br><span class="line">    <span class="keyword">return</span> s; <span class="comment">// 退出 s 的作用域:</span></span><br><span class="line">              <span class="comment">// 调用其析构函数并解分配其存储</span></span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">string</span>&amp; r = f(); <span class="comment">// 悬垂引用</span></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; r;       <span class="comment">// 未定义行为：从悬垂引用读取</span></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">string</span> s = f();  <span class="comment">// 未定义行为：从悬垂引用复制初始化</span></span><br></pre></td></tr></table></figure>
+<hr>
+<p>auto&amp;&amp;，但当其从花括号包围的初始化器列表推导时则不是：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span>&amp;&amp; vec = foo();       <span class="comment">// foo() 可以是左值或右值，vec 是转发引用</span></span><br><span class="line"><span class="keyword">auto</span> i = <span class="built_in">std</span>::begin(vec); <span class="comment">// 也可以</span></span><br><span class="line">(*i)++;                   <span class="comment">// 也可以</span></span><br><span class="line">g(<span class="built_in">std</span>::forward&lt;<span class="keyword">decltype</span>(vec)&gt;(vec)); <span class="comment">// 转发，保持值类别</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">auto</span>&amp;&amp; x: f()) &#123;</span><br><span class="line">  <span class="comment">// x 是转发引用；这是使用范围 for 循环的最安全方式</span></span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">auto</span>&amp;&amp; z = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;; <span class="comment">// *不是*转发引用（初始化器列表的特殊情形）</span></span><br></pre></td></tr></table></figure>
+<h2 id="相关参考">相关参考</h2>
+<p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/zh-hans/%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8">右值引用wiki</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/1993/N0345.pdf">pdf N0345</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/cb82c8b72c6b">C++11 右值引用与移动构造函数</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/03/22/CMake/CMake%E5%8F%98%E9%87%8F/" rel="prev" title="CMake变量">
+      <i class="fa fa-chevron-left"></i> CMake变量
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/03/22/Git/Git%E5%AD%90%E6%A8%A1%E5%9D%97/" rel="next" title="git 子模块删除">
+      git 子模块删除 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#section"><span class="nav-number">1.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text">右值引用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%A6%E5%80%BC%E5%92%8C%E5%8F%B3%E5%80%BC"><span class="nav-number">2.1.</span> <span class="nav-text">左值和右值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%A6%E5%80%BC%E5%BC%95%E7%94%A8%E4%B8%8E%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8"><span class="nav-number">2.2.</span> <span class="nav-text">左值引用与右值引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E9%87%8F%E5%B7%A6%E5%80%BC%E5%BC%95%E7%94%A8"><span class="nav-number">2.3.</span> <span class="nav-text">常量左值引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%87%E8%83%BD%E5%BC%95%E7%94%A8"><span class="nav-number">2.4.</span> <span class="nav-text">万能引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%95%E7%94%A8%E6%8A%98%E5%8F%A0%E8%BD%AC%E5%8F%91%E5%BC%95%E7%94%A8"><span class="nav-number">2.5.</span> <span class="nav-text">引用折叠&#x2F;转发引用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A8%A1%E6%9D%BF%E5%8F%82%E6%95%B0%E7%B1%BB%E5%9E%8B%E6%8E%A8%E5%AF%BC"><span class="nav-number">2.5.1.</span> <span class="nav-text">模板参数类型推导</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#typedef%E7%9A%84%E7%B1%BB%E5%9E%8B%E6%8E%A8%E5%AF%BC"><span class="nav-number">2.5.2.</span> <span class="nav-text">typedef的类型推导</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#decltype%E7%B1%BB%E5%9E%8B%E6%8E%A8%E5%AF%BC"><span class="nav-number">2.5.3.</span> <span class="nav-text">decltype类型推导</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B"><span class="nav-number">2.6.</span> <span class="nav-text">示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89"><span class="nav-number">3.</span> <span class="nav-text">移动语义</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89-1"><span class="nav-number">3.1.</span> <span class="nav-text">移动语义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8B%B7%E8%B4%9D%E8%AF%AD%E4%B9%89"><span class="nav-number">3.2.</span> <span class="nav-text">拷贝语义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B-1"><span class="nav-number">3.3.</span> <span class="nav-text">示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%8C%E7%BE%8E%E8%BD%AC%E5%8F%91"><span class="nav-number">4.</span> <span class="nav-text">完美转发</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B-2"><span class="nav-number">4.1.</span> <span class="nav-text">示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E5%8F%82%E8%80%83"><span class="nav-number">5.</span> <span class="nav-text">相关参考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">straywriter</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">124</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/straywriter" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;straywriter" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">straywriter</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

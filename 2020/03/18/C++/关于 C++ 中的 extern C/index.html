@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"straywriter.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="C++ extern关键字">
+<meta property="og:url" content="https://straywriter.github.io/2020/03/18/C++/%E5%85%B3%E4%BA%8E%20C++%20%E4%B8%AD%E7%9A%84%20extern%20C/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://straywriter.github.io/2020/03/18/C++/%E5%85%B3%E4%BA%8E%20C++%20%E4%B8%AD%E7%9A%84%20extern%20C/image-20210318145537351.png">
+<meta property="og:image" content="https://straywriter.github.io/2020/03/18/C++/%E5%85%B3%E4%BA%8E%20C++%20%E4%B8%AD%E7%9A%84%20extern%20C/image-20210318145409720.png">
+<meta property="article:published_time" content="2020-03-18T05:45:33.000Z">
+<meta property="article:modified_time" content="2021-03-18T06:56:15.147Z">
+<meta property="article:author" content="straywriter">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://straywriter.github.io/2020/03/18/C++/%E5%85%B3%E4%BA%8E%20C++%20%E4%B8%AD%E7%9A%84%20extern%20C/image-20210318145537351.png">
+
+<link rel="canonical" href="https://straywriter.github.io/2020/03/18/C++/%E5%85%B3%E4%BA%8E%20C++%20%E4%B8%AD%E7%9A%84%20extern%20C/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>C++ extern关键字 | Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://straywriter.github.io/2020/03/18/C++/%E5%85%B3%E4%BA%8E%20C++%20%E4%B8%AD%E7%9A%84%20extern%20C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="straywriter">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C++ extern关键字
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-03-18 13:45:33" itemprop="dateCreated datePublished" datetime="2020-03-18T13:45:33+08:00">2020-03-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-18 14:56:15" itemprop="dateModified" datetime="2021-03-18T14:56:15+08:00">2021-03-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="/2020/03/18/C++/%E5%85%B3%E4%BA%8E%20C++%20%E4%B8%AD%E7%9A%84%20extern%20C/image-20210318145537351.png"></p>
+<h2 id="简介">简介</h2>
+<p><strong><code>extern</code></strong> 关键字可应用于全局变量、函数或模板声明。 它指定该符号具有<strong>外部链接</strong></p>
+<p><strong><code>extern</code></strong> 关键字有四种含义，具体取决于上下文：</p>
+<ul>
+<li>在非 <strong><code>const</code></strong> 全局变量声明中， <strong><code>extern</code></strong> 指定在其他编译单元中定义变量或函数。 <strong><code>extern</code></strong> 必须应用于除了定义变量的所有文件中。</li>
+<li>在 <strong><code>const</code></strong> 变量声明中，它指定变量具有 extern al 链接。 <strong><code>extern</code></strong> 必须应用于所有文件中的所有声明。 （ <strong><code>const</code></strong> 默认情况下，全局变量具有内部链接。）</li>
+<li>** extern "C"** 指定在其他位置定义函数并使用 C 语言调用约定。 extern"C" 修饰符也可以应用于块中的多个函数声明。</li>
+<li>在模板声明中， <strong><code>extern</code></strong> 指定模板已在其他位置实例化。 <strong><code>extern</code></strong> 告诉编译器它可以重复使用另一个实例化，而不是在当前位置创建新的实例化。 有关此用法的详细信息 <strong><code>extern</code></strong> ，请参阅<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/cpp/cpp/explicit-instantiation?view=msvc-160">显式实例化</a>。</li>
+</ul>
+<p>作为C语言的扩展，C++保留了一部分过程式语言的特点，因而它可以定义不属于任何类的全局变量和函数。但是，C++毕竟是一种面向对象的设计语言，为了支持函数的重载，C++对全局函数的处理方式有着明显的不同。</p>
+<h2 id="extern-声明变量和函数">extern 声明变量和函数</h2>
+<p>声明extern关键字的全局变量和函数可以使得它们能够跨文件被访问。</p>
+<ul>
+<li>全局函数的声明语句中，关键字extern可以省略，因为全局函数默认是extern类型的。</li>
+</ul>
+<h3 id="非常量-全局变量的外部链接">非常量 全局变量的外部链接</h3>
+<p>当链接器<strong><code>extern</code></strong>在全局变量声明之前看到时，它将在另一个转换单元中查找定义。<strong><code>const</code></strong>默认情况下，全局范围内的非变量声明是外部的。仅适用<strong><code>extern</code></strong>于不提供定义的声明。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//fileA.cpp</span></span><br><span class="line"><span class="keyword">int</span> i = <span class="number">42</span>; <span class="comment">// declaration and definition</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//fileB.cpp</span></span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">int</span> i;  <span class="comment">// declaration only. same as i in FileA</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//fileC.cpp</span></span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">int</span> i;  <span class="comment">// declaration only. same as i in FileA</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//fileD.cpp</span></span><br><span class="line"><span class="keyword">int</span> i = <span class="number">43</span>; <span class="comment">// LNK2005! &#x27;i&#x27; already has a definition.</span></span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">int</span> i = <span class="number">43</span>; <span class="comment">// same error (extern is ignored on definitions)</span></span><br></pre></td></tr></table></figure>
+<h3 id="const-全局变量的外部链接">const 全局变量的外部链接</h3>
+<p>一个<strong><code>const</code></strong>全局变量默认有内在联系。如果您希望变量具有外部链接，请将<strong><code>extern</code></strong>关键字应用于定义以及其他文件中的所有其他声明：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;fileA.cpp</span><br><span class="line">extern const int i &#x3D; 42; &#x2F;&#x2F; extern const definition</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;fileB.cpp</span><br><span class="line">extern const int i;  &#x2F;&#x2F; declaration only. same as i in FileA</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="extern-constexpr链接">extern constexpr链接</h3>
+<blockquote>
+<p>在 Visual Studio 2017 版本15.3 及更早版本中，编译器始终提供 <strong><code>constexpr</code></strong> 变量内部链接，即使该变量已标记 <strong><code>extern</code></strong> 。 在 Visual Studio 2017 版本15.5 及更高版本中， <a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/cpp/build/reference/zc-externconstexpr?view=msvc-160">/zc： extern Constexpr</a>编译器开关实现了符合标准的正确行为。 最终，选项将成为默认值。 <a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/cpp/build/reference/permissive-standards-conformance?view=msvc-160">/permissive-</a>选项不启用 <strong>/Zc： extern Constexpr</strong>。</p>
+<p>C++复制</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="keyword">constexpr</span> <span class="keyword">int</span> x = <span class="number">10</span>; <span class="comment">//error LNK2005: &quot;int const x&quot; already defined</span></span><br></pre></td></tr></table></figure>
+<p>如果标头文件包含已声明的变量 <strong><code>extern</code></strong> <strong><code>constexpr</code></strong> ，则必须将其标记 <code>__declspec(selectany)</code> 为正确地将其重复的声明组合在一起：</p>
+<p>C++复制</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="keyword">constexpr</span> __declspec(selectany) <span class="keyword">int</span> x = <span class="number">10</span>;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h3 id="示例">示例</h3>
+<p>我们一般把所有的全局变量和全局函数的实现都放在一个<em>.cpp文件里面，然后用一个同名的</em>.h文件包含所有的函数和变量的声明。如：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*Demo.h*/</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> once</span></span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">int</span> a;</span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">int</span> b;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*Demo.cpp*/</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;Demo.h&quot;</span> <span class="comment">/*这句话写或者不写在本例中都行，不过建议不写*/</span></span></span><br><span class="line"><span class="comment">/*不写不会出问题，写了有些情况下会出问题，下面有解释*/</span></span><br><span class="line"><span class="keyword">int</span> a =<span class="number">10</span>;</span><br><span class="line"><span class="keyword">int</span> b =<span class="number">20</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">add</span><span class="params">(intl,intr)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">return</span> l +r;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果将Demo.cpp写成了Demo.c，编译器会告诉你说无法解析的外部符号。</p>
+<p>因为Demo.c里面的实现会被C编译器处理，然而C++和C编译器在编译函数时存在差异，所以会存在找不到函数的情况。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;fileA.cpp</span><br><span class="line">int i &#x3D; 42; &#x2F;&#x2F; declaration and definition</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;fileB.cpp</span><br><span class="line">extern int i;  &#x2F;&#x2F; declaration only. same as i in FileA</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;fileC.cpp</span><br><span class="line">extern int i;  &#x2F;&#x2F; declaration only. same as i in FileA</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;fileD.cpp</span><br><span class="line">int i &#x3D; 43; &#x2F;&#x2F; LNK2005! &#39;i&#39; already has a definition.</span><br><span class="line">extern int i &#x3D; 43; &#x2F;&#x2F; same error (extern is ignored on definitions)</span><br></pre></td></tr></table></figure>
+<h2 id="c的名称修饰机制name-mangling">C++的名称修饰机制（name mangling）</h2>
+<p>C++编译器是名字修饰使用得出名的编译器。第一个C++编译器的实现是翻译成C语言源代码，以便于让C编译器编译成目标代码。正因如此，符号名必须服从C语言的标识符规则。直至后来，能直接产生机器语言或汇编语言的编译器出现了以后，系统的链接器也是基本上不支持C++的符号的，所以仍然需要名字修饰。</p>
+<p>C++语言并没有规定一个标准的名字修饰方式，所以各款编译器都使用各自的名字修饰方式。C++还有一套复杂的语言特性，例如类、模板、命名空间和运算符重载。这改变了基于上下文或用法的特定符号的意义。关于这些特性的元数据能够用改编（修饰）调试符号的名字来消除二义性。正因为这些特性的名字修饰系统并没有跨编译器标准化，所以几乎没有链接器可以链接不同编译器产生的目标代码。</p>
+<h3 id="示例-1">示例</h3>
+<p>考虑一个下面的C++程序中的两个<code>f()</code>的定义：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span>  <span class="title">f</span> <span class="params">(<span class="keyword">void</span>)</span> </span>&#123; <span class="keyword">return</span> <span class="number">1</span>; &#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span>  <span class="title">f</span> <span class="params">(<span class="keyword">int</span>)</span>  </span>&#123; <span class="keyword">return</span> <span class="number">0</span>; &#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">g</span> <span class="params">(<span class="keyword">void</span>)</span> </span>&#123; <span class="keyword">int</span> i = f(), j = f(<span class="number">0</span>); &#125;</span><br></pre></td></tr></table></figure>
+<p>这些是不同的函数，除了函数名相同以外没有任何关系。如果不做任何改变直接把它们当成C代码，结果将导致一个错误——C语言不允许两个函数同名。所以，C++编译器将会把它们的类型信息编码成符号名，结果类似下面的的代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>  __f_v (<span class="keyword">void</span>) &#123; <span class="keyword">return</span> <span class="number">1</span>; &#125;</span><br><span class="line"><span class="keyword">int</span>  __f_i (<span class="keyword">int</span>)  &#123; <span class="keyword">return</span> <span class="number">0</span>; &#125;</span><br><span class="line"><span class="keyword">void</span> __g_v (<span class="keyword">void</span>) &#123; <span class="keyword">int</span> i = __f_v(), j = __f_i(<span class="number">0</span>); &#125;</span><br></pre></td></tr></table></figure>
+<p>注意<code>g()</code>也被名字修饰了，虽然没有任何名字冲突。名字修饰应用于C++的任何符号。</p>
+<h2 id="extern-c">extern “C”</h2>
+<p>作为面向对象的语言，C++为了支持函数重载，函数在被C++编译后在符号库中的名字与C语言的不同。</p>
+<p>假如某个函数的原型为void foo(int x, int y);该函数被C编译器编译后在符号库中的名字为_foo，而C++编译器则会产生_foo_int_int之类的名字。_foo_int_int这样的名字是包含了函数名以及形参，C++就是靠这种机制来实现函数重载的。</p>
+<p>被extern “C”修饰的函数或者变量是按照C语言方式编译和链接的，所以可以用一句话来概括extern “C”的真实目的：实现C++与C的混合编程。</p>
+<p><strong>注意：</strong></p>
+<ul>
+<li><p>extern "C" 只是 <code>C++</code> 的关键字，不是 <code>C</code> 的</p></li>
+<li><p>被 extern "C" 修饰的目标一般是对一个全局C或者 <code>C++</code> 函数的声明</p>
+<p>从源码上看 extern "C" 一般对头文件中函数声明进行修饰。 <code>C</code> 和 <code>cpp</code> 中头文件函数声明的形式都是一样的（因为两者语法基本一样），对应声明的实现却可能由于语言特性而不同了( <code>C</code> 库和 <code>C++</code> 库里面当然会不同)。</p></li>
+<li><p>extern "C" 这个关键字声明的真实目的，就是实现 <code>C++</code> 与C及其它语言的混合编程</p></li>
+<li><p>被 extern "C" 限定的函数或变量是 <code>extern</code> 类型的。</p></li>
+<li><p>被 extern "C" 修饰的变量和函数是按照 <code>C</code> 语言方式编译和连接的。</p></li>
+<li><p>如果在一个文件里定义了<code>char g_str[] = "123456";</code>在另外一个文件中必须使用extern char g_str[ ];来声明。不能使用<code>extern char* g_str;</code>来声明。extern是严格的声明。且<code>extern char* g_str</code>只是声明的一个全局字符指针。</p></li>
+<li><p>声明可以声明n次，但是定义只能定义一次。</p></li>
+</ul>
+<h2 id="extern-c的惯用法">extern “C”的惯用法</h2>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> __cplusplus </span></span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span> &#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">    <span class="comment">/* ... */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> __cplusplus</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="示例-2">示例</h3>
+<p>在C++中引用C语言中的函数和变量，在包含C语言头文件时(假设为cExample.h)，需进行以下处理：</p>
+<p>c语言文件：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* c语言头文件：cExample.h */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> C_EXAMPLE_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> C_EXAMPLE_H</span></span><br><span class="line"><span class="function"><span class="keyword">extern</span> <span class="keyword">int</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span></span>;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* c语言的实现文件：cExample.c */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;cExample.h&quot;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x + y;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* c++实现文件，调用add：cppFile.cpp */</span></span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;cExample.h&quot;</span>;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    add(<span class="number">2</span>, <span class="number">3</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果C++调用一个C语言编写的.DLL时，在包含.DLL的头文件或声明接口函数时，应该也要加上extern “C”。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* c++头文件cppExample.h */</span> </span><br><span class="line"> <span class="meta">#<span class="meta-keyword">ifndef</span> CPP_EXAMPLE_H </span></span><br><span class="line"> <span class="meta">#<span class="meta-keyword">define</span> CPP_EXAMPLE_H </span></span><br><span class="line"> <span class="keyword">extern</span> <span class="string">&quot;C&quot;</span> <span class="function"><span class="keyword">int</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span></span>; </span><br><span class="line"> <span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"> <span class="comment">/* c实现文件cFile.c */</span> </span><br><span class="line"> <span class="function"><span class="keyword">extern</span> <span class="keyword">int</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span></span>; </span><br><span class="line"> <span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span></span><br><span class="line"><span class="function"> </span>&#123; </span><br><span class="line"> add(<span class="number">2</span>, <span class="number">3</span>); </span><br><span class="line"> <span class="keyword">return</span> <span class="number">0</span>; </span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="extern和static">extern和static</h2>
+<ul>
+<li><p>extern表明该变量在别的地方已经定义过了，在这里要使用那个变量。</p></li>
+<li><p>static 表示静态的变量，分配内存的时候，存储在静态区，不存储在栈上面。</p></li>
+<li><p>extern和static不能同时修饰一个变量</p></li>
+<li><p>static修饰的全局变量声明与定义同时进行</p></li>
+<li><p>static修饰全局变量的作用域只能是本身的编译单元</p></li>
+</ul>
+<h2 id="extern和const">extern和const</h2>
+<ul>
+<li>C++中const修饰的全局常量具有跟static相同的特性，即它们只能作用于本编译模块中，且static修饰的是全局变量，但是const可以与extern连用来声明该常量可以作用于其他编译模块中。</li>
+<li>当const单独使用时它就与static相同，而当与extern一起合作的时候，它的特性就跟extern的一样了</li>
+</ul>
+<h2 id="extern-和类模板的显示实例化-c11">extern 和类模板的显示实例化 C++11</h2>
+<p><img src="/2020/03/18/C++/%E5%85%B3%E4%BA%8E%20C++%20%E4%B8%AD%E7%9A%84%20extern%20C/image-20210318145409720.png"></p>
+<p><a target="_blank" rel="noopener" href="https://zh.cppreference.com/w/cpp/language/class_template">cppreference</a></p>
+<hr>
+<p>参考</p>
+<p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/cpp/cpp/extern-cpp?view=msvc-160">extern (C++)</a></p>
+<p><a target="_blank" rel="noopener" href="https://medium.com/@alan81920/c-c-%E4%B8%AD%E7%9A%84-static-extern-%E7%9A%84%E8%AE%8A%E6%95%B8-9b42d000688f">C/C++ 中的 static, extern</a></p>
+<p><a target="_blank" rel="noopener" href="https://zh.cppreference.com/w/cpp/language/class_template">类模板</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2020/04/08/CMake/CMake-message%E4%BD%BF%E7%94%A8/" rel="next" title="CMake message 用法">
+      CMake message 用法 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#extern-%E5%A3%B0%E6%98%8E%E5%8F%98%E9%87%8F%E5%92%8C%E5%87%BD%E6%95%B0"><span class="nav-number">2.</span> <span class="nav-text">extern 声明变量和函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E5%B8%B8%E9%87%8F-%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%96%E9%83%A8%E9%93%BE%E6%8E%A5"><span class="nav-number">2.1.</span> <span class="nav-text">非常量 全局变量的外部链接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#const-%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%96%E9%83%A8%E9%93%BE%E6%8E%A5"><span class="nav-number">2.2.</span> <span class="nav-text">const 全局变量的外部链接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#extern-constexpr%E9%93%BE%E6%8E%A5"><span class="nav-number">2.3.</span> <span class="nav-text">extern constexpr链接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B"><span class="nav-number">2.4.</span> <span class="nav-text">示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c%E7%9A%84%E5%90%8D%E7%A7%B0%E4%BF%AE%E9%A5%B0%E6%9C%BA%E5%88%B6name-mangling"><span class="nav-number">3.</span> <span class="nav-text">C++的名称修饰机制（name mangling）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B-1"><span class="nav-number">3.1.</span> <span class="nav-text">示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#extern-c"><span class="nav-number">4.</span> <span class="nav-text">extern “C”</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#extern-c%E7%9A%84%E6%83%AF%E7%94%A8%E6%B3%95"><span class="nav-number">5.</span> <span class="nav-text">extern “C”的惯用法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B-2"><span class="nav-number">5.1.</span> <span class="nav-text">示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#extern%E5%92%8Cstatic"><span class="nav-number">6.</span> <span class="nav-text">extern和static</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#extern%E5%92%8Cconst"><span class="nav-number">7.</span> <span class="nav-text">extern和const</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#extern-%E5%92%8C%E7%B1%BB%E6%A8%A1%E6%9D%BF%E7%9A%84%E6%98%BE%E7%A4%BA%E5%AE%9E%E4%BE%8B%E5%8C%96-c11"><span class="nav-number">8.</span> <span class="nav-text">extern 和类模板的显示实例化 C++11</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">straywriter</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">124</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/straywriter" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;straywriter" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">straywriter</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
